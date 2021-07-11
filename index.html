@@ -1,7 +1,9 @@
 <html>
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, shrink-to-fit=no, user-scalable=no">
 	<meta name="mobile-web-app-capable" content="yes">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.0/css/all.css">
 <style>
@@ -12,13 +14,15 @@
 }
 
 :root {
---section1-color: #EDEDED;
---section2-color: #E0E0E0;
---section3-color: #D4D4D4;
---section4-color: #C7C7C7;
+--section1-color: #ffffff;
+--section2-color: #ffffff;
+--section3-color: #ffffff;
+--section4-color: #ffffff;
 --light-color: #737373;
 --nav-color: #cdcdcd;
 }
+
+html, body { height: 100% }
 
 .container {
   background: var(--light-color);;
@@ -26,41 +30,63 @@
   font-family: Montserrat, sans-serif;
 }
 
+section {
+	position: absolute;
+	top: 0;
+	height: 100vh;
+	width: 0;
+	opacity: 0;
+	transition: all ease-in .5s;
+/*    display: flex; */
+	text-align:right;
+	justify-content: right;
+	align-items: right;
+	padding-right:10px;
+	padding-top:10px;
+}
+
+nav {
+	position: absolute;
+	left: 0;
+	top:0;
+	z-index: 50;
+	display: flex;
+	background: var(--nav-color);
+}
+
+@media (orientation: landscape) {
+	nav {
+		height:100vh;
+		flex-direction: column;
+	}
+	section {
+		padding-left:15vh;
+	}
+}
+
+@media (orientation: portrait) {
+	nav {
+		width:100vh;
+		flex-direction: row;
+	}
+	section {
+		padding-top:15vh;
+	}
+}
+
 nav a {
-    font-size: 40px;
+    font-size: 50px;
     color: #fff;
     text-decoration: none;
     padding: 20px;
     text-align: center;
+    float:left;
 }
 
-nav {
-    position: fixed;
-    left: 0;
-    z-index: 50;
-    display: flex;
-    justify-content: space-around;
-    flex-direction: column;
-    height: 100vh;
-    background: var(--nav-color);
-}
-
-section {
-    position: absolute;
-    top: 0;
-    height: 100vh;
-    width: 0;
-    opacity: 0;
-    transition: all ease-in .5s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
 section h1 {
-    color: #fff;
-    font-size: 50px;
-    text-transform: uppercase;
+    color: #121212;
+    font-size: 30px;
     opacity: 0;
 }
 
@@ -70,7 +96,7 @@ section:target {
     position: absolute;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     z-index: 10;
 }
 
@@ -98,31 +124,48 @@ section:target h1 {
     100% { opacity:1 }
 }
 </style>
+<script>
+
+function toggleFullscreen() {
+  let elem = document.querySelector("body")
+  if (!document.fullscreenElement) {
+    elem.requestFullscreen().catch(err => {
+      alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`)
+    })
+  } else {
+    document.exitFullscreen()
+  }
+  screen.orientation.lock(screen.orientation.type) // Lock to current orientation type
+}
+</script>
 </head>
 <body>
- <nav>
-   <a href="#section1"><i class="far fa-user"></i></a>
-   <a href="#section2"><i class="fas fa-briefcase"></i></a>
-   <a href="#section3 "><i class="far fa-file"></i></a>
-   <a href="#section4 "><i class="far fa-address-card"></i></a>
- </nav>
+	<nav>
+		<a href="#section1"><i class="fas fa-user"></i></a>
+		<a href="#section2"><i class="fas fa-briefcase"></i></a>
+		<a href="#section3"><i class="far fa-file"></i></a>
+		<a href="#section4"><i class="far fa-address-card"></i></a>
+	</nav>
+	<div class='container'>
+		<section id='section1'>
+			<img src="https://avatars.githubusercontent.com/u/19834806?v=4" alt="ReeKol" style="border-radius:25px;margin-bottom:20px;height:150px;width:150px"/>
+			<h1>ReeKol</h1><br/>
+			<h1>cupuyc@gmail.com</h1><br/>
+			<h1>https://github.com/reekol</h1><br/>
+		</section>
 
-<div class='container'>
-	<section id='section1'>
-		<h1>ReeKol</h1>
-	</section>
+		<section id='section2'>
+			<h1>Projects</h1>
+		</section>
 
-	<section id='section2'>
-		<h1>Projects</h1>
-	</section>
+		<section id='section3'>
+			<h1>What's new</h1>
+		</section>
 
-	<section id='section3'>
-		<h1>What's new</h1>
-	</section>
-
-	<section id='section4'>
-		<h1>Social</h1>
-</section>
-</div>
+		<section id='section4'>
+			<h1>Social</h1>
+		</section>
+		<i onclick="toggleFullscreen()" class="fa fa-expand-arrows-alt"></i>
+	</div>
 </body>
 </html>
