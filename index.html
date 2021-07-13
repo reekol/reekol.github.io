@@ -185,6 +185,8 @@ function toggleFullscreen() {
   }
   screen.orientation.lock(screen.orientation.type) // Lock to current orientation type
 }
+
+
 </script>
 </head>
 <body>
@@ -219,14 +221,33 @@ import { Octokit } from "https://cdn.skypack.dev/@octokit/core";
 		</section>
 
 		<section id='section2'>
-			<form action="/action_page.php">
-				<input type="text" id="fname" name="firstname" placeholder="Your name..">
-				<input type="text" id="lname" name="lastname" placeholder="Your last name..">
-				<textarea id="subject" name="subject" placeholder="(Subject) Write something.." ></textarea>
+			<form id="formElem" >
+				<input type="text" name="title" placeholder="Your name..">
+				<textarea name="message" placeholder="(Subject) Write something.." style="height:30vh"></textarea>
 				<br />
 				<input type="submit" value="Submit">
 			</form>
 		</section>
 	</div>
+<script>
+ formElem.onsubmit = async (e) => {
+    e.preventDefault();
+
+    let response = fetch('https://vetshares.com/message?token=AWEzK29G4UerQfi', {
+      method: 'POST',
+      mode: 'cors',
+      body: new FormData(formElem)
+    })
+    .then(response => response.json())
+	.then(data => {
+		alert("Message was sent")
+		console.log('Success:', data)
+	})
+	.catch(error => {
+		alert('Error:', error)
+	})
+  }
+</script>
+</script>
 </body>
 </html>
