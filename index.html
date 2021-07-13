@@ -10,24 +10,19 @@
   padding: 0;
   box-sizing: border-box;
 }
-
 :root {
---section1-color: #ffffff;
---section2-color: #ffffff;
---section3-color: #ffffff;
---section4-color: #ffffff;
---light-color: #737373;
---nav-color: #cdcdcd;
+	--link-color: #fff;
+	--h1-color: #cdcdcd;
 }
 
 html, body { height: 100% }
+a { text-decoration:none; color:var(--link-color)}
+.clear{clear:both}
 
 .container {
-  background: var(--light-color);;
   min-height: 100vh;
   font-family: Montserrat, sans-serif;
 }
-
 section {
 	position: absolute;
 	top: 0;
@@ -42,20 +37,49 @@ section {
 	padding-right:30px;
 	padding-top:5vw;
 }
-
-
 nav {
 	position: absolute;
 	left: 0;
 	top:0;
 	z-index: 50;
 	display: flex;
-	background: var(--nav-color);
+}
+body, section {
+	background:
+		radial-gradient(black 15%, transparent 16%) 0 0,
+		radial-gradient(black 15%, transparent 16%) 8px 8px,
+		radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px,
+		radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px;
+	background-color:#282828;
+	background-size:16px 16px;
 }
 .sectImg{
+	margin-left:4vw;
 	border-radius:4px;
 	margin-bottom:20px;
-	border:0px solid #cdcdcd
+	border:1px solid #fff;
+}
+input[type=text], select, textarea {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+input[type=submit] {
+  background-color: #04AA6D;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
 }
 
 @media (orientation: landscape) {
@@ -67,8 +91,11 @@ nav {
 		padding-top:30px;
 	}
 	.sectImg{
-		height:35vh;
-		width:35vh;
+		height:40vh;
+		width:40vh;
+	}
+	input[type=text],input[type=submit], select, textarea {
+		width:50vw
 	}
 }
 
@@ -81,14 +108,17 @@ nav {
 		padding-top:120px;
 	}
 	.sectImg{
-		height:40vw;
-		width:40vw;
+		height:45vw;
+		width:45vw;
+	}
+	input[type=text],input[type=submit], select, textarea {
+		width:70vw
 	}
 }
 
 nav a {
     font-size: 50px;
-    color: #fff;
+    color: var(--link-color);
     text-decoration: none;
     padding: 20px;
     text-align: center;
@@ -97,7 +127,7 @@ nav a {
 
 
 section h1 {
-    color: #121212;
+    color: var(--h1-color);
     font-size: 30px;
     opacity: 0;
 }
@@ -118,18 +148,23 @@ section:target h1 {
 }
 
 #section1 {
-	background:var(--section1-color);
+
 }
+
 #section2 {
-	background: var(--section2-color);
-}
-
-#section3 {
-	background: var(--section3-color);
-}
-
-#section4 {
-	background: var(--section4-color);
+	background:
+		radial-gradient(hsl(0, 100%, 27%) 4%, hsl(0, 100%, 18%) 9%, hsla(0, 100%, 20%, 0) 9%) 0 0,
+		radial-gradient(hsl(0, 100%, 27%) 4%, hsl(0, 100%, 18%) 8%, hsla(0, 100%, 20%, 0) 10%) 50px 50px,
+		radial-gradient(hsla(0, 100%, 30%, 0.8) 20%, hsla(0, 100%, 20%, 0)) 50px 0,
+		radial-gradient(hsla(0, 100%, 30%, 0.8) 20%, hsla(0, 100%, 20%, 0)) 0 50px,
+		radial-gradient(hsla(0, 100%, 20%, 1) 35%, hsla(0, 100%, 20%, 0) 60%) 50px 0,
+		radial-gradient(hsla(0, 100%, 20%, 1) 35%, hsla(0, 100%, 20%, 0) 60%) 100px 50px,
+		radial-gradient(hsla(0, 100%, 15%, 0.7), hsla(0, 100%, 20%, 0)) 0 0,
+		radial-gradient(hsla(0, 100%, 15%, 0.7), hsla(0, 100%, 20%, 0)) 50px 50px,
+		linear-gradient(45deg, hsla(0, 100%, 20%, 0) 49%, hsla(0, 100%, 0%, 1) 50%, hsla(0, 100%, 20%, 0) 70%) 0 0,
+		linear-gradient(-45deg, hsla(0, 100%, 20%, 0) 49%, hsla(0, 100%, 0%, 1) 50%, hsla(0, 100%, 20%, 0) 70%) 0 0;
+	background-color: #300;
+	background-size: 100px 100px;
 }
 
 @keyframes fadeIn {
@@ -137,6 +172,7 @@ section:target h1 {
 }
 </style>
 <script>
+if(!window.location.hash) window.location.hash = 'section1'
 
 function toggleFullscreen() {
   let elem = document.querySelector("body")
@@ -152,33 +188,45 @@ function toggleFullscreen() {
 </script>
 </head>
 <body>
+<script type="module">
+import { Octokit } from "https://cdn.skypack.dev/@octokit/core";
+</script>
 	<nav>
-		<a href="#section1"><i class="fas fa-user"></i></a>
-		<a href="#section2"><i class="fas fa-briefcase"></i></a>
-		<a href="#section3"><i class="far fa-file"></i></a>
-		<a href="#section4"><i class="far fa-address-card"></i></a>
+		<a href="#section1"><i class="far fa-address-card"></i></a>
+		<a href="#section2"><i class="fas fa-comment-dots"></i></a>
+		<a href="javascript:toggleFullscreen()" ><i class="fa fa-expand-arrows-alt"></i></a>
+
 	</nav>
 	<div class='container'>
 		<section id='section1'>
-			<img src="https://raw.githubusercontent.com/reekol/reekol.github.io/master/assets/reeko.vcard.svg" alt="Projects page" class="sectImg" />
-			<img src="https://avatars.githubusercontent.com/u/19834806?v=4" alt="ReeKol" class="sectImg" />
-			<h1>ReeKol</h1><br/>
-			<h1><a href="mailto:cupuyc@gmail.com"   target="_new" >cupuyc@gmail.com</a></h1><br/>
-			<h1><a href="https://github.com/reekol" target="_new" >https://github.com/reekol</a></h1><br/>
+
+			<svg viewBox="0 0 350 150" xmlns="http://www.w3.org/2000/svg" class="sectImg" style="height:20vh">
+				<style>
+					.texts { font: bold italic 23px serif; fill: #fff;}
+				</style>
+
+				<text x="10"  y="40"  class="texts">ReeKol</text>
+				<text x="10"  y="70"  class="texts">cupuyc@gmail.com</text>
+				<text x="10"  y="100" class="texts">https://github.com/reekol</text>
+				<text x="10"  y="130" class="texts">vCard: &#8675;&#8675;&#8675;</text>
+			</svg>
+
+			<div class="clear" ></div>
+			<a href="https://raw.githubusercontent.com/reekol/reekol.github.io/master/assets/vcard.vcf" download="reeKolVc">
+				<img src="https://raw.githubusercontent.com/reekol/reekol.github.io/master/assets/reeko.vcard.svg" alt="Projects page" class="sectImg" />
+			</a>
+<!--			<img src="https://avatars.githubusercontent.com/u/19834806?v=4" alt="ReeKol" class="sectImg" />-->
 		</section>
 
 		<section id='section2'>
-			<h1>Projects</h1>
+			<form action="/action_page.php">
+				<input type="text" id="fname" name="firstname" placeholder="Your name..">
+				<input type="text" id="lname" name="lastname" placeholder="Your last name..">
+				<textarea id="subject" name="subject" placeholder="(Subject) Write something.." ></textarea>
+				<br />
+				<input type="submit" value="Submit">
+			</form>
 		</section>
-
-		<section id='section3'>
-			<h1>What's new</h1>
-		</section>
-
-		<section id='section4'>
-			<h1>Social</h1>
-		</section>
-		<i onclick="toggleFullscreen()" class="fa fa-expand-arrows-alt"></i>
 	</div>
 </body>
 </html>
