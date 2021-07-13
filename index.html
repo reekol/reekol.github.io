@@ -171,23 +171,6 @@ section:target h1 {
     100% { opacity:1 }
 }
 </style>
-<script>
-if(!window.location.hash) window.location.hash = 'section1'
-
-function toggleFullscreen() {
-  let elem = document.querySelector("body")
-  if (!document.fullscreenElement) {
-    elem.requestFullscreen().catch(err => {
-      alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`)
-    })
-  } else {
-    document.exitFullscreen()
-  }
-  screen.orientation.lock(screen.orientation.type) // Lock to current orientation type
-}
-
-
-</script>
 </head>
 <body>
 <script type="module">
@@ -230,15 +213,30 @@ import { Octokit } from "https://cdn.skypack.dev/@octokit/core";
 		</section>
 	</div>
 <script>
- formElem.onsubmit = async (e) => {
-    e.preventDefault();
 
-    let response = fetch('https://vetshares.com/message?token=AWEzK29G4UerQfi', {
-      method: 'POST',
-      mode: 'cors',
-      body: new FormData(formElem)
+if(!window.location.hash) window.location.hash = 'section1'
+
+function toggleFullscreen() {
+  let elem = document.querySelector("body")
+  if (!document.fullscreenElement) {
+    elem.requestFullscreen().catch(err => {
+      alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`)
     })
-    .then(response => response.json())
+  } else {
+    document.exitFullscreen()
+  }
+  screen.orientation.lock(screen.orientation.type) // Lock to current orientation type
+}
+
+formElem.onsubmit = async (e) => {
+	e.preventDefault();
+
+	let response = fetch('https://vetshares.com/message?token=AWEzK29G4UerQfi', {
+		method: 'POST',
+		mode: 'cors',
+		body: new FormData(formElem)
+	})
+	.then(response => response.json())
 	.then(data => {
 		alert("Message was sent")
 		console.log('Success:', data)
@@ -246,7 +244,8 @@ import { Octokit } from "https://cdn.skypack.dev/@octokit/core";
 	.catch(error => {
 		alert('Error:', error)
 	})
-  }
+}
+
 </script>
 </script>
 </body>
