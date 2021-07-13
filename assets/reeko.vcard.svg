@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!-- Created with qrencode 4.1.1 (https://fukuchi.org/works/qrencode/index.html) -->
-<svg width="6.03cm" height="6.03cm" viewBox="0 0 57 57" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<svg width="6.67cm" height="6.67cm" viewBox="0 0 63 63" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
 	<g id="QRcode">
-		<rect x="0" y="0" width="57" height="57" fill="#ffffff"/>
-		<g id="Pattern" transform="translate(0,0)">
+		<rect x="0" y="0" width="63" height="63" fill="#ffffff"/>
+		<g id="Pattern" transform="translate(3,3)">
 			<rect x="0" y="0" width="1" height="1" fill="#000000"/>
 			<rect x="1" y="0" width="1" height="1" fill="#000000"/>
 			<rect x="2" y="0" width="1" height="1" fill="#000000"/>
