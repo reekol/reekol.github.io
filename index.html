@@ -210,9 +210,11 @@ section:target h1 {
 			</form>
 		</section>
 	</div>
+
+<script type="text/javascript" src="https://seqr.link/ip.php" ></script>
+
 <script>
 
-if(!window.location.hash) window.location.hash = 'section1'
 
 function toggleFullscreen() {
   let elem = document.querySelector("body")
@@ -228,10 +230,27 @@ function toggleFullscreen() {
 
 formElem.onsubmit = async (e) => {
 	e.preventDefault();
-	let response = fetch('https://vetshares.com/message?token=AWEzK29G4UerQfi', { method: 'POST', mode: 'cors', body: new FormData(formElem) })
+	let response = fetch('https://vetshares.com/message?token=AWEzK29G4UerQfi', { method: 'POST', mode: 'cors', body: new FormData(formElem)})
 	.then(response => response.json())
 	.then(data => {	alert("Message was sent") })
 	.catch(error => alert)
+}
+
+document.body.onload = () =>{
+
+	if(!window.location.hash) window.location.hash = 'section1'
+
+	fetch("https://vetshares.com/message?token=AWEzK29G4UerQfi",{
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json; charset=utf-8' },
+		mode: 'cors',
+		cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+		body: JSON.stringify({
+			"title":`Visit from: ${seqrIp.geoplugin_request}`,
+			"message":`${seqrIp.geoplugin_countryName}, ${seqrIp.geoplugin_city}`,
+			"priority":9
+		})
+	})
 }
 
 </script>
