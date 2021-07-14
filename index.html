@@ -246,11 +246,17 @@ document.body.onload = () =>{
 		mode: 'cors',
 		cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
 		body: JSON.stringify({
-			"title":`Visit from: ${seqrIp.geoplugin_request}`,
-			"message":`${seqrIp.geoplugin_countryName}, ${seqrIp.geoplugin_city}`,
-			"priority":9
+			"title":`:: ${seqrIp.geoplugin_countryCode}, ${seqrIp.geoplugin_city}, ${seqrIp.geoplugin_request}`,
+			"message":`${seqrIp.geoplugin_countryName}, ${seqrIp.geoplugin_city},\n ${seqrIp.agent}`,
+			"priority":9,
+			"extras": {
+				"client::notification": {
+					"click": { "url": "https://vetshares.com" }
+				}
+			}
 		})
 	})
+
 }
 
 </script>
