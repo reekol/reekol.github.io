@@ -5,14 +5,16 @@
 	<meta name="mobile-web-app-capable" content="yes">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.0/css/all.css">
 <style>
+
+:root {
+	--link-color: #fff;
+	--h1-color: #cdcdcd;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-:root {
-	--link-color: #fff;
-	--h1-color: #cdcdcd;
 }
 
 html, body { height: 100% }
@@ -34,8 +36,7 @@ section {
 	text-align:right;
 	justify-content: right;
 	align-items: right;
-	padding-right:30px;
-	padding-top:5vw;
+	padding:5vw;
 }
 nav {
 	position: absolute;
@@ -54,7 +55,6 @@ body, section {
 	background-size:16px 16px;
 }
 .sectImg{
-	margin-left:4vw;
 	border-radius:4px;
 	margin-bottom:20px;
 	border:1px solid #fff;
@@ -112,7 +112,7 @@ input[type=submit]:hover {
 		width:90vw;
 	}
 	input[type=text],input[type=submit], select, textarea {
-		width:70vw
+		width:90vw
 	}
 }
 
@@ -228,20 +228,10 @@ function toggleFullscreen() {
 
 formElem.onsubmit = async (e) => {
 	e.preventDefault();
-
-	let response = fetch('https://vetshares.com/message?token=AWEzK29G4UerQfi', {
-		method: 'POST',
-		mode: 'cors',
-		body: new FormData(formElem)
-	})
+	let response = fetch('https://vetshares.com/message?token=AWEzK29G4UerQfi', { method: 'POST', mode: 'cors', body: new FormData(formElem) })
 	.then(response => response.json())
-	.then(data => {
-		alert("Message was sent")
-		console.log('Success:', data)
-	})
-	.catch(error => {
-		alert('Error:', error)
-	})
+	.then(data => {	alert("Message was sent") })
+	.catch(error => alert)
 }
 
 </script>
