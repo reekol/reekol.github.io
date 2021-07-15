@@ -170,6 +170,39 @@ section:target h1 {
 @keyframes fadeIn {
     100% { opacity:1 }
 }
+
+.gg-profile,
+.gg-profile::after,
+.gg-profile::before {
+    display: block;
+    box-sizing: border-box;
+    border: 2px solid;
+    border-radius: 100px
+}
+.gg-profile {
+    overflow: hidden;
+    transform: scale(var(--ggs,1));
+    width: 22px;
+    height: 22px;
+    position: relative
+}
+.gg-profile::after,
+.gg-profile::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 5px;
+    width: 8px;
+    height: 8px
+}
+.gg-profile::after {
+    border-radius: 200px;
+    top: 11px;
+    left: 0px;
+    width: 18px;
+    height: 18px
+}
+
 </style>
 </head>
 <body>
@@ -181,12 +214,10 @@ section:target h1 {
 	</nav>
 	<div class='container'>
 		<section id='section1'>
-
-			<svg viewBox="0 0 350 150" xmlns="http://www.w3.org/2000/svg" class="sectImg" style="height:20vh">
+			<svg viewBox="0 0 350 150" xmlns="http://www.w3.org/2000/svg" class="sectImg" style="height:20vh;border-radius:15px 15px 0 0;margin-bottom:0">
 				<style>
 					.texts { font: bold italic 23px serif; fill: #fff;}
 				</style>
-
 				<text x="10"  y="40"  class="texts">ReeKol</text>
 				<text x="10"  y="70"  class="texts">cupuyc@gmail.com</text>
 				<text x="10"  y="100" class="texts">https://github.com/reekol</text>
@@ -195,7 +226,7 @@ section:target h1 {
 
 			<div class="clear" ></div>
 			<a href="https://raw.githubusercontent.com/reekol/reekol.github.io/master/assets/vcard.vcf" download="reeKolVc">
-				<img src="https://raw.githubusercontent.com/reekol/reekol.github.io/master/assets/reekol.vcard.svg" alt="Projects page" class="sectImg" />
+				<img src="https://raw.githubusercontent.com/reekol/reekol.github.io/master/assets/reekol.vcard.svg" alt="Projects page" class="sectImg" style="border-radius:0 0 15px 15px;background:#fff"/>
 			</a>
 <!--			<img src="https://avatars.githubusercontent.com/u/19834806?v=4" alt="ReeKol" class="sectImg" />-->
 		</section>
@@ -203,16 +234,13 @@ section:target h1 {
 		<section id='section2'>
 			<form id="formElem" >
 				<input type="hidden" name="priority" value="8">
-				<input type="text" name="title" placeholder="Your name..">
+				<input type="text" name="title" placeholder="Your name and/or e-mail..">
 				<textarea name="message" placeholder="(Subject) Write something.." style="height:30vh"></textarea>
 				<br />
 				<input type="submit" value="Submit">
 			</form>
 		</section>
 	</div>
-
-<script type="text/javascript" src="https://seqr.link/ip.php" ></script>
-
 <script>
 
 
@@ -239,24 +267,30 @@ formElem.onsubmit = async (e) => {
 document.body.onload = () =>{
 
 	if(!window.location.hash) window.location.hash = 'section1'
+	if(['reekol.github.io','example.com'].indexOf(window.location.host) === -1) return false; // list of hosts to track
 
-	fetch("https://vetshares.com/message?token=AWEzK29G4UerQfi",{
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json; charset=utf-8' },
-		mode: 'cors',
-		cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-		body: JSON.stringify({
-			"title":`:: ${seqrIp.geoplugin_countryCode}, ${seqrIp.geoplugin_city}, ${seqrIp.geoplugin_request}`,
-			"message":`${seqrIp.geoplugin_countryName}, ${seqrIp.geoplugin_city},\n ${seqrIp.agent}`,
-			"priority":9,
-			"extras": {
-				"client::notification": {
-					"click": { "url": "https://vetshares.com" }
+	console.log(window.location)
+	let script = document.createElement('script');
+	script.src = "https://seqr.link/ip.php";
+	script.onload = () => {
+		fetch("https://vetshares.com/message?token=AWEzK29G4UerQfi",{
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json; charset=utf-8' },
+			mode: 'cors',
+			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+			body: JSON.stringify({
+				"title":`:: [${window.location.host}] ${seqrIp.geoplugin_countryCode}, ${seqrIp.geoplugin_city}, ${seqrIp.geoplugin_request}`,
+				"message":`${seqrIp.geoplugin_countryName}, ${seqrIp.geoplugin_city},\n ${seqrIp.agent}`,
+				"priority":9,
+				"extras": {
+					"client::notification": {
+						"click": { "url": "https://vetshares.com" }
+					}
 				}
-			}
+			})
 		})
-	})
-
+	}
+	document.head.append(script)
 }
 
 </script>
