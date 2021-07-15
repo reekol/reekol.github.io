@@ -88,7 +88,7 @@ input[type=submit]:hover {
 		flex-direction: column;
 	}
 	section {
-		padding-top:2vh;
+		padding-top:10vh;
 	}
 	.sectImg{
 		height:60vh;
@@ -96,6 +96,9 @@ input[type=submit]:hover {
 	}
 	input[type=text],input[type=submit], select, textarea {
 		width:50vw
+	}
+	#section1{
+		background: radial-gradient(ellipse at top left, #1b2735 0%, #090a0f 100%);
 	}
 }
 
@@ -113,6 +116,9 @@ input[type=submit]:hover {
 	}
 	input[type=text],input[type=submit], select, textarea {
 		width:90vw
+	}
+	#section1{
+		background: radial-gradient(ellipse at top left, #1b2735 0%, #090a0f 100%);
 	}
 }
 
@@ -170,39 +176,6 @@ section:target h1 {
 @keyframes fadeIn {
     100% { opacity:1 }
 }
-
-.gg-profile,
-.gg-profile::after,
-.gg-profile::before {
-    display: block;
-    box-sizing: border-box;
-    border: 2px solid;
-    border-radius: 100px
-}
-.gg-profile {
-    overflow: hidden;
-    transform: scale(var(--ggs,1));
-    width: 22px;
-    height: 22px;
-    position: relative
-}
-.gg-profile::after,
-.gg-profile::before {
-    content: "";
-    position: absolute;
-    top: 2px;
-    left: 5px;
-    width: 8px;
-    height: 8px
-}
-.gg-profile::after {
-    border-radius: 200px;
-    top: 11px;
-    left: 0px;
-    width: 18px;
-    height: 18px
-}
-
 </style>
 </head>
 <body>
