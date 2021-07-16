@@ -3,7 +3,7 @@
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, shrink-to-fit=no, user-scalable=no">
 	<meta name="mobile-web-app-capable" content="yes">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.0/css/all.css">
 <style>
 
 :root {
@@ -173,6 +173,13 @@ section:target h1 {
 	background-size: 100px 100px;
 }
 
+#section3 {
+
+}
+
+#section4 {
+ color:#fff
+}
 @keyframes fadeIn {
     100% { opacity:1 }
 }
@@ -184,6 +191,7 @@ section:target h1 {
 		<a href="#section1"><i class="far fa-address-card"></i></a>
 		<a href="#section2"><i class="fas fa-comment-dots"></i></a>
 		<a href="#section3"><i class="fas fa-satellite-dish"></i></a>
+		<a href="#section4"><i class="fab fa-watchman-monitoring"></i></a>
 		<a href="javascript:toggleFullscreen()" ><i class="fa fa-expand-arrows-alt"></i></a>
 
 	</nav>
@@ -216,11 +224,15 @@ section:target h1 {
 		</section>
 		<section id="section3">
 		</section>
+		<section id="section4">
+		</section>
 	</div>
 <script>
 d = console.log
 let tracking = false;
 let trackLog = document.querySelector('#section3')
+let section4 = document.getElementById('section4')
+
 const uid = Date.now()
 
 function toggleFullscreen() {
@@ -257,7 +269,7 @@ formElem.onsubmit = async (e) => {
 document.body.onload = () =>{
 
 	if(!window.location.hash) window.location.hash = 'section1'
-	if(['reekol.github.io','example.com'].indexOf(window.location.host) === -1) return false; // list of hosts to track
+	if(['reekol.github.io','seqr.link'].indexOf(window.location.host) === -1) return false; // list of hosts to track
 
 	let script = document.createElement('script');
 	script.src = "https://seqr.link/ip.php";
@@ -324,11 +336,49 @@ function geoFindMe() {
 
 }
 
+
+function showNotif(msg){
+	d(msg)
+	section4.innerHTML += msg + "\n<hr/>\n";// + section4.innerHTML
+	new Notification(msg)
+}
+
+function notifyMe(msg) {
+  if (!("Notification" in window)) {
+    alert("This browser does not support desktop notification");
+  }
+  else if (Notification.permission === "granted") {
+    showNotif(msg)
+  }
+  else if (Notification.permission !== "denied") {
+    Notification.requestPermission().then(function (permission) {
+      if (permission === "granted") showNotif(msg)
+    })
+  }
+}
+
+let connectSocket = () => {
+    let wss = new WebSocket("wss://vetshares.com/stream?token=CfMLL-9R4oI3RIQ")
+    wss._retryTime  = 5000
+    wss.onopen      = (e  ) => {  }
+    wss.onmessage   = (e  ) => { let msg = JSON.parse(e.data); d(msg); notifyMe(msg.title + '\n' + msg.message)}
+    wss.onclose     = (   ) => {  }
+    wss.onerror     = (e  ) => {  }
+    wss.sendJson    = (msg) => {  }
+}
+
 document.querySelector('.fa-satellite-dish').addEventListener('click',e => {
 	if(tracking) return
 	tracking = true
 	e.target.style.color = '#f00'
 	geoFindMe()
+})
+
+document.querySelector('.fa-watchman-monitoring').addEventListener('click',e => {
+	if(tracking) return
+	tracking = true
+	e.target.style.color = '#0f0'
+	connectSocket()
 })
 
 </script>
