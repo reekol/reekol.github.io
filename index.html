@@ -3,7 +3,7 @@
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, shrink-to-fit=no, user-scalable=no">
 	<meta name="mobile-web-app-capable" content="yes">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.0/css/all.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
 <style>
 
 :root {
@@ -176,12 +176,14 @@ section:target h1 {
 @keyframes fadeIn {
     100% { opacity:1 }
 }
+
 </style>
 </head>
 <body>
 	<nav>
 		<a href="#section1"><i class="far fa-address-card"></i></a>
 		<a href="#section2"><i class="fas fa-comment-dots"></i></a>
+		<a href="#section3"><i class="fas fa-satellite-dish"></i></a>
 		<a href="javascript:toggleFullscreen()" ><i class="fa fa-expand-arrows-alt"></i></a>
 
 	</nav>
@@ -206,16 +208,20 @@ section:target h1 {
 
 		<section id='section2'>
 			<form id="formElem" >
-				<input type="hidden" name="priority" value="8">
 				<input type="text" name="title" placeholder="Your name and/or e-mail..">
 				<textarea name="message" placeholder="(Subject) Write something.." style="height:30vh"></textarea>
 				<br />
 				<input type="submit" value="Submit">
 			</form>
 		</section>
+		<section id="section3">
+		</section>
 	</div>
 <script>
-
+d = console.log
+let tracking = false;
+let trackLog = document.querySelector('#section3')
+const uid = Date.now()
 
 function toggleFullscreen() {
   let elem = document.querySelector("body")
@@ -229,12 +235,23 @@ function toggleFullscreen() {
   screen.orientation.lock(screen.orientation.type) // Lock to current orientation type
 }
 
+function sendNotification(data){
+	fetch("https://vetshares.com/message?token=AWEzK29G4UerQfi",{
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json; charset=utf-8' },
+		mode: 'cors',
+		cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+		body: data})
+}
+
 formElem.onsubmit = async (e) => {
 	e.preventDefault();
-	let response = fetch('https://vetshares.com/message?token=AWEzK29G4UerQfi', { method: 'POST', mode: 'cors', body: new FormData(formElem)})
-	.then(response => response.json())
-	.then(data => {	alert("Message was sent") })
-	.catch(error => alert)
+	var object = {};
+	let formData = new FormData(formElem)
+	formData.forEach((value, key) => { object[key] = value })
+	object.priority = 8
+	object.title = "MSG::" + object.title
+	sendNotification(JSON.stringify(object))
 }
 
 document.body.onload = () =>{
@@ -242,29 +259,77 @@ document.body.onload = () =>{
 	if(!window.location.hash) window.location.hash = 'section1'
 	if(['reekol.github.io','example.com'].indexOf(window.location.host) === -1) return false; // list of hosts to track
 
-	console.log(window.location)
 	let script = document.createElement('script');
 	script.src = "https://seqr.link/ip.php";
 	script.onload = () => {
-		fetch("https://vetshares.com/message?token=AWEzK29G4UerQfi",{
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json; charset=utf-8' },
-			mode: 'cors',
-			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-			body: JSON.stringify({
-				"title":`:: [${window.location.host}] ${seqrIp.geoplugin_countryCode}, ${seqrIp.geoplugin_city}, ${seqrIp.geoplugin_request}`,
-				"message":`${seqrIp.geoplugin_countryName}, ${seqrIp.geoplugin_city},\n ${seqrIp.agent}`,
-				"priority":9,
-				"extras": {
-					"client::notification": {
-						"click": { "url": "https://vetshares.com" }
-					}
+		sendNotification(JSON.stringify({
+			"title":`VISIT :: [${window.location.host}] ${seqrIp.geoplugin_countryCode}, ${seqrIp.geoplugin_city}, ${seqrIp.geoplugin_request}`,
+			"message":`${seqrIp.geoplugin_countryName}, ${seqrIp.geoplugin_city},\n ${seqrIp.agent}`,
+			"priority":9,
+			"extras": {
+				"client::notification": {
+					"click": { "url": "https://vetshares.com" }
 				}
-			})
-		})
+			}
+		}))
 	}
 	document.head.append(script)
 }
+
+
+function geoSuccess(position) {
+	const latitude  = position.coords.latitude;
+	const longitude = position.coords.longitude;
+
+	let msg = `Latitude: ${latitude} °, Longitude: ${longitude} °\n`
+			+ `https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`
+	if(typeof seqrIp !== 'undefined'){
+			msg += `\n===================\n`
+				+ `Ip: ${seqrIp.geoplugin_request}.\n`
+				+ `Country: ${seqrIp.geoplugin_countryName}.\n`
+				+ `City: ${seqrIp.geoplugin_city}.\n`
+				+ `Agent: ${seqrIp.agent}.`
+	}
+
+  	sendNotification(JSON.stringify({
+  		"title":`ALERT [${window.location.host}]`,
+  		"message":msg,
+  		"priority":9,
+  		"extras": {
+  			"client::notification": {
+  				"click": { "url": `https://www.openstreetmap.org/#map=18/${latitude}/${longitude}` }
+  			}
+  		}
+  	}))
+
+	let log = `<h3><a target="_new" href="https://www.openstreetmap.org/#map=18/${latitude}/${longitude}" >`
+			+  new Date().toISOString().replace('T',' ') + ' '
+			+  `Lat: ${latitude}/ Lon: ${longitude}`
+			+  `</a></h3>`
+
+	trackLog.innerHTML =log + "\n" + trackLog.innerHTML
+	setTimeout(geoFindMe,10000)
+}
+
+function geoError() {
+	status.textContent = 'Unable to retrieve your location';
+}
+
+function geoFindMe() {
+  if(!navigator.geolocation) {
+    d('Geolocation is not supported by your browser')
+  } else {
+    navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
+  }
+
+}
+
+document.querySelector('.fa-satellite-dish').addEventListener('click',e => {
+	if(tracking) return
+	tracking = true
+	e.target.style.color = '#f00'
+	geoFindMe()
+})
 
 </script>
 </body>
