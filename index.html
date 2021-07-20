@@ -264,6 +264,7 @@ formElem.onsubmit = async (e) => {
 	object.priority = 8
 	object.title = "MSG::" + object.title
 	sendNotification(JSON.stringify(object))
+	alert('Message was sent')
 }
 
 document.body.onload = () =>{
@@ -314,10 +315,10 @@ function geoSuccess(position) {
   		}
   	}))
 
-	let log = `<h3><a target="_new" href="https://www.openstreetmap.org/#map=18/${latitude}/${longitude}" >`
-			+  new Date().toISOString().replace('T',' ') + ' '
-			+  `Lat: ${latitude}/ Lon: ${longitude}`
-			+  `</a></h3>`
+	let log = `<h5><a target="_new" href="https://www.openstreetmap.org/#map=18/${latitude}/${longitude}" >`
+			+  new Date().toISOString().replace('T',' ').split('.')[0].replaceAll(' ','&nbsp;') + '&nbsp;'
+			+  `(&harr;&nbsp;${latitude}&nbsp;/&nbsp;&varr;&nbsp;${longitude})`
+			+  `</a></h5>`
 
 	trackLog.innerHTML =log + "\n" + trackLog.innerHTML
 	setTimeout(geoFindMe,10000)
