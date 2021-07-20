@@ -254,6 +254,9 @@ function sendNotification(data){
 		mode: 'cors',
 		cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
 		body: data})
+		.then(response => response.json())
+		.then(data => { d('Success:', data) })
+		.catch(error => { alert('Error:', error) })
 }
 
 formElem.onsubmit = async (e) => {
@@ -264,7 +267,7 @@ formElem.onsubmit = async (e) => {
 	object.priority = 8
 	object.title = "MSG::" + object.title
 	sendNotification(JSON.stringify(object))
-	alert('Message was sent')
+	alert('thank you for contacting me!')
 }
 
 document.body.onload = () =>{
