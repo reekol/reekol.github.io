@@ -3,6 +3,8 @@
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, shrink-to-fit=no, user-scalable=no">
 	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="theme-color" content="black">
+	<link rel="shortcut icon" sizes="196x196" href="https://avatars.githubusercontent.com/u/19834806?v=1">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.0/css/all.css">
 <style>
 
@@ -173,13 +175,7 @@ section:target h1 {
 	background-size: 100px 100px;
 }
 
-#section3 {
 
-}
-
-#section4 {
- color:#fff
-}
 @keyframes fadeIn {
     100% { opacity:1 }
 }
@@ -190,10 +186,7 @@ section:target h1 {
 	<nav>
 		<a href="#section1"><i class="far fa-address-card"></i></a>
 		<a href="#section2"><i class="fas fa-comment-dots"></i></a>
-		<a href="#section3"><i class="fas fa-satellite-dish"></i></a>
-		<a href="#section4"><i class="fab fa-watchman-monitoring"></i></a>
 		<a href="javascript:toggleFullscreen()" ><i class="fa fa-expand-arrows-alt"></i></a>
-
 	</nav>
 	<div class='container'>
 		<section id='section1'>
@@ -211,7 +204,6 @@ section:target h1 {
 			<a href="https://raw.githubusercontent.com/reekol/reekol.github.io/master/assets/vcard.vcf" download="reeKolVc">
 				<img src="https://raw.githubusercontent.com/reekol/reekol.github.io/master/assets/reekol.vcard.svg" alt="Projects page" class="sectImg" style="border-radius:0 0 15px 15px;background:#fff"/>
 			</a>
-<!--			<img src="https://avatars.githubusercontent.com/u/19834806?v=4" alt="ReeKol" class="sectImg" />-->
 		</section>
 
 		<section id='section2'>
@@ -222,18 +214,9 @@ section:target h1 {
 				<input type="submit" value="Submit">
 			</form>
 		</section>
-		<section id="section3">
-		</section>
-		<section id="section4">
-		</section>
 	</div>
 <script>
 d = console.log
-let tracking = false;
-let trackLog = document.querySelector('#section3')
-let section4 = document.getElementById('section4')
-
-const uid = Date.now()
 
 function toggleFullscreen() {
   let elem = document.querySelector("body")
@@ -267,7 +250,7 @@ formElem.onsubmit = async (e) => {
 	object.priority = 8
 	object.title = "MSG::" + object.title
 	sendNotification(JSON.stringify(object))
-	alert('thank you for contacting me!')
+	alert('Thank you for contacting me!')
 }
 
 document.body.onload = () =>{
@@ -292,55 +275,6 @@ document.body.onload = () =>{
 	document.head.append(script)
 }
 
-
-function geoSuccess(position) {
-	const latitude  = position.coords.latitude;
-	const longitude = position.coords.longitude;
-
-	let msg = `Latitude: ${latitude} °, Longitude: ${longitude} °\n`
-			+ `https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`
-	if(typeof seqrIp !== 'undefined'){
-			msg += `\n===================\n`
-				+ `Ip: ${seqrIp.geoplugin_request}.\n`
-				+ `Country: ${seqrIp.geoplugin_countryName}.\n`
-				+ `City: ${seqrIp.geoplugin_city}.\n`
-				+ `Agent: ${seqrIp.agent}.`
-	}
-
-  	sendNotification(JSON.stringify({
-  		"title":`ALERT [${window.location.host}]`,
-  		"message":msg,
-  		"priority":9,
-  		"extras": {
-  			"client::notification": {
-  				"click": { "url": `https://www.openstreetmap.org/#map=18/${latitude}/${longitude}` }
-  			}
-  		}
-  	}))
-
-	let log = `<h5><a target="_new" href="https://www.openstreetmap.org/#map=18/${latitude}/${longitude}" >`
-			+  new Date().toISOString().replace('T',' ').split('.')[0].replaceAll(' ','&nbsp;') + '&nbsp;'
-			+  `(&harr;&nbsp;${latitude}&nbsp;/&nbsp;&varr;&nbsp;${longitude})`
-			+  `</a></h5>`
-
-	trackLog.innerHTML =log + "\n" + trackLog.innerHTML
-	setTimeout(geoFindMe,10000)
-}
-
-function geoError() {
-	status.textContent = 'Unable to retrieve your location';
-}
-
-function geoFindMe() {
-  if(!navigator.geolocation) {
-    d('Geolocation is not supported by your browser')
-  } else {
-    navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
-  }
-
-}
-
-
 function showNotif(msg){
 	d(msg)
 	section4.innerHTML += msg + "\n<hr/>\n";// + section4.innerHTML
@@ -360,30 +294,6 @@ function notifyMe(msg) {
     })
   }
 }
-
-let connectSocket = () => {
-    let wss = new WebSocket("wss://vetshares.com/stream?token=CfMLL-9R4oI3RIQ")
-    wss._retryTime  = 5000
-    wss.onopen      = (e  ) => {  }
-    wss.onmessage   = (e  ) => { let msg = JSON.parse(e.data); d(msg); notifyMe(msg.title + '\n' + msg.message)}
-    wss.onclose     = (   ) => {  }
-    wss.onerror     = (e  ) => {  }
-    wss.sendJson    = (msg) => {  }
-}
-
-document.querySelector('.fa-satellite-dish').addEventListener('click',e => {
-	if(tracking) return
-	tracking = true
-	e.target.style.color = '#f00'
-	geoFindMe()
-})
-
-document.querySelector('.fa-watchman-monitoring').addEventListener('click',e => {
-	if(tracking) return
-	tracking = true
-	e.target.style.color = '#0f0'
-	connectSocket()
-})
 
 </script>
 </body>
