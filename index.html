@@ -4,8 +4,10 @@
 	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, shrink-to-fit=no, user-scalable=no">
 	<meta name="mobile-web-app-capable" content="yes">
 	<meta name="theme-color" content="black">
-	<link rel="shortcut icon" sizes="196x196" href="https://avatars.githubusercontent.com/u/19834806?v=1">
+	<link rel="shortcut icon" sizes="196x196" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2016%2016'%3E%3Ctext%20x='0'%20y='14'%3E🖌%3C/text%3E%3C/svg%3E" type="image/svg+xml">
+	<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2016%2016'%3E%3Ctext%20x='0'%20y='14'%3E🖌%3C/text%3E%3C/svg%3E" type="image/svg+xml" />
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.0/css/all.css">
+
 <style>
 
 :root {
@@ -19,14 +21,21 @@
   box-sizing: border-box;
 }
 
-html, body { height: 100% }
-a { text-decoration:none; color:var(--link-color)}
-.clear{clear:both}
+
+html, body {
+	height: 100%;
+	touch-action: none;
+}
+
+a {
+	text-decoration:none;
+	color:var(--link-color)
+}
 
 .container {
-  min-height: 100vh;
-  font-family: Montserrat, sans-serif;
+  min-height: 100vh
 }
+
 section {
 	position: absolute;
 	top: 0;
@@ -34,12 +43,10 @@ section {
 	width: 0;
 	opacity: 0;
 	transition: all ease-in .5s;
-/*    display: flex; */
-	text-align:right;
 	justify-content: right;
 	align-items: right;
-	padding:5vw;
 }
+
 nav {
 	position: absolute;
 	left: 0;
@@ -47,42 +54,7 @@ nav {
 	z-index: 50;
 	display: flex;
 }
-body, section {
-	background:
-		radial-gradient(black 15%, transparent 16%) 0 0,
-		radial-gradient(black 15%, transparent 16%) 8px 8px,
-		radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px,
-		radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px;
-	background-color:#282828;
-	background-size:16px 16px;
-}
-.sectImg{
-	border-radius:4px;
-	margin-bottom:20px;
-	border:1px solid #fff;
-}
-input[type=text], select, textarea {
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  margin-top: 6px;
-  margin-bottom: 16px;
-  resize: vertical;
-}
 
-input[type=submit] {
-  background-color: #04AA6D;
-  color: white;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-input[type=submit]:hover {
-  background-color: #45a049;
-}
 
 @media (orientation: landscape) {
 	nav {
@@ -92,15 +64,13 @@ input[type=submit]:hover {
 	section {
 		padding-top:10vh;
 	}
-	.sectImg{
-		height:60vh;
-		width:60vh;
+
+	body {
+		background: linear-gradient(to right, #3b4775 0%, #090a0f 100%);
 	}
-	input[type=text],input[type=submit], select, textarea {
-		width:50vw
-	}
-	#section1{
-		background: radial-gradient(ellipse at top left, #3b4775 0%, #090a0f 100%);
+	.fa, .fas, .fab, .far {
+		font-size:5vh;
+		padding: 2vh;
 	}
 }
 
@@ -112,67 +82,40 @@ input[type=submit]:hover {
 	section {
 		padding-top:100px;
 	}
-	.sectImg{
-		height:90vw;
-		width:90vw;
+
+	body {
+		background: linear-gradient(to bottom, #3b4775 0%, #090a0f 100%);
 	}
-	input[type=text],input[type=submit], select, textarea {
-		width:90vw
-	}
-	#section1{
-		background: radial-gradient(ellipse at top left, #3b4775 0%, #090a0f 100%);
+	.fa, .fas, .fab , .far {
+		font-size:5vw;
+		padding: 2vw;
 	}
 }
 
-nav a {
-    font-size: 50px;
-    color: var(--link-color);
-    text-decoration: none;
-    padding: 20px;
-    text-align: center;
-    float:left;
+
+.fa, .fas, .fab, .far  {
+	caret-color: transparent;
+	cursor:pointer;
+	color: var(--link-color);
+	text-decoration: none;
+	text-align: center;
+	text-shadow: 4px 4px 2px #000, 0 0 1em #cdcdcd, 0 0 0.2em #cdcdcd;
 }
 
-
-section h1 {
-    color: var(--h1-color);
-    font-size: 30px;
-    opacity: 0;
-}
 
 /* Styles applied on trigger */
 section:target {
-    opacity: 1;
-    position: absolute;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    z-index: 10;
+	opacity: 1;
+	position: absolute;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+	z-index: 10;
 }
 
 section:target h1 {
-    opacity: 0;
-    animation: 2s fadeIn forwards .5s;
-}
-
-#section1 {
-
-}
-
-#section2 {
-	background:
-		radial-gradient(hsl(0, 100%, 27%) 4%, hsl(0, 100%, 18%) 9%, hsla(0, 100%, 20%, 0) 9%) 0 0,
-		radial-gradient(hsl(0, 100%, 27%) 4%, hsl(0, 100%, 18%) 8%, hsla(0, 100%, 20%, 0) 10%) 50px 50px,
-		radial-gradient(hsla(0, 100%, 30%, 0.8) 20%, hsla(0, 100%, 20%, 0)) 50px 0,
-		radial-gradient(hsla(0, 100%, 30%, 0.8) 20%, hsla(0, 100%, 20%, 0)) 0 50px,
-		radial-gradient(hsla(0, 100%, 20%, 1) 35%, hsla(0, 100%, 20%, 0) 60%) 50px 0,
-		radial-gradient(hsla(0, 100%, 20%, 1) 35%, hsla(0, 100%, 20%, 0) 60%) 100px 50px,
-		radial-gradient(hsla(0, 100%, 15%, 0.7), hsla(0, 100%, 20%, 0)) 0 0,
-		radial-gradient(hsla(0, 100%, 15%, 0.7), hsla(0, 100%, 20%, 0)) 50px 50px,
-		linear-gradient(45deg, hsla(0, 100%, 20%, 0) 49%, hsla(0, 100%, 0%, 1) 50%, hsla(0, 100%, 20%, 0) 70%) 0 0,
-		linear-gradient(-45deg, hsla(0, 100%, 20%, 0) 49%, hsla(0, 100%, 0%, 1) 50%, hsla(0, 100%, 20%, 0) 70%) 0 0;
-	background-color: #300;
-	background-size: 100px 100px;
+	opacity: 0;
+	animation: 2s fadeIn forwards .5s;
 }
 
 
@@ -180,119 +123,190 @@ section:target h1 {
     100% { opacity:1 }
 }
 
+.alert {
+	border-radius:5px;
+	margin-top:10px;
+	margin-left:5vw;
+	margin-right:5vw;
+	padding: 0px;
+	background-color: rgba(255, 0, 0, 0.1);
+	color: white;
+	float:right;
+	overflow:hidden
+}
+.alert:nth-child(1){
+	background:rgba(255, 0, 0, 0.4);
+}
+.alertHead{
+	border-radius:5px 5px 0 0;
+	background:rgba(255, 0, 0, 0.3);
+	color:white;
+	padding:8px
+}
+
+.alertBody{
+	padding:8px;
+	font-family: monospace;
+}
+
+@media (orientation: landscape) {
+	.alert {
+		width:50vw
+	}
+}
+
+@media (orientation: portrait) {
+	.alert {
+		width:90vw;
+	}
+}
+
 </style>
 </head>
 <body>
 	<nav>
-		<a href="#section1"><i class="far fa-address-card"></i></a>
-		<a href="#section2"><i class="fas fa-comment-dots"></i></a>
-		<a href="javascript:toggleFullscreen()" ><i class="fa fa-expand-arrows-alt"></i></a>
+<!-- <a href="#section1"><i class="fas fa-dot-circle"></i></a> -->
 	</nav>
 	<div class='container'>
-		<section id='section1'>
-			<svg viewBox="0 0 350 150" xmlns="http://www.w3.org/2000/svg" class="sectImg" style="height:20vh;border-radius:15px 15px 0 0;margin-bottom:0">
-				<style>
-					.texts { font: bold italic 23px serif; fill: #fff;}
-				</style>
-				<text x="10"  y="40"  class="texts">ReeKol</text>
-				<text x="10"  y="70"  class="texts">cupuyc@gmail.com</text>
-				<text x="10"  y="100" class="texts">https://github.com/reekol</text>
-				<text x="10"  y="130" class="texts">vCard: &#8675;&#8675;&#8675;</text>
-			</svg>
-
-			<div class="clear" ></div>
-			<a href="https://raw.githubusercontent.com/reekol/reekol.github.io/master/assets/vcard.vcf" download="reeKolVc">
-				<img src="https://raw.githubusercontent.com/reekol/reekol.github.io/master/assets/reekol.vcard.svg" alt="Projects page" class="sectImg" style="border-radius:0 0 15px 15px;background:#fff"/>
-			</a>
-		</section>
-
-		<section id='section2'>
-			<form id="formElem" >
-				<input type="text" name="title" placeholder="Your name and/or e-mail..">
-				<textarea name="message" placeholder="(Subject) Write something.." style="height:30vh"></textarea>
-				<br />
-				<input type="submit" value="Submit">
-			</form>
-		</section>
+<!-- <section id="section1"></section> -->
 	</div>
-<script>
-d = console.log
+<script type="text/javascript">
 
-function toggleFullscreen() {
-  let elem = document.querySelector("body")
-  if (!document.fullscreenElement) {
-    elem.requestFullscreen().catch(err => {
-      alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`)
-    })
-  } else {
-    document.exitFullscreen()
-  }
-  screen.orientation.lock(screen.orientation.type) // Lock to current orientation type
+const d = console.log
+const audio =new AudioContext() // browsers limit the number of concurrent audio contexts, so you better re-use'em
+
+const beep = (vol, freq, duration) => {
+   v=audio.createOscillator()
+   u=audio.createGain()
+   v.connect(u)
+   v.frequency.value=freq
+   v.type="square"
+   u.connect(audio.destination)
+   u.gain.value=vol*0.01
+   v.start(audio.currentTime)
+   v.stop(audio.currentTime+duration*0.001)
 }
 
-function sendNotification(data){
-	fetch("https://vetshares.com/message?token=AWEzK29G4UerQfi",{
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json; charset=utf-8' },
-		mode: 'cors',
-		cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-		body: data})
-		.then(response => response.json())
-		.then(data => { d('Success:', data) })
-		.catch(error => { alert('Error:', error) })
+const blink = obj => {
+ 	setTimeout(() => { obj.style.visibility = 'hidden'  }, 100)
+ 	setTimeout(() => { obj.style.visibility = 'visible' }, 200)
+ 	setTimeout(() => { obj.style.visibility = 'hidden'  }, 300)
+ 	setTimeout(() => { obj.style.visibility = 'visible' }, 400)
+ 	setTimeout(() => { obj.style.visibility = 'hidden'  }, 500)
+ 	setTimeout(() => { obj.style.visibility = 'visible' }, 600)
+// 	beep(100, 520, 200)
 }
 
-formElem.onsubmit = async (e) => {
-	e.preventDefault();
-	var object = {};
-	let formData = new FormData(formElem)
-	formData.forEach((value, key) => { object[key] = value })
-	object.priority = 8
-	object.title = "MSG::" + object.title
-	sendNotification(JSON.stringify(object))
-	alert('Thank you for contacting me!')
+const showAlert = (parent, msg, notify) => {
+
+ 	let href = null
+
+ 	if(	typeof msg.extras !== 'undefined' &&
+ 		typeof msg.extras['client::notification'] !== 'undefined' &&
+ 		typeof msg.extras['client::notification'].click !== 'undefined' &&
+ 		typeof msg.extras['client::notification'].click.url !== 'undefined' )
+ 	{
+ 		href = msg.extras['client::notification'].click.url
+ 	}
+ 	if( typeof msg.date !== 'undefined')
+ 	{
+ 		msg.title = msg.date.split('.')[0].replace('T',' ') + ' ' + msg.title
+ 	}
+ 	if(notify) try{ new Notification(msg.title + '\n' + msg.message) }catch(e){ d(e) }
+
+ 	const 	newElLink = document.createElement(href ? "a" : "div")
+ 			newElLink.setAttribute('href',href)
+ 			newElLink.setAttribute('target','_new')
+ 			newElLink.className = 'alert'
+
+ 	const 	newEl = document.createElement("div")
+ 			newElLink.appendChild(newEl)
+
+ 	const 	newElHead = document.createElement("div")
+ 			newElHead.className = 'alertHead'
+ 	const 	newElHeadText = document.createTextNode(msg.title)
+ 			newElHead.appendChild(newElHeadText)
+
+ 	const 	newElBody = document.createElement("div")
+
+ 			newElBody.className = 'alertBody'
+ 	const 	newElBodyText = document.createTextNode(msg.message)
+ 			newElBody.appendChild(newElBodyText)
+
+ 	newEl.appendChild(newElHead)
+ 	newEl.appendChild(newElBody)
+
+ 	parent.prepend(newElLink)
+ 	blink(newEl)
+ 	return newEl
 }
 
-document.body.onload = () =>{
+const loadCss = css => {
+	let style = document.createElement('style')
+		style.type = 'text/css'
+		style.innerHTML = css
+		document.querySelector('head').appendChild(style)
+}
 
-	if(!window.location.hash) window.location.hash = 'section1'
-	if(['reekol.github.io','seqr.link'].indexOf(window.location.host) === -1) return false; // list of hosts to track
-
-	let script = document.createElement('script');
-	script.src = "https://seqr.link/ip.php";
-	script.onload = () => {
-		sendNotification(JSON.stringify({
-			"title":`VISIT :: [${window.location.host}] ${seqrIp.geoplugin_countryCode}, ${seqrIp.geoplugin_city}, ${seqrIp.geoplugin_request}`,
-			"message":`${seqrIp.geoplugin_countryName}, ${seqrIp.geoplugin_city},\n ${seqrIp.agent}`,
-			"priority":9,
-			"extras": {
-				"client::notification": {
-					"click": { "url": "https://vetshares.com" }
-				}
-			}
-		}))
-	}
+const loadScript	 = (src,cb) => {
+	let script = document.createElement('script')
+		script.src = src
+		script.onload = () => { d('Loaded: ' + src); if(cb) cb() }
 	document.head.append(script)
 }
 
-function showNotif(msg){
-	d(msg)
-	section4.innerHTML += msg + "\n<hr/>\n";// + section4.innerHTML
-	new Notification(msg)
+const loadScripts	 = (srcArr, pointer = 0) => {
+
+	if(typeof srcArr[pointer] === 'undefined') return
+
+	let src = srcArr[pointer]
+		pointer++
+
+	let tag = document.createElement('script')
+		tag.src = src + '?ts=' + new Date().getTime() // No Cache
+		tag.async = true
+		tag.defer = true
+		tag.onload = () => {
+			d('Loaded ' + pointer + ' : ' + src);
+			loadScripts(srcArr, pointer)
+		}
+	document.head.append(tag)
 }
 
-function notifyMe(msg) {
-  if (!("Notification" in window)) {
-    alert("This browser does not support desktop notification");
-  }
-  else if (Notification.permission === "granted") {
-    showNotif(msg)
-  }
-  else if (Notification.permission !== "denied") {
-    Notification.requestPermission().then(function (permission) {
-      if (permission === "granted") showNotif(msg)
-    })
-  }
+var PROJECT = null
+
+window.addEventListener('hashchange',() => {
+	let project = window.location.hash.substr(1).split('-')[0]
+	if(project !== PROJECT) window.location.reload()
+} ,false)
+
+document.body.onload = () => {
+	let project = window.location.hash.substr(1).split('-')[0]
+	if(!project) project = 'portfolio'
+	PROJECT = project
+	d('Loading project: ' + PROJECT)
+	let APPS = {
+		draw: [
+			'plugins/canvas.js',
+			'plugins/palette.js',
+			'plugins/range.js',
+			'plugins/undoredo.js',
+			'plugins/print.js',
+			'plugins/uploadCanvas.js',
+			'plugins/handwriting.js',
+			'plugins/fullscreen.js',
+		],
+		portfolio:[
+			'plugins/contacts.js',
+			'plugins/messageme.js',
+			'plugins/fullscreen.js',
+		],
+		oers:[
+			'plugins/oers.js',
+			'plugins/fullscreen.js',
+		]
+	}
+	loadScripts(APPS[project])
 }
 
 </script>
