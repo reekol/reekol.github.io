@@ -263,7 +263,7 @@ const loadScripts	 = (srcArr, pointer = 0) => {
 		pointer++
 
 	let tag = document.createElement('script')
-		tag.src = src + '?ts=' + new Date().getTime() // No Cache
+		tag.src = src // + '?ts=' + new Date().getTime() // No Cache
 		tag.async = true
 		tag.defer = true
 		tag.onload = () => {
