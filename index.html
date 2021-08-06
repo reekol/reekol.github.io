@@ -24,7 +24,10 @@
 
 html, body {
 	height: 100%;
-	touch-action: none;
+}
+
+body {
+	background: #3b4775
 }
 
 a {
@@ -61,13 +64,11 @@ nav {
 		height:100vh;
 		flex-direction: column;
 	}
+
 	section {
-		padding-top:10vh;
+		padding-top:2vh;
 	}
 
-	body {
-		background: linear-gradient(to right, #3b4775 0%, #090a0f 100%);
-	}
 	.fa, .fas, .fab, .far {
 		font-size:5vh;
 		padding: 2vh;
@@ -79,13 +80,11 @@ nav {
 		width:100vw;
 		flex-direction: row;
 	}
+
 	section {
-		padding-top:100px;
+		padding-top:10vh;
 	}
 
-	body {
-		background: linear-gradient(to bottom, #3b4775 0%, #090a0f 100%);
-	}
 	.fa, .fas, .fab , .far {
 		font-size:5vw;
 		padding: 2vw;
@@ -197,6 +196,11 @@ const blink = obj => {
 // 	beep(100, 520, 200)
 }
 
+const showAlertCleared = (parent, msg, notify) => {
+	parent.innerHTML = ''
+	return showAlert(parent, msg, notify)
+}
+
 const showAlert = (parent, msg, notify) => {
 
  	let href = null
@@ -263,7 +267,7 @@ const loadScripts	 = (srcArr, pointer = 0) => {
 		pointer++
 
 	let tag = document.createElement('script')
-		tag.src = src // + '?ts=' + new Date().getTime() // No Cache
+		tag.src = src + '?ts=' + new Date().getTime() // No Cache
 		tag.async = true
 		tag.defer = true
 		tag.onload = () => {
@@ -280,32 +284,51 @@ window.addEventListener('hashchange',() => {
 	if(project !== PROJECT) window.location.reload()
 } ,false)
 
+let APPS = {
+	draw: [
+		'plugins/canvas.js',
+		'plugins/palette.js',
+		'plugins/range.js',
+		'plugins/undoredo.js',
+		'plugins/print.js',
+		'plugins/uploadCanvas.js',
+		'plugins/handwriting.js',
+		'plugins/fullscreen.js',
+	],
+	oers:[
+		'plugins/oers.js',
+		'plugins/fullscreen.js',
+	],
+	audio:[
+		'plugins/audioplayer.js'
+	],
+	portfolio:[
+		'plugins/contacts.js',
+		'plugins/messageme.js',
+		'plugins/fullscreen.js',
+	]
+}
+
 document.body.onload = () => {
 	let project = window.location.hash.substr(1).split('-')[0]
-	if(!project) project = 'portfolio'
+	if(!project){
+		let container = document.getElementsByClassName('container')[0]
+		for( let app in APPS){
+			showAlert(container, {
+				title: app,
+				message: APPS[app].join('\n'),
+				extras: {
+					"client::notification": {
+						click: {
+							url: `https://reekol.github.io/#${app}`
+						}
+					}
+				}
+			})
+		}
+	}
 	PROJECT = project
 	d('Loading project: ' + PROJECT)
-	let APPS = {
-		draw: [
-			'plugins/canvas.js',
-			'plugins/palette.js',
-			'plugins/range.js',
-			'plugins/undoredo.js',
-			'plugins/print.js',
-			'plugins/uploadCanvas.js',
-			'plugins/handwriting.js',
-			'plugins/fullscreen.js',
-		],
-		portfolio:[
-			'plugins/contacts.js',
-			'plugins/messageme.js',
-			'plugins/fullscreen.js',
-		],
-		oers:[
-			'plugins/oers.js',
-			'plugins/fullscreen.js',
-		]
-	}
 	loadScripts(APPS[project])
 }
 
