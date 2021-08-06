@@ -1,5 +1,7 @@
 
 loadCss(`
+html, body { touch-action: none; }
+
 nav, .fa-paint-brush 		{ order: 0 }
 nav, .fa-fingerprint 		{ order: 1 }
 nav, .fa-palette 			{ order: 2 }
