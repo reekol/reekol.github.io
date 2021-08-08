@@ -4,19 +4,9 @@
 	let idx = PROJECT + ''
 	let nav = document.querySelector('nav')
 	let cnt = document.querySelector('.container')
-	let playing = false
 	let playlist = []
-	let nowPlaying
-	let nowPlayingTitle = document.createElement('div')
-
-	let nowPlayingTime = document.createElement('div')
-	let nowPlayingRange = document.createElement('input')
-		nowPlayingRange.type = 'range'
-		nowPlayingRange.value = 0
-		nowPlayingRange.min =  0
-		nowPlayingRange.max = 100
-		nowPlayingRange.step = 0.5
-		nowPlayingRange.style.width = '100%'
+	let storage = window.localStorage
+	let mediaRecorder
 
 	let btnPlus = document.createElement('a')
 		btnPlus.className = 'fas fa-folder-plus'
@@ -29,9 +19,6 @@
 	let btnPlay = document.createElement('a')
 		btnPlay.className = 'fas fa-play'
 		btnPlay.href = '#' + idx
-
-	let btnStop = document.createElement('i')
-		btnStop.className = 'fas fa-stop'
 
 	let btnForw = document.createElement('i')
 		btnForw.className = 'fas fa-fast-forward'
@@ -49,6 +36,8 @@
 		nav.appendChild(btnForw)
 		cnt.appendChild(boxPlay)
 
+	let frequencys = [30, 60, 120, 250, 500, 1000, 2000, 4000, 8000, 16000]
+
 	let player = document.createElement('audio')
 		player.controls = true
 		player.preload="metadata"
@@ -58,10 +47,10 @@
 
 	let files = document.createElement('input')
 		files.type = 'file'
-  		files.webkitdirectory = true
-   		files.directory = true
 		files.multiple = "multiple"
 		files.accept ="audio/*"
+		files.directory = 'directory'
+		files.webkitdirectory = 'webkitdirectory'
 
 	let audioContext,
 		audioContextAnalyser,
@@ -72,19 +61,114 @@
 		highPass,
 		lowPass
 
+	let alert = showAlertCleared(
+					boxPlay,
+					{title: 'Currently playing:',message: ''},
+					false
+				)
+		alert.id = 'playerList'
+	let alertBody = alert.getElementsByClassName('alertBody')[0]
+	let nowPlaying = alert.getElementsByClassName('alertHead')[0]
+	let nowPlayingTitle = document.createElement('div')
+
+	let nowPlayingTime = document.createElement('div')
+	let nowPlayingRange = document.createElement('input')
+		nowPlayingRange.type = 'range'
+		nowPlayingRange.value = 0
+		nowPlayingRange.min =  0
+		nowPlayingRange.max = 100
+		nowPlayingRange.step = 0.5
+		nowPlayingRange.style.width = '100%'
+
 	let nowPlayingVisualiser = document.createElement('canvas')
 		nowPlayingVisualiser.className = 'visualiser'
 		nowPlayingVisualiser.width  = 512
 		nowPlayingVisualiser.height = 300
 	let nowPlayingVisualiserContext = nowPlayingVisualiser.getContext("2d")
 
+	let boxEq = document.createElement('div')
+		boxEq.className = 'boxEq'
+
+		nowPlaying.appendChild(nowPlayingTitle)
+		nowPlaying.appendChild(nowPlayingTime)
+		nowPlaying.appendChild(nowPlayingRange)
+		nowPlaying.appendChild(document.createElement('br'))
+		nowPlaying.appendChild(nowPlayingVisualiser)
+		nowPlaying.appendChild(boxEq)
+
+
+	let presets = [
+		{ name: "Manual",	values: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+		{ name: "Dance",	values: [5, 2, 0, -10, -5, 0, 6, 12, 11, 10] },
+		{ name: "Rap",		values: [-13, -9, -4, 2, 8, 12, 2, -11, -2, 8] },
+		{ name: "Metal",	values: [12, 7, -3, 4, 13, 8, 3, -3, 8, 12] },
+		{ name: "Jazz",		values: [-8, 6, 0, 8, -8, 10, -2, 13, 8, 1] },
+		{ name: "SoftRock",	values: [5, 5, 2, -2, -8, -12, -4, 0, 7, 9] },
+		{ name: "Rock",		values: [6, 3, -8, -12, -4, 3, 8, 10, 10, 7] },
+		{ name: "Live",		values: [-6, 0, 4, 8, 9, 9, 5, 3, 2, 1] },
+		{ name: "Treble",	values: [-10, -11, -12, -6, 2, 8, 13, 13, 11, 14] },
+		{ name: "Bass",		values: [11, 7, 3, 0, 0, -6, -10, -10, -2, -2] },
+		{ name: "Classic",	values: [0, 7, -1, -7, -12, -8, 0, 10, 4, -5] },
+		{ name: "Opera",	values: [-13, -8, 0, 6, 14, 4, -4, -7, -8, -10] },
+	]
+
 	loadCss(`
+		.fa-microphone-alt {
+			color: #FF0000
+		}
+		.preset {
+			color:#3b4775;
+			cursor:pointer;
+		}
+    	.boxEq {
+			transform-origin:top left;
+			transform: rotate(-90deg);
+    		width: 100px;
+    		height: 250px;
+			padding:10px;
+			margin:0;
+
+			float:left;
+			margin-top:0p;
+			border: 0;
+    		background: transparent;
+    		border-radius: 10px;
+    		box-shadow: 0 0 25px 0 gray;
+    		display: flex;
+    		align-items: left;
+    		justify-content: space-around;
+    		flex-direction: column;
+		}
+
+		.boxEq input[type="range"] {
+     		-webkit-appearance: none;
+     		outline: none;
+     		width: 100%;
+			float:left;
+     		height: 10px;
+     		background: transparent;
+     		border-radius: 5px;
+     		box-shadow: inset 2px 2px 5px 0 gray;
+     		overflow: hidden;
+     	}
+
+     	.boxEq input[type="range"]::-webkit-slider-thumb {
+     		-webkit-appearance: none;
+     		width: 15px;
+     		height: 15px;
+     		background: #3b4775;
+     		box-shadow: 0 0 5px 0 silver;
+     		cursor: pointer;
+			border-radius: 50%;
+     	}
+
 	.visualiser {
 		height:100px;
 		width:100%;
 		margin-top:10px;
 		border-radius:10px;
-		background:blue
+		background:#fff;
+		float:left;
 	}
 	#${idx} .alert {
 		background:transparent,
@@ -127,23 +211,7 @@
 
 	#${idx} .alertHead {
 		height: 200px;
-	}
-
-	#${idx} #playerList .alertBody{
-		overflow-y: auto;
-		overflow-x: hidden;
-		height:calc(100% - 200px);
-
-	}
-	@media (orientation: landscape) {
-		#${idx} #playerList {
-			height:95vh
-		}
-	}
-	@media (orientation: portrait) {
-		#${idx} #playerList {
-			height:85vh
-		}
+		overflow:hidden;
 	}
 
 	.songPlayed {
@@ -158,6 +226,29 @@
 		background: rgb(255, 255, 0)
 	}
 
+	#${idx} #playerList .alertBody{
+		overflow-y: auto;
+		overflow-x: hidden;
+		height:calc(100% - 200px);
+
+	}
+	@media (orientation: landscape) {
+		#${idx} #playerList {
+			height:95vh
+		}
+	}
+	@media (orientation: portrait) and (min-width: 400px) {
+		#${idx} #playerList {
+			height:85vh
+		}
+	}
+
+	@media (orientation: portrait) and (min-width: 0px) and (max-width: 400px){
+		.alert {
+			width:100vw;
+			margin:0
+		}
+	}
 	`)
 
 	let onCanPlay = () => {
@@ -180,16 +271,16 @@
 		let currnetSongEl = document.getElementById('song-' + player.index)
 			document.querySelectorAll('.songPlaying').forEach( node => node.classList.remove('songPlaying') )
 
-		if(!player.paused){
+ 		if(!player.paused || btnPlay.className === 'fa fa-pause')
+		{
 			let source = URL.createObjectURL(playlist[player.index])
-				nowPlayingRange.value = 0
+ 				nowPlayingRange.value = 0
 				player.src = source
 		}
 
 		player
 			.play()
 			.then( () => {
-				playing = true
 				btnPlay.className = 'fa fa-pause'
 				currnetSongEl.classList.remove('songError')
 				currnetSongEl.classList.add('songPlayed')
@@ -204,7 +295,6 @@
  			})
 
 		nowPlayingTitle.innerText = (parseInt(player.index) + 1) + '/' + playlist.length + ') ' + playlist[player.index].name
-		document.title = playlist[player.index].name
 	}
 
 	let playNext = e => {
@@ -221,50 +311,25 @@
 	}
 
 	let plToggle = e => {
- 		if(playing){
+ 		if(player.paused){
+			play()
+		}else{
 			player.pause()
 			playing = false
 			btnPlay.className = 'fa fa-play'
-		}else{
-			play()
 		}
 	}
 
 	let createVisualiser = e => {
+		if(audioContext) return
 
-		if(!audioContext) 			audioContext = new AudioContext()
-		if(!audioContextSrc) 		audioContextSrc = audioContext.createMediaElementSource(player)
-		if(!audioContextAnalyser)	audioContextAnalyser = audioContext.createAnalyser()
+			audioContext = new AudioContext()
+			audioContextSrc = audioContext.createMediaElementSource(player)
+			audioContextAnalyser = audioContext.createAnalyser()
 
 			audioContextSrc.connect(audioContextAnalyser)
 			audioContextAnalyser.connect(audioContext.destination)
 			audioContextAnalyser.fftSize = 512
-
-			highShelf = audioContext.createBiquadFilter()
-			lowShelf = audioContext.createBiquadFilter()
-			highPass = audioContext.createBiquadFilter()
-			lowPass = audioContext.createBiquadFilter()
-
-			highShelf.connect(lowShelf)
-			lowShelf.connect(highPass)
-			highPass.connect(lowPass)
-			lowPass.connect(audioContext.destination)
-
-			highShelf.type = "highshelf"
-			highShelf.frequency.value = 4700
-			highShelf.gain.value = 1
-
-			lowShelf.type = "lowshelf"
-			lowShelf.frequency.value = 35
-			lowShelf.gain.value = 1
-
-			highPass.type = "highpass"
-			highPass.frequency.value = 800
-			highPass.Q.value = 0.1
-
-			lowPass.type = "lowpass"
-			lowPass.frequency.value = 880
-			lowPass.Q.value = 0.1
 
 		let bufferLength = audioContextAnalyser.frequencyBinCount
 		let dataArray = new Uint8Array(bufferLength)
@@ -277,6 +342,7 @@
 		let x = 0
 
 		let renderFrame = () => {
+
 			requestAnimationFrame(renderFrame)
 			x = 0
 			audioContextAnalyser.getByteFrequencyData(dataArray)
@@ -285,9 +351,9 @@
 
 			for (var i = 0; i < bufferLength; i++) {
 				barHeight = dataArray[i];
-				var b = barHeight + (25 * (i/bufferLength));
+				var r = barHeight + (25 * (i/bufferLength));
 				var g = 250 * (i/bufferLength);
-				var r = 90;
+				var b = 90;
 				nowPlayingVisualiserContext.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
 				nowPlayingVisualiserContext.fillRect(x, (HEIGHT - barHeight) - 5, barWidth, barHeight);
 				x += barWidth + 1;
@@ -295,18 +361,70 @@
 		}
 
 		renderFrame()
+//		z()
+		equalizerUIItem()
+
+	}
+
+	let equalizerUIItem = () => {
+		let filters = []
+		let inputs = []
+		for(let i in frequencys){
+			let hz = frequencys[i]
+			let input = document.createElement("input")
+				input.type = "range"
+				input.min = "-20.0"
+				input.max = "20.0"
+				input.value = "0"
+				input.addEventListener('input', e => {
+					filter.gain.value = input.value
+					let savedEq = []
+					for(let f of filters) savedEq.push(f.gain.value)
+					localStorage.setItem('filters',savedEq.join(','))
+				})
+				inputs.push(input)
+
+			let filter = audioContext.createBiquadFilter()
+				filter.type = "peaking";
+				filter.frequency.value = hz
+				filter.gain.value = 0
+				filters.push(filter)
+			boxEq.appendChild(input)
+		}
+
+		let storedEq = localStorage.getItem('filters')
+		if(storedEq){
+			storedEq = storedEq.split(',')
+			for(let i in storedEq){
+				inputs[i].value = storedEq[i]
+				inputs[i].dispatchEvent(new Event('input'))
+			}
+		}
+
+		for(let preset of presets){
+			let set = document.createElement('div')
+				set.className = 'preset'
+				set.textContent = preset.name
+ 				set.addEventListener('click', e => {
+ 						for(let i in preset.values){
+							inputs[i].value = preset.values[i]
+							inputs[i].dispatchEvent(new Event('input'))
+						}
+ 				})
+			boxEq.appendChild(set)
+		}
+
+		audioContextSrc.connect(filters[0])
+		for(var i = 0; i < filters.length - 1; i++) {
+			filters[i].connect(filters[i+1]);
+		}
+		filters[filters.length - 1].connect(audioContext.destination);
 
 	}
 
 	let showList = e => {
-		let alert = showAlertCleared(boxPlay,{
-			title: 'Currently playing:',
-			message: ''
-		},false)
-		alert.id = 'playerList'
-
 		player.index = 0
-		alertBody = alert.getElementsByClassName('alertBody')[0]
+		alertBody.innerHTML = ''
 		playlist.map((track,i) => {
 				let songEl = document.createElement('div')
 					songEl.id = 'song-' + i
@@ -317,19 +435,13 @@
 					}
 					alertBody.appendChild(songEl)
 			})
-		nowPlaying = alert.getElementsByClassName('alertHead')[0]
-		nowPlaying.appendChild(nowPlayingTitle)
-		nowPlaying.appendChild(nowPlayingTime)
-		nowPlaying.appendChild(nowPlayingRange)
-		nowPlaying.appendChild(document.createElement('br'))
-		nowPlaying.appendChild(nowPlayingVisualiser)
-
 		createVisualiser()
 	}
 
 	let playShuf = e => {
 		playlist = playlist.sort((a, b) => 0.5 - Math.random()) // Shuffle
 		showList()
+		play()
 	}
 
 	let playFile = e => {
@@ -346,6 +458,20 @@
 		play()
 	}
 
+	let  z = () => {
+		setTimeout(z, 40);
+		let l = ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"]
+		let d = new Uint8Array(4)
+		audioContextAnalyser.getByteFrequencyData(d)
+		const data = Array.from(d)
+		const s = data.map(v => l[Math.floor((v / 255) * 8)])
+		document.title = s.join("") + ' ' + playlist[player.index].name
+	}
+
+	let resizeEq = () => {
+		boxEq.style.height = nowPlayingVisualiser.offsetWidth
+	}
+
 	nowPlayingRange.addEventListener('input', onCanPlay, false)
 		player.		addEventListener('loadedmetadata', loadMeta, false)
 		player.		addEventListener('timeupdate', updateTime, false)
@@ -356,4 +482,78 @@
 		btnPlay.	addEventListener('click',  plToggle, false)
 		btnForw.	addEventListener('click',  playNext, false)
 		btnPrev.	addEventListener('click',  playPrev, false)
+
+		window.		addEventListener('resize', resizeEq, false)
+
+		resizeEq()
 })()
+
+
+
+
+
+
+
+
+
+// 	let btnMicr = document.createElement('i')
+// 		btnMicr.className = 'fas fa-microphone-alt'
+// 		nav.appendChild(btnMicr)
+
+
+// 	let allStoredNotes = () => {
+// 		var archive = [],
+// 			keys = Object.keys(localStorage),
+// 			i = keys.length
+// 		while ( i-- ){
+// 			let name = keys[i]
+// 			if(name.indexOf('note-') === 0){
+// 				d(fetch(localStorage.getItem( name )))
+// 					.then(r => r.blob())
+// 					.then(blobFile => {
+// 						playlist.push(
+// 							new File([blobFile], name, { type: blobFile.type })
+// 						)
+// 					})
+// 			}
+// 		}
+// 	}
+//
+// 	let startRecording = (e) => {
+// 		let name = 'note-' + Date.now()
+//
+// 		e.preventDefault()
+// 		e.target.style.color = "#0F0"
+//
+// 		navigator.mediaDevices
+// 			.getUserMedia({ audio: true })
+// 			.then(stream => {
+// 					mediaRecorder = new MediaRecorder(stream)
+// 					mediaRecorder.start()
+//
+// 				let audioChunks = []
+// 					mediaRecorder.addEventListener("dataavailable", event => {
+// 					audioChunks.push(event.data)
+// 				});
+//
+// 				mediaRecorder.addEventListener("stop", () => {
+// 					const audioBlob = new Blob(audioChunks,{type: 'audio/mpeg'})
+//
+// 					let reader = new FileReader();
+// 						reader.readAsDataURL(audioBlob)
+// 						reader.onloadend = () => localStorage.setItem(name, reader.result)
+// 				})
+// 			})
+//
+// 	}
+//
+//
+// 	let stopRecording = (e) => {
+// 		e.preventDefault()
+// 		e.target.style.color = "#F00"
+// 		mediaRecorder.stop().then(allStoredNotes)
+//
+// 	}
+
+// 		btnMicr.	addEventListener('pointerdown', startRecording, false)
+// 		btnMicr.	addEventListener('pointerup', stopRecording, false)
