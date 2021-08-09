@@ -35,7 +35,7 @@
 
 	let jFilter = document.createElement('input')
 		jFilter.className = 'jFilter'
-		jFilter.placeholder = 'Filter'
+		jFilter.placeholder = '(Shortcut: J key) Filter songs by name.'
 		jFilter.value = ''
 
 		nav.appendChild(btnPlus)
@@ -511,7 +511,10 @@
 //			d(e)
 //		if(e.altkey)
 		{
-				 if (e.keyCode === 106) jFilter.focus() // shift + j
+				 if (e.keyCode === 106){
+					 e.preventDefault()
+					 jFilter.focus() // shift + j
+				 }
 // 			else if (e.keyCode === 32 ) plToggle() // shift + space
 // 			else if (e.keyCode === 110) playNext() // shift + n
 // 			else if (e.keyCode === 112) playPrev() // shift + p
