@@ -267,6 +267,7 @@
 	}
 
 	let play = () => {
+		if(!playlist.length) playFile()
 
 		let currnetSongEl = document.getElementById('song-' + player.index)
 			document.querySelectorAll('.songPlaying').forEach( node => node.classList.remove('songPlaying') )
@@ -315,7 +316,6 @@
 			play()
 		}else{
 			player.pause()
-			playing = false
 			btnPlay.className = 'fa fa-play'
 		}
 	}
@@ -472,6 +472,13 @@
 		boxEq.style.height = nowPlayingVisualiser.offsetWidth
 	}
 
+	let keypress = e => {
+		if		(e.keyCode === 32 ) plToggle() // space
+		else if (e.keyCode === 110) playNext() // n
+		else if (e.keyCode === 112) playPrev() // p
+		else if (e.keyCode === 111) playFile() // o
+  	}
+
 	nowPlayingRange.addEventListener('input', onCanPlay, false)
 		player.		addEventListener('loadedmetadata', loadMeta, false)
 		player.		addEventListener('timeupdate', updateTime, false)
@@ -484,76 +491,7 @@
 		btnPrev.	addEventListener('click',  playPrev, false)
 
 		window.		addEventListener('resize', resizeEq, false)
+		document.	addEventListener('keypress',keypress,	false)
 
 		resizeEq()
 })()
-
-
-
-
-
-
-
-
-
-// 	let btnMicr = document.createElement('i')
-// 		btnMicr.className = 'fas fa-microphone-alt'
-// 		nav.appendChild(btnMicr)
-
-
-// 	let allStoredNotes = () => {
-// 		var archive = [],
-// 			keys = Object.keys(localStorage),
-// 			i = keys.length
-// 		while ( i-- ){
-// 			let name = keys[i]
-// 			if(name.indexOf('note-') === 0){
-// 				d(fetch(localStorage.getItem( name )))
-// 					.then(r => r.blob())
-// 					.then(blobFile => {
-// 						playlist.push(
-// 							new File([blobFile], name, { type: blobFile.type })
-// 						)
-// 					})
-// 			}
-// 		}
-// 	}
-//
-// 	let startRecording = (e) => {
-// 		let name = 'note-' + Date.now()
-//
-// 		e.preventDefault()
-// 		e.target.style.color = "#0F0"
-//
-// 		navigator.mediaDevices
-// 			.getUserMedia({ audio: true })
-// 			.then(stream => {
-// 					mediaRecorder = new MediaRecorder(stream)
-// 					mediaRecorder.start()
-//
-// 				let audioChunks = []
-// 					mediaRecorder.addEventListener("dataavailable", event => {
-// 					audioChunks.push(event.data)
-// 				});
-//
-// 				mediaRecorder.addEventListener("stop", () => {
-// 					const audioBlob = new Blob(audioChunks,{type: 'audio/mpeg'})
-//
-// 					let reader = new FileReader();
-// 						reader.readAsDataURL(audioBlob)
-// 						reader.onloadend = () => localStorage.setItem(name, reader.result)
-// 				})
-// 			})
-//
-// 	}
-//
-//
-// 	let stopRecording = (e) => {
-// 		e.preventDefault()
-// 		e.target.style.color = "#F00"
-// 		mediaRecorder.stop().then(allStoredNotes)
-//
-// 	}
-
-// 		btnMicr.	addEventListener('pointerdown', startRecording, false)
-// 		btnMicr.	addEventListener('pointerup', stopRecording, false)
