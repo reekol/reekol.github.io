@@ -12,6 +12,10 @@
 		btnPlus.className = 'fas fa-folder-plus'
 		btnPlus.href = '#' + idx
 
+	let btnFile = document.createElement('a')
+		btnFile.className = 'fas fa-file-audio'
+		btnFile.href = '#' + idx
+
 	let btnShuf = document.createElement('a')
 		btnShuf.className = 'fas fa-random'
 		btnShuf.href = '#' + idx
@@ -29,7 +33,13 @@
 	let boxPlay = document.createElement('section')
 		boxPlay.id = idx
 
+	let jFilter = document.createElement('input')
+		jFilter.className = 'jFilter'
+		jFilter.placeholder = 'Filter'
+		jFilter.value = ''
+
 		nav.appendChild(btnPlus)
+		nav.appendChild(btnFile)
 		nav.appendChild(btnShuf)
 		nav.appendChild(btnPrev)
 		nav.appendChild(btnPlay)
@@ -43,8 +53,7 @@
 		player.preload="metadata"
 		player.index = -1 // init with element before first one
 		player.volume = 1
-		player	.play() //workaround for initial error
-				.catch(e => d(['Ugly workaround', e]))
+		player.paused = true
 
 	let files = document.createElement('input')
 		files.type = 'file'
@@ -114,6 +123,15 @@
 	]
 
 	loadCss(`
+		.jFilter {
+			width:100%;
+			height:4vh;
+			padding-left:10px;
+			border:0;
+			margin-bottom:5px;
+			border-radius:2px;
+			outline: none
+		}
 		.fa-microphone-alt {
 			color: #FF0000
 		}
@@ -268,7 +286,7 @@
 	}
 
 	let play = () => {
-		if(!playlist.length) playFile()
+		if(!playlist.length) return playFile()
 
 		let currnetSongEl = document.getElementById('song-' + player.index)
 			document.querySelectorAll('.songPlaying').forEach( node => node.classList.remove('songPlaying') )
@@ -426,8 +444,10 @@
 	let showList = e => {
 		player.index = 0
 		alertBody.innerHTML = ''
+		alertBody.appendChild(jFilter)
 		playlist.map((track,i) => {
 				let songEl = document.createElement('div')
+					songEl.classList.add('song')
 					songEl.id = 'song-' + i
 					songEl.innerText = track.name
 					songEl.onclick = () => {
@@ -446,6 +466,20 @@
 	}
 
 	let playFile = e => {
+		if(e && e.target && e.target.className && e.target.className === 'fas fa-file-audio')
+		{
+			files.multiple = "multiple"
+			files.accept ="audio/*"
+			files.directory = false
+			files.webkitdirectory = false
+		}else{
+			files.type = ''
+			files.type = 'file'
+			files.multiple = "multiple"
+			files.accept ="audio/*"
+			files.directory = 'directory'
+			files.webkitdirectory = 'webkitdirectory'
+		}
 		files.click()
 	}
 
@@ -474,11 +508,26 @@
 	}
 
 	let keypress = e => {
-		if		(e.keyCode === 32 ) plToggle() // space
-		else if (e.keyCode === 110) playNext() // n
-		else if (e.keyCode === 112) playPrev() // p
-		else if (e.keyCode === 111) playFile() // o
+//			d(e)
+//		if(e.altkey)
+		{
+				 if (e.keyCode === 106) jFilter.focus() // shift + j
+// 			else if (e.keyCode === 32 ) plToggle() // shift + space
+// 			else if (e.keyCode === 110) playNext() // shift + n
+// 			else if (e.keyCode === 112) playPrev() // shift + p
+//  			else if (e.keyCode === 111) playFile() // shift + o
+
+		}
   	}
+
+  	let filterPl = e => {
+		let filter = e.target.value.toLowerCase()
+		if(filter.length > 0){
+			playlist.find( (a,i) => {
+				document.getElementById('song-' + i).style.display = (new RegExp(filter + '\*', 'gi')).test(a.name.toLowerCase()) ? 'block' : 'none';
+			})
+		}
+	}
 
 	nowPlayingRange.addEventListener('input', onCanPlay, false)
 		player.		addEventListener('loadedmetadata', loadMeta, false)
@@ -486,13 +535,16 @@
 		player.		addEventListener('ended',  playNext, false)
 		files.		addEventListener('change', playLoad, false)
 		btnPlus.	addEventListener('click',  playFile, false)
+		btnFile.	addEventListener('click',  playFile, false)
 		btnShuf.	addEventListener('click',  playShuf, false)
 		btnPlay.	addEventListener('click',  plToggle, false)
 		btnForw.	addEventListener('click',  playNext, false)
 		btnPrev.	addEventListener('click',  playPrev, false)
-
-		window.		addEventListener('resize', resizeEq, false)
+		jFilter.	addEventListener('input',  filterPl, false)
 		document.	addEventListener('keypress',keypress,	false)
+		window.		addEventListener('resize', resizeEq, false)
 
 		resizeEq()
 })()
+
+//alert(navigator.userAgent.toLowerCase().indexOf("android")) // is android
