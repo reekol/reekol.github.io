@@ -42,6 +42,7 @@
 		player.controls = true
 		player.preload="metadata"
 		player.index = -1 // init with element before first one
+		player.volume = 1
 		player	.play() //workaround for initial error
 				.catch(e => d(['Ugly workaround', e]))
 
