@@ -242,7 +242,7 @@ const showAlert = (parent, msg, notify) => {
 
  	parent.prepend(newElLink)
  	blink(newEl)
- 	return newEl
+ 	return newElLink
 }
 
 const loadCss = css => {
@@ -285,6 +285,10 @@ window.addEventListener('hashchange',() => {
 } ,false)
 
 let APPS = {
+	note: [
+		'plugins/notes.js',
+		'plugins/fullscreen.js',
+	],
 	draw: [
 		'plugins/canvas.js',
 		'plugins/palette.js',
@@ -300,7 +304,8 @@ let APPS = {
 		'plugins/fullscreen.js',
 	],
 	audio:[
-		'plugins/audioplayer.js'
+		'plugins/audioplayer.js',
+		'plugins/fullscreen.js',
 	],
 	portfolio:[
 		'plugins/contacts.js',
@@ -320,7 +325,7 @@ document.body.onload = () => {
 				extras: {
 					"client::notification": {
 						click: {
-							url: `https://reekol.github.io/#${app}`
+							url: `./#${app}`
 						}
 					}
 				}
