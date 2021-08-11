@@ -1,12 +1,13 @@
 
 (() => {
 
+    let ANDROID = (navigator.userAgent.toLowerCase().indexOf("android") > -1)// is android
 	let idx = PROJECT + ''
 	let nav = document.querySelector('nav')
 	let cnt = document.querySelector('.container')
 	let storage = window.localStorage
 	let playlist = []
-
+d(ANDROID)
 	let btnList = document.createElement('a')
 		btnList.className = 'fas fa-list'
 		btnList.href = '#' + idx
@@ -49,7 +50,8 @@
                             display:none !important
                         }
                     }`)
-                window.onafterprint =  e => { css.remove() }
+                // Fix for android's chrome not detecting afterprint as it should
+                window.addEventListener('afterprint', e => { setTimeout( i => css.remove(), ANDROID ? 3000 : 0) }, false)
                 window.print()
 
         },false)
@@ -157,8 +159,10 @@
                             display:none
                         }
                     }`)
-                window.onafterprint =  e => { css.remove() }
+                // Fix for android's chrome not detecting afterprint as it should
+                window.addEventListener('afterprint', e => { setTimeout( i => css.remove(), ANDROID ? 3000 : 0) }, false)
                 window.print()
+
             })
 
         let edit = e => {
@@ -199,4 +203,4 @@
     btnList.    dispatchEvent(new Event('pointerdown'))
 })()
 
-//alert(navigator.userAgent.toLowerCase().indexOf("android")) // is android
+
