@@ -65,7 +65,7 @@
             if(i == '='){
                 btn.addEventListener('pointerdown', e => { res.value = eval(res.value)  }, false)
             }else if (i == 'C'){
-                btn.addEventListener('pointerdown', e => { res.value = res.value.substring(0,res.value.length-1) }, false)
+                btn.addEventListener('pointerdown', e => { res.value = res.value.slice(0, -1) }, false)
             }else if (i == 'CE'){
                 btn.addEventListener('pointerdown', e => { res.value = ''               }, false)
             }else{
