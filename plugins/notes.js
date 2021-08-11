@@ -17,6 +17,43 @@
 		btnPlus.href = '#' + idx
 		nav.appendChild(btnPlus)
 
+	let btnPrint = document.createElement('a')
+		btnPrint.className = 'fas fa-print'
+		btnPrint.href = '#' + idx
+		nav.appendChild(btnPrint)
+
+        btnPrint.addEventListener('pointerdown', e => {
+                let css = loadCss(`
+                    @media print {
+                        * {
+                            visibility: hidden;
+                        }
+                        html, body{
+                            background:#fff
+                        }
+                        .alert{
+                            width:90vw;
+                            float:left;
+                            visibility: visible !important;
+                            border:1px solid rgba(0, 0, 0, 1) !important
+                        }
+                        .alert .alertHead{
+                            border-bottom:1px solid rgba(0, 0, 0, 1) !important
+                        }
+                        .alert, .alert .alertHead, .alert .alertBody {
+                            visibility: visible !important;
+                            background: #fff;
+                            color: #000;
+                        }
+                        .alert .fa-trash-alt, .alert .fa-print {
+                            display:none !important
+                        }
+                    }`)
+                window.onafterprint =  e => { css.remove() }
+                window.print()
+
+        },false)
+
     loadCss(`
         .confirm{
             color:#FFFF00;
@@ -119,10 +156,9 @@
                         #${newAlert.id} .fa-trash-alt, #${newAlert.id} .fa-print {
                             display:none
                         }
-
                     }`)
+                window.onafterprint =  e => { css.remove() }
                 window.print()
-                setTimeout( e => { css.remove() },1000)
             })
 
         let edit = e => {
