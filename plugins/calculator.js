@@ -6,11 +6,6 @@
 	let storage = window.localStorage
 	let items = [1,2,3,'+','-',4,5,6,'*','/',7,8,9,'**','=',0,'(',')','C','CE']
 
-    let clc = document.createElement('a')
-		clc.href="#" + idx
-		clc.className = 'fas fa-calculator'
-        nav.appendChild(clc)
-
 	loadCss(`
         #${idx}{
             font
@@ -18,6 +13,7 @@
         .calculator alertBody{
             justify-content: space-around;
         }
+
         .calcNum {
             margin:0;
             width:20%;
@@ -25,7 +21,8 @@
             outline:none;
             border-radius:5px;
             border:0;
-            font-size:3.0vh;
+            font-size:4.0vh;
+            font-weight: bold;
             color:#000;
             cursor:pointer;
             background: radial-gradient(#ffffff, #cdcdcd);
@@ -35,14 +32,14 @@
             outline:none;
             border:0;
             border-radius:5px;
-            height:6vh;
+            height:10vh;
             font-weight: bold;
-            font-size:3.0vh;
+            font-size:6.0vh;
             text-align:right;
             padding:10px;
         }
         .calculator{
-            margin-top:9vw
+            margin-top:2vh
         }
 	`)
     let alert = showAlert(cnt,{title:'',message:''},false)
