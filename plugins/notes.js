@@ -18,6 +18,9 @@
 		nav.appendChild(btnPlus)
 
     loadCss(`
+        .confirm{
+            color:#FFFF00;
+        }
         .container {
             padding-top: 8vw
         }
@@ -33,7 +36,7 @@
             white-space: pre;
         }
 
-        .fa-trash-alt{
+        .fa-trash-alt, .fa-dice-one, .fa-dice-two, .fa-dice-three, .fa-dice-four{
             float:right
         }
     `)
@@ -82,6 +85,10 @@
             alertTrash.className = 'fas fa-trash-alt'
             newAlert.appendChild(alertTrash)
 
+//         let alertShare = document.createElement('i')
+//             alertShare.className = 'fas fa-share-alt'
+//             newAlert.appendChild(alertShare)
+
         let edit = e => {
                 localStorage. setItem(
                     newAlert.id,
@@ -90,6 +97,21 @@
             }
 
         let trash = e => {
+
+            if(!alertTrash.classList.contains('confirm'))
+            {
+                alertTrash.classList.add('confirm')
+                blink(alertTrash)
+                setTimeout(() => { alertTrash.classList.replace('fa-trash-alt','fa-dice-four')}, 1000)
+                setTimeout(() => { alertTrash.classList.replace('fa-dice-four','fa-dice-three')}, 2000)
+                setTimeout(() => { alertTrash.classList.replace('fa-dice-three','fa-dice-two')}, 3000)
+                setTimeout(() => { alertTrash.classList.replace('fa-dice-two','fa-dice-one')}, 4000)
+                setTimeout(() => {
+                    alertTrash.classList.replace('fa-dice-one','fa-trash-alt')
+                    alertTrash.classList.remove('confirm')
+                },5000)
+                return
+            }
             localStorage.removeItem(newAlert.id)
             newAlert.remove()
         }
@@ -100,6 +122,7 @@
     }
     btnPlus.    addEventListener('pointerdown', createNote, false)
     btnList.    addEventListener('pointerdown',  listNotes, false)
+    btnList.click()
 })()
 
 //alert(navigator.userAgent.toLowerCase().indexOf("android")) // is android
