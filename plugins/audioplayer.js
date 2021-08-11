@@ -123,6 +123,7 @@
 	]
 
 	loadCss(`
+
 		.jFilter {
 			width:100%;
 			height:4vh;
@@ -252,20 +253,29 @@
 
 	}
 	@media (orientation: landscape) {
+        #${idx} {
+            padding-top: 2vh
+        }
 		#${idx} #playerList {
-			height:95vh
+			height:95vh;
 		}
 	}
 	@media (orientation: portrait) and (min-width: 400px) {
+        #${idx} {
+            padding-top: 9vw
+        }
 		#${idx} #playerList {
 			height:85vh
 		}
 	}
 
 	@media (orientation: portrait) and (min-width: 0px) and (max-width: 400px){
+        #${idx} {
+            padding-top: 9vw
+        }
 		.alert {
 			width:100vw;
-			margin:0
+			margin:0;
 		}
 	}
 	`)
