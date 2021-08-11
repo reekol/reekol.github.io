@@ -36,7 +36,7 @@
             white-space: pre;
         }
 
-        .fa-trash-alt, .fa-dice-one, .fa-dice-two, .fa-dice-three, .fa-dice-four{
+        .fa-trash-alt, .fa-dice-one, .fa-dice-two, .fa-dice-three, .fa-dice-four, .fa-dice-five, .fa-dice-six{
             float:right
         }
     `)
@@ -74,20 +74,56 @@
             newAlert.id = e.note && e.note.id ? e.note.id : 'note-' + Date.now()
 
         let alertHead = newAlert.getElementsByClassName('alertHead')[0]
+            alertHead.setAttribute('placeholder','Note title.')
             alertHead.setAttribute('contenteditable','true')
-            alertHead.textContent = e.note && e.note.title ? e.note.title : 'Note Title.'
+            alertHead.textContent = e.note && e.note.title ? e.note.title : ''
 
         let alertBody = newAlert.getElementsByClassName('alertBody')[0]
+            alertBody.setAttribute('placeholder','Note body.')
             alertBody.setAttribute('contenteditable','true')
-            alertBody.textContent = e.note && e.note.body ? e.note.body : 'Note Contents.'
+            alertBody.textContent = e.note && e.note.body ? e.note.body : ''
 
         let alertTrash = document.createElement('i')
             alertTrash.className = 'fas fa-trash-alt'
             newAlert.appendChild(alertTrash)
 
-//         let alertShare = document.createElement('i')
-//             alertShare.className = 'fas fa-share-alt'
-//             newAlert.appendChild(alertShare)
+        let alertShare = document.createElement('i')
+            alertShare.className = 'fas fa-print'
+            newAlert.appendChild(alertShare)
+
+            alertShare.addEventListener('pointerdown', e => {
+                let css = loadCss(`
+                    @media print {
+                        * {
+                            visibility: hidden;
+                        }
+                        html, body{
+                            background:#fff
+                        }
+                        #${newAlert.id}{
+                            position:absolute;
+                            top:5vh;
+                            width:90vw;
+                            float:left;
+                            visibility: visible !important;
+                            border:1px solid rgba(0, 0, 0, 1) !important
+                        }
+                        #${newAlert.id} .alertHead{
+                            border-bottom:1px solid rgba(0, 0, 0, 1) !important
+                        }
+                        #${newAlert.id},#${newAlert.id} .alertHead,#${newAlert.id} .alertBody {
+                            visibility: visible !important;
+                            background: #fff;
+                            color: #000;
+                        }
+                        #${newAlert.id} .fa-trash-alt, #${newAlert.id} .fa-print {
+                            display:none
+                        }
+
+                    }`)
+                window.print()
+                setTimeout( e => { css.remove() },1000)
+            })
 
         let edit = e => {
                 localStorage. setItem(
@@ -102,14 +138,16 @@
             {
                 alertTrash.classList.add('confirm')
                 blink(alertTrash)
-                setTimeout(() => { alertTrash.classList.replace('fa-trash-alt','fa-dice-four')}, 1000)
-                setTimeout(() => { alertTrash.classList.replace('fa-dice-four','fa-dice-three')}, 2000)
-                setTimeout(() => { alertTrash.classList.replace('fa-dice-three','fa-dice-two')}, 3000)
-                setTimeout(() => { alertTrash.classList.replace('fa-dice-two','fa-dice-one')}, 4000)
+                setTimeout(() => { alertTrash.classList.replace('fa-trash-alt','fa-dice-six')}, 1000)
+                setTimeout(() => { alertTrash.classList.replace('fa-dice-six','fa-dice-five')}, 2000)
+                setTimeout(() => { alertTrash.classList.replace('fa-dice-five','fa-dice-four')}, 3000)
+                setTimeout(() => { alertTrash.classList.replace('fa-dice-four','fa-dice-three')}, 4000)
+                setTimeout(() => { alertTrash.classList.replace('fa-dice-three','fa-dice-two')}, 5000)
+                setTimeout(() => { alertTrash.classList.replace('fa-dice-two','fa-dice-one')}, 6000)
                 setTimeout(() => {
                     alertTrash.classList.replace('fa-dice-one','fa-trash-alt')
                     alertTrash.classList.remove('confirm')
-                },5000)
+                },7000)
                 return
             }
             localStorage.removeItem(newAlert.id)
@@ -122,7 +160,7 @@
     }
     btnPlus.    addEventListener('pointerdown', createNote, false)
     btnList.    addEventListener('pointerdown',  listNotes, false)
-    btnList.click()
+    btnList.    dispatchEvent(new Event('pointerdown'))
 })()
 
 //alert(navigator.userAgent.toLowerCase().indexOf("android")) // is android
