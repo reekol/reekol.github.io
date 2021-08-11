@@ -148,6 +148,14 @@ section:target h1 {
 	font-family: monospace;
 }
 
+[placeholder]:empty::before {
+    content: attr(placeholder);
+}
+
+[placeholder]:empty:focus::before {
+    content: "";
+}
+
 @media (orientation: landscape) {
 	.alert {
 		width:50vw
