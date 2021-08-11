@@ -4,7 +4,7 @@
 	let nav = document.querySelector('nav')
 	let cnt = document.querySelector('.container')
 	let storage = window.localStorage
-	let items = [1,2,3,'+','-',4,5,6,'*','/',7,8,9,'**','=',0,'(',')','%','CE']
+	let items = [1,2,3,'+','-',4,5,6,'*','/',7,8,9,'**','=',0,'(',')','C','CE']
 
     let clc = document.createElement('a')
 		clc.href="#" + idx
@@ -28,6 +28,7 @@
             font-size:3.0vh;
             color:#000;
             cursor:pointer;
+            background: radial-gradient(#ffffff, #cdcdcd);
         }
         .calcText {
             width:100%;
@@ -60,9 +61,11 @@
             btn.type = 'button'
             btn.classList.add('calcNum')
             btn.value = i
-            if(parseInt(i) !== i) btn.style.background = '#cdcdcd'
+            if(parseInt(i) !== i) btn.style.background = 'radial-gradient(#ffffff, #dedede)'
             if(i == '='){
                 btn.addEventListener('pointerdown', e => { res.value = eval(res.value)  }, false)
+            }else if (i == 'C'){
+                btn.addEventListener('pointerdown', e => { res.value = res.value.substring(0,res.value.length-1) }, false)
             }else if (i == 'CE'){
                 btn.addEventListener('pointerdown', e => { res.value = ''               }, false)
             }else{
