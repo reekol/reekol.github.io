@@ -142,7 +142,7 @@
             alertQr.className = 'fas fa-qrcode'
             newAlert.appendChild(alertQr)
 
-            alertQr.addEventListener('pointerdown', e => {
+        let shareQr = e => {
                 document.querySelectorAll('.sharingQr').forEach( el => el.remove() )
                 let href = window.location.href.split('#')[0] + '#note-add?' +
                     btoa(
@@ -159,10 +159,11 @@
                     image.removeAttribute('height')
 
                 a.appendChild(image)
-                newAlert.prepend(a)
+                newAlert.appendChild(a)
 
-            })
-            alertPrint.addEventListener('pointerdown', e => {
+            }
+
+        let print = e => {
                 let css = loadCss(`
                     @media print {
                         * {
@@ -187,7 +188,7 @@
                             background: #fff;
                             color: #000;
                         }
-                        #${newAlert.id} .fa-trash-alt, #${newAlert.id} .fa-print {
+                        #${newAlert.id} .fa-trash-alt, #${newAlert.id} .fa-print, #${newAlert.id} .fa-qrcode {
                             display:none
                         }
                     }`)
@@ -195,9 +196,10 @@
                 window.addEventListener('afterprint', e => { setTimeout( i => css.remove(), ANDROID ? 3000 : 0) }, false)
                 window.print()
 
-            })
+            }
 
         let edit = e => {
+                document.querySelectorAll('.sharingQr').forEach( el => el.remove() )
                 localStorage. setItem(
                     newAlert.id,
                     JSON.stringify({title: alertHead.innerText, body: alertBody.innerText })
@@ -226,13 +228,17 @@
             newAlert.remove()
         }
 
-        alertHead.  addEventListener('input',       edit,  false)
-        alertBody.  addEventListener('input',       edit,  false)
-        alertTrash. addEventListener('pointerdown', trash, false)
-
+        alertHead.  addEventListener('pointerdown', edit,    false)
+        alertBody.  addEventListener('pointerdown', edit,    false)
+        alertHead.  addEventListener('input',       edit,    false)
+        alertBody.  addEventListener('input',       edit,    false)
+        alertTrash. addEventListener('pointerdown', trash,   false)
+        alertPrint. addEventListener('pointerdown', print,   false)
+        alertQr.    addEventListener('pointerdown', shareQr, false)
         return newAlert
+
     }
-    btnPlus.    addEventListener('pointerdown', createNote, false)
+    btnPlus.    addEventListener('pointerdown',  createNote, false)
     btnList.    addEventListener('pointerdown',  listNotes, false)
     btnList.    dispatchEvent(new Event('pointerdown'))
 
