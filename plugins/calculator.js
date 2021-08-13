@@ -50,7 +50,7 @@
     let res = document.createElement('input')
         res.type = 'text'
         res.classList.add('calcText')
-        res.placeholder = 'Result'
+        res.placeholder = '.'
         alertTitle.appendChild(res)
 
 	for(let i of items){
