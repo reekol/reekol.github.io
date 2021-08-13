@@ -61,11 +61,18 @@
         },false)
 
     loadCss(`
+        @media (orientation: landscape) {
+            .container {
+                padding-top: 2vh
+            }
+        }
+        @media (orientation: portrait) {
+            .container {
+                padding-top: 8vw
+            }
+        }
         .confirm{
             color:#FFFF00;
-        }
-        .container {
-            padding-top: 8vw
         }
         .newNote .alertHead {
             outline:none;
@@ -78,11 +85,9 @@
             font-family: monospace;
             white-space: pre;
         }
-
         .fa-trash-alt, .fa-dice-one, .fa-dice-two, .fa-dice-three, .fa-dice-four, .fa-dice-five, .fa-dice-six{
             float:right
         }
-
         .sharingQr {
             width:100%
         }
@@ -245,7 +250,7 @@
     let hash = window.location.hash.split('?')
     if(hash[0] === '#' + PROJECT + '-add' && hash[1])
     {
-        d(atob(hash[1]))
+        d(decodeURIComponent(atob(hash[1])))
         let note = createNote({
             note:JSON.parse(
                 decodeURIComponent(
