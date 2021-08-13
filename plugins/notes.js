@@ -7,7 +7,11 @@
 	let cnt = document.querySelector('.container')
 	let storage = window.localStorage
 	let playlist = []
-d(ANDROID)
+    let qrious = document.createElement('script')
+        qrious.type = 'text/javascript'
+        qrious.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js'
+        document.head.appendChild(qrious)
+
 	let btnList = document.createElement('a')
 		btnList.className = 'fas fa-list'
 		btnList.href = '#' + idx
@@ -41,12 +45,12 @@ d(ANDROID)
                         .alert .alertHead{
                             border-bottom:1px solid rgba(0, 0, 0, 1) !important
                         }
-                        .alert, .alert .alertHead, .alert .alertBody {
+                        .alert, .alert .alertHead, .alert .alertBody, .alert .sharingQr {
                             visibility: visible !important;
                             background: #fff;
                             color: #000;
                         }
-                        .alert .fa-trash-alt, .alert .fa-print {
+                        .alert .fa-trash-alt, .alert .fa-print, .alert .fa-qrcode {
                             display:none !important
                         }
                     }`)
@@ -77,6 +81,10 @@ d(ANDROID)
 
         .fa-trash-alt, .fa-dice-one, .fa-dice-two, .fa-dice-three, .fa-dice-four, .fa-dice-five, .fa-dice-six{
             float:right
+        }
+
+        .sharingQr {
+            width:100%
         }
     `)
 
@@ -126,11 +134,35 @@ d(ANDROID)
             alertTrash.className = 'fas fa-trash-alt'
             newAlert.appendChild(alertTrash)
 
-        let alertShare = document.createElement('i')
-            alertShare.className = 'fas fa-print'
-            newAlert.appendChild(alertShare)
+        let alertPrint = document.createElement('i')
+            alertPrint.className = 'fas fa-print'
+            newAlert.appendChild(alertPrint)
 
-            alertShare.addEventListener('pointerdown', e => {
+        let alertQr = document.createElement('i')
+            alertQr.className = 'fas fa-qrcode'
+            newAlert.appendChild(alertQr)
+
+            alertQr.addEventListener('pointerdown', e => {
+                document.querySelectorAll('.sharingQr').forEach( el => el.remove() )
+                let href = window.location.href.split('#')[0] + '#note-add?' +
+                    btoa(
+                        encodeURIComponent(
+                            JSON.stringify({title:alertHead.textContent, body: alertBody.textContent})
+                        )
+                    )
+
+                let a = document.createElement('a')
+                    a.href = href
+
+                let image = (new QRious({level: 'H', size: 500, value: href}).image)
+                    image.className = 'sharingQr'
+                    image.removeAttribute('height')
+
+                a.appendChild(image)
+                newAlert.prepend(a)
+
+            })
+            alertPrint.addEventListener('pointerdown', e => {
                 let css = loadCss(`
                     @media print {
                         * {
@@ -150,7 +182,7 @@ d(ANDROID)
                         #${newAlert.id} .alertHead{
                             border-bottom:1px solid rgba(0, 0, 0, 1) !important
                         }
-                        #${newAlert.id},#${newAlert.id} .alertHead,#${newAlert.id} .alertBody {
+                        #${newAlert.id},#${newAlert.id} .alertHead,#${newAlert.id} .alertBody, #${newAlert.id} .sharingQr {
                             visibility: visible !important;
                             background: #fff;
                             color: #000;
@@ -194,13 +226,30 @@ d(ANDROID)
             newAlert.remove()
         }
 
-            alertHead.  addEventListener('input',       edit,  false)
-            alertBody.  addEventListener('input',       edit,  false)
-            alertTrash. addEventListener('pointerdown', trash, false)
+        alertHead.  addEventListener('input',       edit,  false)
+        alertBody.  addEventListener('input',       edit,  false)
+        alertTrash. addEventListener('pointerdown', trash, false)
+
+        return newAlert
     }
     btnPlus.    addEventListener('pointerdown', createNote, false)
     btnList.    addEventListener('pointerdown',  listNotes, false)
     btnList.    dispatchEvent(new Event('pointerdown'))
+
+    let hash = window.location.hash.split('?')
+    if(hash[0] === '#' + PROJECT + '-add' && hash[1])
+    {
+        d(atob(hash[1]))
+        let note = createNote({
+            note:JSON.parse(
+                decodeURIComponent(
+                    atob(hash[1])))
+        })
+        note.getElementsByClassName('alertHead')[0] .dispatchEvent(new Event('input'))
+        note.getElementsByClassName('alertBody')[0] .dispatchEvent(new Event('input'))
+        window.location.hash = PROJECT
+    }
+
 })()
 
 
