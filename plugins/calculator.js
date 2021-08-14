@@ -4,7 +4,7 @@
 	let nav = document.querySelector('nav')
 	let cnt = document.querySelector('.container')
 	let storage = window.localStorage
-	let items = [1,2,3,'+','-',4,5,6,'*','/',7,8,9,'**','=',0,'(',')','C','CE']
+	let items = [1,2,3,'+','-',4,5,6,'*','/',7,8,9,'.','=',0,'(',')','C','CE']
 
 	loadCss(`
         #${idx}{
