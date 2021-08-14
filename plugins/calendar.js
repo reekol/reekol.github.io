@@ -23,7 +23,7 @@ loadCss(`
     }
 
     .days li:hover {
-        color: white !important
+        color: #00ffFF !important
     }
 
     .days .day6, .days .day7{
@@ -40,16 +40,24 @@ loadCss(`
 	let cnt = document.querySelector('.container')
 	let storage = window.localStorage
 
+	let	btnPrev = document.createElement('a')
+		btnPrev.href="#" + idx
+		btnPrev.className = 'fas fa-caret-left'
+        nav.appendChild(btnPrev)
 	let	btnMonth = document.createElement('a')
 		btnMonth.href="#" + idx
 		btnMonth.className = 'fas fa-calendar-alt'
         nav.appendChild(btnMonth)
-        btnMonth.dispatchEvent(new Event('pointerdown'))
+	let	btnNext = document.createElement('a')
+		btnNext.href="#" + idx
+		btnNext.className = 'fas fa-caret-right'
+        nav.appendChild(btnNext)
 
 	let section = document.createElement('section')
 		section.id = idx
 		section.style.background = 'transparent'
         cnt.appendChild(section)
+
 
 	let getDay = (year, month, day) => {
         let date = new Date()
@@ -112,12 +120,26 @@ loadCss(`
             alertBody.appendChild(ul)
     }
 
-
     let today = getDay()
-//    createMonthCal(today.year, today.month)
-    let toMonth = getMonth(today.year, today.month)
+    let year = today.year
 
-    let toYear = getYear(today.year)
+    btnNext. addEventListener('pointerdown', e => {
+        section.innerHTML = ''
+        let toYear = getYear(year++)
+        for(let i = 12; i > 0; i-- ) createMonthCal(year, i)
+    })
 
-    for(let i = 12; i > 0; i-- ) createMonthCal(today.year, i)
+    btnPrev. addEventListener('pointerdown', e => {
+        section.innerHTML = ''
+        let toYear = getYear(year--)
+        for(let i = 12; i > 0; i-- ) createMonthCal(year, i)
+    })
+
+    btnMonth. addEventListener('pointerdown', e => {
+        section.innerHTML = ''
+        year = today.year
+        let toYear = getYear(year)
+        for(let i = 12; i > 0; i-- ) createMonthCal(year, i)
+    })
+
 })()
