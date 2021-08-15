@@ -130,8 +130,10 @@
             alertHead.setAttribute('contenteditable','true')
             alertHead.textContent = e.note && e.note.title ? e.note.title : ''
         let color = (alertHead.innerText.charAt(0) === '#' ? alertHead.innerText.split(' ')[0] : false)
-        if(color) alertHead.style.background = color
-
+        if(color){
+            alertHead.style.color = ('#cdcdcd' < color ? '#000' : '#fff')
+            alertHead.style.background = color
+        }
         let alertBody = newAlert.getElementsByClassName('alertBody')[0]
             alertBody.setAttribute('placeholder','Note body.')
             alertBody.setAttribute('contenteditable','true')
@@ -244,7 +246,10 @@
         alertQr.    addEventListener('pointerdown', shareQr, false)
         alertHead.  addEventListener('input', () => {
             let color = (alertHead.innerText.charAt(0) === '#' ? alertHead.innerText.split(' ')[0] : false)
-            if(color) alertHead.style.background = color
+            if(color){
+                alertHead.style.color = ('#cdcdcd' < color ? '#000' : '#fff')
+                alertHead.style.background = color
+            }
         },false)
         return newAlert
 
