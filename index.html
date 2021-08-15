@@ -261,6 +261,14 @@ const loadCss = css => {
 		return style
 }
 
+const loadCssSrc = src => {
+	let style = document.createElement('link')
+		style.rel = 'stylesheet'
+        style.href = src
+        document.querySelector('head').appendChild(style)
+		return style
+}
+
 const loadScript	 = (src,cb) => {
 	let script = document.createElement('script')
 		script.src = src
