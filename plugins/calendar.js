@@ -18,7 +18,7 @@ loadCss(`
     }
 
     .days .active {
-        background: #1abc9c;
+        background: rgba(255, 0, 0, 0.3);
         color: white !important
     }
 
@@ -30,10 +30,30 @@ loadCss(`
         color: #00bb99;
         font-weight:bold
     }
+
+    .events {
+        position: relative;
+    }
+
+    .events::before,
+    .events::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        border-color: transparent;
+        border-style: solid;
+    }
+
+    .events::before {
+    }
+
+    .events::after {
+        border-width: 0.6em;
+    }
 `);
 
-
-(() => {
+;(() => {
 
    	let idx = PROJECT + ''
 	let nav = document.querySelector('nav')
@@ -58,6 +78,48 @@ loadCss(`
 		section.style.background = 'transparent'
         cnt.appendChild(section)
 
+    let archive = {}
+
+	let getAllNotes = () => {
+        let re = /\d{2}.\d{2}.\d{4}/mgi;
+			keys = Object.keys(localStorage).sort().reverse(),
+			i = keys.length
+		while ( i-- ){
+			let name = keys[i]
+			if(name.indexOf('note-') === 0){
+                try{
+                    let btoaclass = btoa(name)
+                    let item = JSON.parse(localStorage.getItem(name))
+                    let color = (item.title.charAt(0) === '#' ? item.title.split(' ')[0] : '#FFFFFF')
+                    let dates = item.body.matchAll(re)
+                    let matched = false
+                    for (const match of dates) {
+                        matched = true
+                        let matchDate = match[0].split('.').map( i => parseInt(i) ).join('.')
+                        if(typeof archive[matchDate] === 'undefined') archive[matchDate] = []
+                        archive[matchDate].push({
+                            name: name,
+                            class: btoaclass,
+                            match: match[0],
+                            start: match.index,
+                            end: match.index + match[0].length,
+                            color: color
+                        })
+                    }
+                    if(matched){
+                        loadCss(`.${btoaclass}::after {
+                            border-width: 0.6em;
+                            border-right-color: ${color};
+                            border-top-color: ${color};
+                        }`)
+                    }
+                }catch(e){
+                    d(['ERR',e])
+                }
+			}
+		}
+		return archive
+	}
 
 	let getDay = (year, month, day) => {
         let date = new Date()
@@ -71,8 +133,9 @@ loadCss(`
             dayOfMonth: date.getDate(),
             dayOfWeek:  date.getDay(),
         }
-
-        res.dayOfWeek = (res.dayOfWeek === 0 ? 7 : res.dayOfWeek)
+        let key = [res.dayOfMonth,res.month,res.year].join('.')
+            res.events = typeof archive[key] === 'undefined' ? [] : archive[key]
+            res.dayOfWeek = (res.dayOfWeek === 0 ? 7 : res.dayOfWeek)
         return res
     }
 
@@ -93,6 +156,15 @@ loadCss(`
         return months
     }
 
+    let showDayliEvents = e => {
+        let events = e.target.events
+        let toDisplay = []
+        for (let evt of events){
+            let note = JSON.parse(localStorage.getItem(evt.name))
+            toDisplay.push(note.title + '\n' + note.body)
+        }
+        d(toDisplay.join('\n>\n'))
+    }
     let createMonthCal = (year, month) => {
         let today = getDay()
         let toMonth = getMonth(year, month)
@@ -108,20 +180,31 @@ loadCss(`
             for(let day of toMonth){
                 let li = document.createElement('li')
                     li.innerText = day.dayOfMonth
-                    li.className = 'day' + day.dayOfWeek
+                    li.classList.add('day' + day.dayOfWeek)
                     ul.appendChild(li)
 
                 if(
                     today.year === day.year &&
                     today.month === day.month &&
                     today.dayOfMonth === day.dayOfMonth
-                ){ li.className = 'active' }
+                ){ li.classList.add('active') }
+
+                if( day.events.length > 0){
+                    li.classList.add('events')
+                    li.events = day.events
+                    for(let evt of day.events){
+                        li.classList.add(evt.class)
+                    }
+                    li.addEventListener('pointerdown',showDayliEvents,false)
+                }
             }
             alertBody.appendChild(ul)
     }
 
     let today = getDay()
     let year = today.year
+    getAllNotes()
+
 
     btnNext. addEventListener('pointerdown', e => {
         section.innerHTML = ''
