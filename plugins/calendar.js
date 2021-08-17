@@ -1,4 +1,14 @@
 loadCss(`
+    @media (orientation: landscape) {
+        .container {
+            padding-top: 2vh
+        }
+    }
+    @media (orientation: portrait) {
+        .container {
+            padding-top: 8vw
+        }
+    }
     ul {list-style-type: none;}
     ul, li {box-sizing: border-box;}
     .days {
@@ -51,7 +61,7 @@ loadCss(`
     .events::after {
         border-width: 0.6em;
     }
-`);
+`)
 
 ;(() => {
 
@@ -73,11 +83,11 @@ loadCss(`
 		btnNext.className = 'fas fa-caret-right'
         nav.appendChild(btnNext)
 
-	let section = document.createElement('section')
-		section.id = idx
-		section.style.background = 'transparent'
-        cnt.appendChild(section)
-
+// 	let section = document.createElement('section')
+// 		section.id = idx
+// 		section.style.background = '#0c0'
+//         cnt.appendChild(section)
+        section = cnt
     let archive = {}
 
 	let getAllNotes = () => {
@@ -224,5 +234,5 @@ loadCss(`
         let toYear = getYear(year)
         for(let i = 12; i > 0; i-- ) createMonthCal(year, i)
     })
-
+    btnMonth. dispatchEvent(new Event('pointerdown'))
 })()

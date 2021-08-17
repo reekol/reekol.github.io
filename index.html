@@ -302,6 +302,11 @@ window.addEventListener('hashchange',() => {
 } ,false)
 
 let APPS = {
+    notesCal: [
+		'plugins/calendar.js',
+		'plugins/notes.js',
+		'plugins/fullscreen.js',
+    ],
 	calendar: [
 		'plugins/calendar.js',
 	],
@@ -338,6 +343,23 @@ let APPS = {
 }
 
 document.body.onload = () => {
+
+    window.addEventListener('storage', e => {
+        d(`Key Changed: ${e.key}`)
+        d(`New Value: ${e.newValue}`)
+    })
+
+/* Start Export
+copy(JSON.stringify(localStorage));
+/* End Export */
+
+/* Start Import
+var data = JSON.parse(EXPORTED);
+Object.keys(data).forEach(function (k) {
+  localStorage.setItem(k, data[k]);
+})
+/* End Import */
+
 	let project = window.location.hash.substr(1).split('-')[0]
 	if(!project){
 		let container = document.getElementsByClassName('container')[0]

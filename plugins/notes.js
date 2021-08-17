@@ -50,6 +50,11 @@
                             background: #fff;
                             color: #000;
                         }
+                        .alert .days, .alert .days li {
+                            visibility: visible !important;
+                            background: #fff !important;
+                            color: #000 !important;
+                        }
                         .alert .fa-trash-alt, .alert .fa-print, .alert .fa-qrcode {
                             display:none !important
                         }
