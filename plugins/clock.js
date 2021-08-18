@@ -64,7 +64,7 @@
             `Day of the year: ${data.day_of_year}`,
             `Is Daylight saving: ${data.dst}`,
             `Daylight saving from: ${data.dst_from}`,
-            `Daylight saving getSeconds: ${data.dst_offset}`,
+            `Daylight saving seconds: ${data.dst_offset}`,
             `Daylight saving to:${data.dst_until}`
         ].join(',\n'))
             alertTitleTZ.appendChild(textNode)
