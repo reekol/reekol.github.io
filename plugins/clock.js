@@ -5,24 +5,32 @@
 	let cnt = document.querySelector('.container')
 	let storage = window.localStorage
     let initTime = Date.now()
-
+    loadCssSrc('https://fonts.googleapis.com/css?family=Orbitron')
 	loadCss(`
         @media (orientation: landscape) {
             .container {
                 padding-top: 2vh
             }
+            .clock{
+                font-size: 5vw;
+                letter-spacing: 2vw;
+            }
+
         }
         @media (orientation: portrait) {
             .container {
                 padding-top: 8vw
             }
+            .clock{
+                font-size: 12vw;
+                letter-spacing: 2vw;
+            }
         }
 
         .clock {
             color: #17D4FE;
-            font-size: 60px;
-            font-family: Orbitron;
-            letter-spacing: 7px;
+            font-family: 'Orbitron', sans-serif, monospace !important;
+            font-weight: bold;
         }
 	`)
 
