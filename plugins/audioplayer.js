@@ -260,19 +260,11 @@
 			height:95vh;
 		}
 	}
-	@media (orientation: portrait) and (min-width: 400px) {
+	@media (orientation: portrait) {
         #${idx} {
             padding-top: 9vw
         }
-		#${idx} #playerList {
-			height:85vh
-		}
-	}
 
-	@media (orientation: portrait) and (min-width: 0px) and (max-width: 400px){
-        #${idx} {
-            padding-top: 9vw
-        }
 		.alert {
 			width:100vw;
 			margin:0;
