@@ -35,6 +35,11 @@ a {
 	color:var(--link-color)
 }
 
+.preformatted {
+    font-family: monospace;
+    white-space: pre;
+}
+
 .container {
   min-height: 100vh
 }
@@ -303,9 +308,9 @@ window.addEventListener('hashchange',() => {
 
 let APPS = {
 
-//     clock: [
-// 		'plugins/clock.js',
-//     ],
+    clock: [
+        'plugins/clock.js',
+    ],
     notesCal: [
 		'plugins/calendar.js',
 		'plugins/notes.js',
@@ -350,11 +355,6 @@ let APPS = {
 }
 
 document.body.onload = () => {
-
-    window.addEventListener('storage', e => {
-        d(`Key Changed: ${e.key}`)
-        d(`New Value: ${e.newValue}`)
-    })
 
 /* Start Export
 copy(JSON.stringify(localStorage));
