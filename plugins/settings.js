@@ -57,20 +57,25 @@
         let el = e.target
         let data = false
         try{
-            data = JSON.parse(e.target.innerText)
-        }catch(e){
-            d(e)
+            data = JSON.parse(el.innerText)
+        }catch(ee){
+            d(['failed first decoding, attempt',ee])
+            try{
+                data = JSON.parse(decodeURIComponent(window.atob(el.innerText)))
+            }catch(eee){
+                d(['failed seccond decoding attempt',eee])
+            }
         }
         if(data){
-            e.target.style.background = 'green'
+            el.style.background = 'green'
             Object.keys(data).forEach( k => localStorage.setItem(k, data[k]) )
         }else{
-            e.target.style.background = 'red'
+            el.style.background = 'red'
         }
     }
 
     let exportStorage = e => {
-        copy(JSON.stringify(storage, null, 4))
+        copy(window.btoa(encodeURIComponent(JSON.stringify(storage, null, 4))))
     }
 
         btnCopy.addEventListener('pointerdown', exportStorage, false)
