@@ -4,7 +4,7 @@
 	let nav = document.querySelector('nav')
 	let cnt = document.querySelector('.container')
 	let storage = window.localStorage
-	let items = [1,2,3,'+','-',4,5,6,'*','/',7,8,9,'.','=',0,'(',')','C','CE']
+	let items = ['CE','C','(',')',7,8,9,'/',4,5,6,'*',1,2,3,'-',0,'.','=','+']
 
 	loadCss(`
         #${idx}{
@@ -16,7 +16,7 @@
 
         .calcNum {
             margin:0;
-            width:20%;
+            width:25%;
             padding:4vh 0 4vh 0;
             outline:none;
             border-radius:5px;
