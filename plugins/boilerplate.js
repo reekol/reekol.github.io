@@ -4,31 +4,37 @@
 	let nav = document.querySelector('nav')
 	let cnt = document.querySelector('.container')
 	let storage = window.localStorage
-    let btn = document.createElement('i')
-        btn.classList.add('far')
-        btn.classList.add('fa-window-restore')
+    let btn = document.createElement('a')
+        btn.href = '#' + idx
+        btn.classList.add('fas')
+        btn.classList.add('fa-tools')
 
+    let sec = document.createElement('section')
+        sec.id = idx
+
+        cnt.appendChild(sec)
         nav.appendChild(btn)
+
 	loadCss(`
         @media (orientation: landscape) {
-            .container {
+            section {
                 padding-top: 2vh
             }
         }
         @media (orientation: portrait) {
-            .container {
+            section {
                 padding-top: 8vw
             }
         }
 	`)
-    let alert = showAlert(cnt,{title:'',message:''},false)
+    let alert = showAlert(sec,{title:'',message:''},false)
         alert.classList.add('someclass')
     let alertTitle = alert.querySelector('.alertHead')
     let alertBody = alert.querySelector('.alertBody')
 
     let btnClick = e => {
-        window.open(window.location.href,idx ,'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350')
+        d(e)
     }
-    btn.addEventListener('pointerdown',btnClick)
+    btn.addEventListener('pointerdown', btnClick, false)
 })()
 
