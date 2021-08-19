@@ -5,6 +5,10 @@
 	let cnt = document.querySelector('.container')
 	let storage = window.localStorage
     let initTime = Date.now()
+    let btnSync = document.createElement('i')
+        btnSync.className = "fas fa-sync-alt"
+        nav.appendChild(btnSync)
+
     loadCssSrc('https://fonts.googleapis.com/css?family=Orbitron')
 	loadCss(`
         @media (orientation: landscape) {
@@ -34,75 +38,86 @@
         }
 	`)
 
-    let alertStopWatch = showAlert(cnt,{title:'Stop watch.',message:''},false)
+
+    let alertStopWatch = showAlert(cnt,{title:'Stop watch.',message:'0'},false)
+    let alertUTC = showAlert(cnt,{title:'UTC',message:'00:00:00'},false)
+    let alertTZ = showAlert(cnt,{title:'00:00:00',message:'TZ'},false)
+
     let alertTitleStopWatch = alertStopWatch.querySelector('.alertHead')
     let alertBodyStopWatch = alertStopWatch.querySelector('.alertBody')
         alertBodyStopWatch.classList.add('clock')
 
-    let alertTZ = showAlert(cnt,{title:'',message:''},false)
 
     let alertTitleTZ = alertTZ.querySelector('.alertHead')
-        alertTitleTZ.classList.add('preformatted')
+        alertTitleTZ.classList.add('clock')
 
     let alertBodyTZ = alertTZ.querySelector('.alertBody')
-        alertBodyTZ.classList.add('clock')
-
-    let alertUTC = showAlert(cnt,{title:'',message:''},false)
+        alertBodyTZ.classList.add('preformatted')
 
     let alertTitleUTC = alertUTC.querySelector('.alertHead')
 
     let alertBodyUTC = alertUTC.querySelector('.alertBody')
         alertBodyUTC.classList.add('clock')
 
-    fetch('https://worldtimeapi.org/api/ip')
-    .then(response => response.json())
-    .then(data => {
-        let now = new Date()
-        let dateTz = new Date(data.datetime.split('.')[0].replace('T',' '))
-        let dateUtc = new Date(data.utc_datetime.split('.')[0].replace('T',' '))
-        let dateUtcDiff = (now - dateUtc)
-        let dateTzDiff = (now - dateTz)
-            alertTitleUTC.innerText = 'Utc'
+    let textNode = document.createTextNode('')
+    let clocksInterval = setInterval( e => e ,1000)
+    let sync = e => {
+        btnSync.classList.add('rotating')
+        fetch('https://worldtimeapi.org/api/ip')
+        .then(response => response.json())
+        .then(data => {
+            btnSync.classList.remove('rotating')
+            let now = new Date()
+            let dateTz = new Date(data.datetime.split('.')[0].replace('T',' '))
+            let dateUtc = new Date(data.utc_datetime.split('.')[0].replace('T',' '))
+            let dateUtcDiff = (now - dateUtc)
+            let dateTzDiff = (now - dateTz)
+                alertTitleUTC.innerText = 'Utc'
+                textNode.remove()
+                textNode = document.createTextNode([
+                `Client IP: ${data.client_ip}`,
+                `Timezone: [${data.abbreviation}] ${data.timezone}`,
+                `UTC offset: ${data.utc_offset}`,
+                `Day of the week: ${data.day_of_week}`,
+                `Day of the year: ${data.day_of_year}`,
+                `Is Daylight saving: ${data.dst}`,
+                `Daylight saving from: ${data.dst_from}`,
+                `Daylight saving seconds: ${data.dst_offset}`,
+                `Daylight saving to:${data.dst_until}`
+            ].join(',\n'))
+                alertBodyTZ.appendChild(textNode)
 
-        let textNode = document.createTextNode([
-            `Client IP: ${data.client_ip}`,
-            `Timezone: [${data.abbreviation}] ${data.timezone}`,
-            `UTC offset: ${data.utc_offset}`,
-            `Day of the week: ${data.day_of_week}`,
-            `Day of the year: ${data.day_of_year}`,
-            `Is Daylight saving: ${data.dst}`,
-            `Daylight saving from: ${data.dst_from}`,
-            `Daylight saving seconds: ${data.dst_offset}`,
-            `Daylight saving to:${data.dst_until}`
-        ].join(',\n'))
-            alertTitleTZ.appendChild(textNode)
+            d(['diff: UTC, Tz',dateUtcDiff,dateTzDiff])
+            let showNow = e => {
 
-        d(['diff: UTC, Tz',dateUtcDiff,dateTzDiff])
-        let showNow = e => {
+                    let dtTZ  = new Date()
+                    let dtUTC = new Date()
 
-                let dtTZ  = new Date()
-                let dtUTC = new Date()
+                        dtTZ. setMilliseconds(dtTZ. getMilliseconds() + dateTzDiff )
+                        dtUTC.setMilliseconds(dtUTC.getMilliseconds() + dateUtcDiff)
 
-                    dtTZ. setMilliseconds(dtTZ. getMilliseconds() + dateTzDiff )
-                    dtUTC.setMilliseconds(dtUTC.getMilliseconds() + dateUtcDiff)
+                    alertTitleTZ.innerText = [
+                            dtTZ.  getHours().toString().padStart(2,0),
+                            dtTZ.getMinutes().toString().padStart(2,0),
+                            dtTZ.getSeconds().toString().padStart(2,0),
+                        ].join(':')
 
-                alertBodyTZ.innerText = [
-                        dtTZ.  getHours().toString().padStart(2,0),
-                        dtTZ.getMinutes().toString().padStart(2,0),
-                        dtTZ.getSeconds().toString().padStart(2,0),
-                    ].join(':')
-
-                alertBodyUTC.innerText = [
-                        dtUTC.  getHours().toString().padStart(2,0),
-                        dtUTC.getMinutes().toString().padStart(2,0),
-                        dtUTC.getSeconds().toString().padStart(2,0),
-                    ].join(':')
-        }
-
-        showNow()
-        let clocksInterval = setInterval( showNow ,1000)
-    })
-
+                    alertBodyUTC.innerText = [
+                            dtUTC.  getHours().toString().padStart(2,0),
+                            dtUTC.getMinutes().toString().padStart(2,0),
+                            dtUTC.getSeconds().toString().padStart(2,0),
+                        ].join(':')
+            }
+            showNow()
+            clearInterval(clocksInterval)
+            clocksInterval = setInterval( showNow ,1000)
+        })
+        .catch(e => {
+            btnSync.classList.remove('rotating')
+            d(e)
+        })
+    }
+    sync()
     let stopWatchTimer = false
     let toggleStopWatch = () => {
         if(stopWatchTimer){
@@ -119,6 +134,6 @@
             },delay)
     }
     alertStopWatch. addEventListener('pointerdown', toggleStopWatch, false)
-
+    btnSync.        addEventListener('pointerdown', sync, false)
 })()
 
