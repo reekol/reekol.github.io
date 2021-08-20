@@ -89,6 +89,7 @@
             outline:none;
             font-family: monospace;
             white-space: pre;
+            overflow-x: auto;
         }
         .fa-trash-alt, .fa-dice-one, .fa-dice-two, .fa-dice-three, .fa-dice-four, .fa-dice-five, .fa-dice-six{
             float:right
@@ -97,7 +98,6 @@
             width:100%
         }
     `)
-
 
 	let getAllNotes = () => {
 		let archive = {},
@@ -123,6 +123,20 @@
             let note = notes[name]
             createNote({note: {id: name, title:note.title, body: note.body}})
         }
+    }
+
+    let download = (filename, text) => {
+        var element = document.createElement('a')
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text))
+        element.setAttribute('download', filename)
+        element.style.display = 'none';
+        document.body.appendChild(element)
+        element.click();
+        document.body.removeChild(element)
+    }
+
+    let exportStorage = e => {
+        download( e.exportName + '-' + Date.now(), JSON.stringify(e.exportData, null, 4))
     }
 
     let createNote = e => {
@@ -155,6 +169,10 @@
         let alertQr = document.createElement('i')
             alertQr.className = 'fas fa-qrcode'
             newAlert.appendChild(alertQr)
+
+        let alertSave = document.createElement('i')
+            alertSave.className = 'fas fa-save'
+            newAlert.appendChild(alertSave)
 
         let shareQr = e => {
                 document.querySelectorAll('.sharingQr').forEach( el => el.remove() )
@@ -219,7 +237,12 @@
                     JSON.stringify({title: alertHead.innerText, body: alertBody.innerText })
                 )
             }
-
+        let save = e => {
+            e.exportName = alertHead.innerText
+            e.exportData = { }
+            e.exportData[newAlert.id] =  storage.getItem(newAlert.id)
+            exportStorage(e)
+        }
         let trash = e => {
 
             if(!alertTrash.classList.contains('confirm'))
@@ -247,6 +270,7 @@
         alertHead.  addEventListener('input',       edit,    false)
         alertBody.  addEventListener('input',       edit,    false)
         alertTrash. addEventListener('pointerdown', trash,   false)
+        alertSave.  addEventListener('pointerdown', save,   false)
         alertPrint. addEventListener('pointerdown', print,   false)
         alertQr.    addEventListener('pointerdown', shareQr, false)
         alertHead.  addEventListener('input', () => {
