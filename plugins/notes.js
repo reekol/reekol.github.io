@@ -7,6 +7,7 @@
 	let cnt = document.querySelector('.container')
 	let storage = window.localStorage
 	let playlist = []
+
     let qrious = document.createElement('script')
         qrious.type = 'text/javascript'
         qrious.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js'
@@ -99,25 +100,27 @@
         }
     `)
 
-	let getAllNotes = () => {
+	let getAllNotes = async () => {
+        let stg = localStorage;
 		let archive = {},
-			keys = Object.keys(localStorage).sort().reverse(),
+			keys = Object.keys(stg).sort().reverse(),
 			i = keys.length
 		while ( i-- ){
 			let name = keys[i]
 			if(name.indexOf('note-') === 0){
                 try{
-                    archive[name] = JSON.parse(localStorage.getItem(name))
+                    archive[name] = JSON.parse(stg.getItem(name))
                 }catch(e){
                     d(['ERR',e])
                 }
 			}
 		}
+
 		return archive;
 	}
 
-    let listNotes  = e =>{
-        let notes = getAllNotes()
+    let listNotes  = async e =>{
+        let notes = await getAllNotes()
         while (cnt.firstChild) cnt.removeChild(cnt.firstChild)
         for(let name in notes){
             let note = notes[name]
@@ -139,6 +142,17 @@
         download( e.exportName + '-' + Date.now(), JSON.stringify(e.exportData, null, 4))
     }
 
+    let getCommands = text => {
+        text = text.split('\n')
+        let commands = {}
+        let availableCommands = ['sync','color']
+        for(let line of text){
+            line = line.split(':')
+            if(availableCommands.indexOf(line[0]) > -1) commands[line.shift()] = line.join(':')
+        }
+        return commands
+    }
+
     let createNote = e => {
         let newAlert  = showAlert(cnt,{title: '',message: ''},false)
             newAlert.classList.add('newNote')
@@ -148,11 +162,14 @@
             alertHead.setAttribute('placeholder','Note title.')
             alertHead.setAttribute('contenteditable','true')
             alertHead.textContent = e.note && e.note.title ? e.note.title : ''
-        let color = (alertHead.innerText.charAt(0) === '#' ? alertHead.innerText.split(' ')[0] : false)
-        if(color){
-            alertHead.style.color = ('#cdcdcd' < color ? '#000' : '#fff')
-            alertHead.style.background = color
+
+        let commands = getCommands(alertHead.innerText)
+
+        if(typeof commands.color !== 'undefined'){
+            alertHead.style.color = ('#cdcdcd' < commands.color ? '#000' : '#fff')
+            alertHead.style.background = commands.color
         }
+
         let alertBody = newAlert.getElementsByClassName('alertBody')[0]
             alertBody.setAttribute('placeholder','Note body.')
             alertBody.setAttribute('contenteditable','true')
@@ -231,18 +248,19 @@
             }
 
         let edit = e => {
-                document.querySelectorAll('.sharingQr').forEach( el => el.remove() )
-                localStorage. setItem(
-                    newAlert.id,
-                    JSON.stringify({title: alertHead.innerText, body: alertBody.innerText })
-                )
-            }
+            document.querySelectorAll('.sharingQr').forEach( el => el.remove() )
+            localStorage. setItem(
+                newAlert.id,
+                JSON.stringify({title: alertHead.innerText, body: alertBody.innerText })
+            )
+        }
         let save = e => {
             e.exportName = alertHead.innerText
             e.exportData = { }
             e.exportData[newAlert.id] =  storage.getItem(newAlert.id)
             exportStorage(e)
         }
+
         let trash = e => {
 
             if(!alertTrash.classList.contains('confirm'))
@@ -265,21 +283,35 @@
             newAlert.remove()
         }
 
+//         let remotePut = e => {
+//             let commands = getCommands(alertHead.innerText)
+//             if(typeof commands.sync !== 'undefined'){
+//               fetch('https://' + commands.sync, {
+//                   method: 'PUT',
+//                   body: JSON.stringify({title: alertHead.innerText, body: alertBody.innerText}, null, 4)
+//                 })
+//               .catch( d )
+//             }
+//         }
+//         alertHead.  addEventListener('input',       remotePut,  false)
+//         alertBody.  addEventListener('input',       remotePut,  false)
+
         alertHead.  addEventListener('pointerdown', edit,    false)
         alertBody.  addEventListener('pointerdown', edit,    false)
         alertHead.  addEventListener('input',       edit,    false)
         alertBody.  addEventListener('input',       edit,    false)
         alertTrash. addEventListener('pointerdown', trash,   false)
-        alertSave.  addEventListener('pointerdown', save,   false)
+        alertSave.  addEventListener('pointerdown', save,    false)
         alertPrint. addEventListener('pointerdown', print,   false)
         alertQr.    addEventListener('pointerdown', shareQr, false)
         alertHead.  addEventListener('input', () => {
-            let color = (alertHead.innerText.charAt(0) === '#' ? alertHead.innerText.split(' ')[0] : false)
-            if(color){
-                alertHead.style.color = ('#cdcdcd' < color ? '#000' : '#fff')
-                alertHead.style.background = color
+            let commands = getCommands(alertHead.innerText)
+            if(typeof commands.color !== 'undefined'){
+                alertHead.style.color = ('#cdcdcd' < commands.color ? '#000' : '#fff')
+                alertHead.style.background = commands.color
             }
         },false)
+
         return newAlert
 
     }

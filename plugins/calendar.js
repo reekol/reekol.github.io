@@ -59,7 +59,7 @@ loadCss(`
     }
 
     .events::after {
-        border-width: 0.6em;
+        border-width: 0.4em;
     }
 `)
 
@@ -90,6 +90,18 @@ loadCss(`
         section = cnt
     let archive = {}
 
+
+    let getCommands = text => {
+        text = text.split('\n')
+        let commands = {}
+        let availableCommands = ['sync','color']
+        for(let line of text){
+            line = line.split(':')
+            if(availableCommands.indexOf(line[0]) > -1) commands[line.shift()] = line.join(':')
+        }
+        return commands
+    }
+
 	let getAllNotes = () => {
         let re = /\d{2}.\d{2}.\d{4}/mgi;
 			keys = Object.keys(localStorage).sort().reverse(),
@@ -100,7 +112,8 @@ loadCss(`
                 try{
                     let btoaclass = btoa(name)
                     let item = JSON.parse(localStorage.getItem(name))
-                    let color = (item.title.charAt(0) === '#' ? item.title.split(' ')[0] : '#FFFFFF')
+                    let commands = getCommands(item.title)
+                    let color = (typeof commands.color === 'undefined' ? '#FFFFFF' : commands.color)
                     let dates = item.body.matchAll(re)
                     let matched = false
                     for (const match of dates) {
