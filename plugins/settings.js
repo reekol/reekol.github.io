@@ -31,7 +31,7 @@
             }
         }
 	`)
-    let alert = showAlert(sec,{title:'',message:''},false)
+    let alertExport = showAlert(sec,{title:'',message:''},false)
     let alertImport = showAlert(sec,{title:'',message:'\n\n\n'},false)
     let alertImportTitle = alertImport.querySelector('.alertHead')
     let alertImportBody = alertImport.querySelector('.alertBody')
@@ -41,12 +41,12 @@
         btnImport.className = 'fas fa-file-upload'
         alertImportTitle.appendChild(btnImport)
 
-    let alertTitle = alert.querySelector('.alertHead')
-    let alertBody = alert.querySelector('.alertBody')
-    let alertBodyTextNode = document.createTextNode('')
+    let alertExportTitle = alertExport.querySelector('.alertHead')
+    let alertExportBody = alertExport.querySelector('.alertBody')
+    let alertExportBodyTextNode = document.createTextNode('')
     let btnCopy = document.createElement('i')
         btnCopy.className = 'fas fa-copy'
-        alertTitle.appendChild(btnCopy)
+        alertExportTitle.appendChild(btnCopy)
 
     let download = (filename, text) => {
         var element = document.createElement('a')
