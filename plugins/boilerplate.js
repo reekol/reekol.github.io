@@ -1,4 +1,5 @@
-(() => {
+
+;(async () => {
 
    	let idx = PROJECT + ''
 	let nav = document.querySelector('nav')
@@ -27,14 +28,13 @@
             }
         }
 	`)
+
     let alert = showAlert(sec,{title:'',message:''},false)
         alert.classList.add('someclass')
     let alertTitle = alert.querySelector('.alertHead')
     let alertBody = alert.querySelector('.alertBody')
 
-    let btnClick = e => {
-        d(e)
-    }
+    let btnClick = e => { d(e) }
     btn.addEventListener('pointerdown', btnClick, false)
 })()
 
