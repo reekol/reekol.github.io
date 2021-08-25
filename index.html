@@ -29,7 +29,9 @@ html, body {
 body {
 	background: #3b4775
 }
-
+.clear {
+    clear:both;
+}
 a {
 	text-decoration:none;
 	color:var(--link-color)
@@ -87,6 +89,23 @@ nav {
 	display: flex;
 }
 
+.tabList{
+    font-size: 2vh;
+    border-top:1px solid #cdcdcd;
+    border-right:1px solid #cdcdcd;
+    border-left:1px solid #cdcdcd;
+    border-top-left-radius:0.5vh;
+    border-top-right-radius:0.5vh;
+    border-bottom:0;
+    float:left;
+    padding:0.5vh;
+    cursor:pointer;
+}
+
+.tabListActive{
+    background: #cdcdcd;
+    color: #222222
+}
 
 @media (orientation: landscape) {
 	nav {
@@ -238,6 +257,39 @@ const showAlertCleared = (parent, msg, notify) => {
 	return showAlert(parent, msg, notify)
 }
 
+const showAlertTabs = (parent, tabs, notify) => {
+	let alert = showAlert(parent, {title:'', message:''}, notify)
+    let alertTitle = alert.querySelector('.alertHead')
+    let alertBody = alert.querySelector('.alertBody')
+
+    for(let i in tabs){
+        let tabTitle = tabs[i]
+        let tab = document.createElement('div')
+            tab.classList.add('tabList')
+            tab.classList.add('tabList_' + i)
+            tab.innerText = tabTitle
+        alertTitle.appendChild(tab)
+
+        let tabContent = document.createElement('div')
+            tabContent.classList.add('tabContent')
+            tabContent.classList.add('tabContent_' + i)
+            tabContent.innerText = tabTitle
+            tabContent.style.display = 'none'
+        alertBody.appendChild(tabContent)
+
+        tab.addEventListener('pointerdown',e => {
+            alertTitle.querySelectorAll('.tabList')   .forEach( el =>{ el.classList.remove('tabListActive') })
+            alertBody .querySelectorAll('.tabContent').forEach( el =>{ el.style.display = 'none' })
+            tab.classList.add('tabListActive')
+            tabContent.style.display = 'block'
+        },false)
+    }
+    let clear = document.createElement('div')
+        clear.classList.add('clear')
+        alertTitle.appendChild(clear)
+	return alert
+}
+
 const showAlert = (parent, msg, notify) => {
 
  	let href = null
@@ -334,6 +386,10 @@ let APPS = {
 
     settings: [
         'plugins/settings.js',
+    ],
+    domsql: [
+        'plugins/domsql.js',
+		'plugins/newwin.js',
     ],
     jarvis: [
         'plugins/assistant.js',

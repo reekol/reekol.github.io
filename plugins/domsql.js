@@ -35,14 +35,15 @@ class DomSQL {
                                 fieldRes[field] = []
                             let xp = dom.evaluate( xpath, dom, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null )
                             let actualEl = xp.iterateNext()
-                            if(x3a){
-                                     if(x3a === 'text' ) actualEl = actualEl.innerText
-                                else if(x3a === 'html' ) actualEl = actualEl.innerHTML
-                                else if(x3a === 'outer') actualEl = actualEl.outerHTML
-                            }else{
-                                actualEl = actualEl.outerHTML
-                            }
+
                             while (actualEl) {
+                                if(x3a){
+                                         if(x3a === 'text' ) actualEl = actualEl.innerText
+                                    else if(x3a === 'html' ) actualEl = actualEl.innerHTML
+                                    else if(x3a === 'outer') actualEl = actualEl.outerHTML
+                                }else{
+                                    actualEl = actualEl.outerHTML
+                                }
                                 this.db.exec(`INSERT INTO ${source} (${field}) VALUES (?)`, [actualEl])
                                 fieldRes[field].push(actualEl)
                                 actualEl = xp.iterateNext()
@@ -148,15 +149,15 @@ class DomSQL {
     }
 }
 
-loadScript('https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.1/sql-wasm.js', async () => {
-    const SQL = await initSqlJs({ locateFile: file => `https://sql.js.org/dist/${file}` })
-    const DB = new SQL.Database() // REQUIRED implementation of .exec method
-    let domsql = new DomSQL(
-        `SELECT s1.{//title=>text}, s2.{//title=>outer} FROM {https://seqr.link} as s1 JOIN {https://vetshares.com} as s2`,
-        DB
-    )
-    d(await domsql.run())
-})
+// loadScript('https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.1/sql-wasm.js', async () => {
+//     const SQL = await initSqlJs({ locateFile: file => `https://sql.js.org/dist/${file}` })
+//     const DB = new SQL.Database() // REQUIRED implementation of .exec method
+//     let domsql = new DomSQL(
+//         `SELECT s1.{//title=>text}, s2.{//title=>outer} FROM {https://seqr.link} as s1 JOIN {https://vetshares.com} as s2`,
+//         DB
+//     )
+//     d(await domsql.run())
+//})
 
 
 
@@ -184,18 +185,23 @@ loadScript('https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.1/sql-wasm.js', as
         btn.classList.add('fas')
         btn.classList.add('fa-spider')
 
-    let COUNT_WAITS = 0
-
     let sec = document.createElement('section')
         sec.id = idx
 
         cnt.appendChild(sec)
         nav.appendChild(btn)
 
+    let SQL, DB, editorSql, editorCb, editorCss, editorWeb, editorRes
+
+    loadScript('https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.1/sql-wasm.js', async () => { })
+
 	loadCss(`
         @media (orientation: landscape) {
             section {
                 padding-top: 2vh
+            }
+            .alert{
+                width:85vw
             }
         }
         @media (orientation: portrait) {
@@ -204,16 +210,109 @@ loadScript('https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.1/sql-wasm.js', as
             }
         }
 	`)
-    let alert = showAlert(sec,{title:'',message:''},false)
-        alert.classList.add('someclass')
+
+    loadCss(`
+            input[type=button] {
+                background-color: #04AA6D;
+                color: white;
+                padding: 12px 20px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                width:100%
+            }
+            input[type=button]:hover {
+                background-color: #45a049;
+            }
+        `)
+
+    let alert = showAlertTabs(sec,['SQL','Callback','CSS','Weblet', 'Result'],false)
+        alert.classList.add('domsql')
     let alertTitle = alert.querySelector('.alertHead')
     let alertBody = alert.querySelector('.alertBody')
 
-    let btnClick = e => {
-        d(e)
-    }
-    btn.addEventListener('pointerdown', btnClick, false)
+    let alertEditorSql = document.querySelector('.tabContent_0')
+        alertEditorSql.style.height = '30vh'
+        alertEditorSql.id = 'editorSql'
 
+    let alertEditorCb = document.querySelector('.tabContent_1')
+        alertEditorCb.style.height = '30vh'
+        alertEditorCb.id = 'editorCb'
+
+    let alertEditorCss = document.querySelector('.tabContent_2')
+        alertEditorCss.style.height = '30vh'
+        alertEditorCss.id = 'editorCss'
+
+    let alertEditorWeb = document.querySelector('.tabContent_3')
+        alertEditorWeb.style.height = '30vh'
+        alertEditorWeb.id = 'editorWeb'
+
+    let alertEditorRes = document.querySelector('.tabContent_4')
+        alertEditorRes.style.height = '30vh'
+        alertEditorRes.id = 'editorRes'
+
+    let btnRun = document.createElement('input')
+        btnRun.type = 'button'
+        btnRun.value = 'Run query'
+        alert.appendChild(btnRun)
+
+    loadScript('https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js', () => {
+        editorSql = ace.edit('editorSql',{ mode:'ace/mode/sql', /* theme:'ace/theme/dracula'*/ })
+        editorCb  = ace.edit('editorCb', { mode:'ace/mode/javascript' })
+        editorCss = ace.edit('editorCss',{ mode:'ace/mode/css' })
+        editorWeb = ace.edit('editorWeb',{ mode:'ace/mode/javascript' })
+        editorRes = ace.edit('editorRes',{ mode:'ace/mode/json' })
+        editorSql.setValue(`
+SELECT
+  s2.{//title=>text} as title,
+  s2.{//*[@class='wfWrapper']=>text} as Weather
+  FROM
+   {https://www.sinoptik.bg/sofia-bulgaria-100727011/hourly} as s2;
+
+SELECT strftime('%s','now') as now
+        `, -1)
+    })
+
+    let btnClick = async e => {
+        SQL = await initSqlJs({ locateFile: file => `https://sql.js.org/dist/${file}` })
+        DB = new SQL.Database()
+        //SELECT s1.{//title=>text}, s2.{//title=>outer} FROM {https://seqr.link} as s1 JOIN {https://vetshares.com} as s2
+        let qry = editorSql.getValue()
+        let domsql = new DomSQL(qry, DB)
+        let res = await domsql.run()
+        let tabs = Array(res.length)
+            tabs.fill('*')
+        let results = showAlertTabs(sec, tabs, false)
+        let resClose = document.createElement('input')
+            resClose.type = 'button'
+            resClose.value = 'Close'
+            resClose.addEventListener('pointerdown', e => results.remove(), false)
+            results.appendChild(resClose)
+
+        res.map( (result, i) => {
+                let title = results.querySelector('.tabList_' + i)
+                    title.innerText = (i + 1)
+                let contents = results.querySelector('.tabContent_' + i)
+                    contents.classList.add('preformatted')
+
+                    contents.innerText = JSON.stringify(result, null, 4)
+        })
+        editorRes.setValue(JSON.stringify(res, null, 4), -1)
+
+    }
+
+    btnRun.addEventListener('pointerdown', btnClick, false)
 
 })()
 
+/*
+
+ SELECT
+  s2.{//title=>text} as title,
+  s2.{//*[@class='wfWrapper']=>text} as Weather
+  FROM
+   {https://www.sinoptik.bg/sofia-bulgaria-100727011/hourly} as s2;
+
+SELECT strftime('%s','now') as now
+
+*/
