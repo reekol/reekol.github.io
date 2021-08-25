@@ -283,6 +283,9 @@ const showAlertTabs = (parent, tabs, notify) => {
             tab.classList.add('tabListActive')
             tabContent.style.display = 'block'
         },false)
+
+        if(i + '' === '0') tab.dispatchEvent(new Event('pointerdown'))
+
     }
     let clear = document.createElement('div')
         clear.classList.add('clear')
