@@ -96,17 +96,27 @@ nav {
     border-left:1px solid #cdcdcd;
     border-top-left-radius:0.5vh;
     border-top-right-radius:0.5vh;
-    border-bottom:0;
+    border-bottom:1px solid #fff;
     float:left;
     padding:0.5vh;
     cursor:pointer;
+    background:transparent;
+    margin-bottom:-9px;
+    color:#cdcdcd;
+    min-width:5vw;
+    outline:none;
 }
 
 .tabListActive{
-    background: #cdcdcd;
+    background: #fff;
     color: #222222
 }
 
+.tabContent{
+    margin:-8px;
+    padding:8px;
+    background:#fff
+}
 @media (orientation: landscape) {
 	nav {
 		height:100vh;
@@ -264,7 +274,7 @@ const showAlertTabs = (parent, tabs, notify) => {
 
     for(let i in tabs){
         let tabTitle = tabs[i]
-        let tab = document.createElement('div')
+        let tab = document.createElement('button')
             tab.classList.add('tabList')
             tab.classList.add('tabList_' + i)
             tab.innerText = tabTitle
@@ -278,6 +288,7 @@ const showAlertTabs = (parent, tabs, notify) => {
         alertBody.appendChild(tabContent)
 
         tab.addEventListener('pointerdown',e => {
+            e.preventDefault()
             alertTitle.querySelectorAll('.tabList')   .forEach( el =>{ el.classList.remove('tabListActive') })
             alertBody .querySelectorAll('.tabContent').forEach( el =>{ el.style.display = 'none' })
             tab.classList.add('tabListActive')
