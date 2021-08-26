@@ -15,7 +15,12 @@ class DomSQL {
     }
 
     getSource = async source => {
-        return fetch(source.sanitized,{method:'GET', mode: 'cors'}).then(r => r.text())
+//        window.navigator.userAgent = 'DomSQL client'
+        return fetch(source.sanitized,{
+            method:'GET',
+            mode: 'cors',
+            headers: new Headers({ "User-Agent"   : "MY-UA-STRING" }),
+        }).then(r => r.text())
     }
 
     handleEventTokenized = async tokenized => {
@@ -147,6 +152,23 @@ class DomSQL {
             tokens: tokens
         }
     }
+
+    weblet = (res, css, js) => {
+        let body = '' //JSON.stringify(res, null, 4)
+        for(let val of res.values){
+            let dsql = document.createElement('domsql')
+                dsql.innerHTML = val.join('<br />')
+            body += dsql.outerHTML
+        }
+
+        let ifrm  = document.createElement('iframe')
+            ifrm.style.border=0
+            ifrm.style.background = 'transparent'
+
+        let html = `<html><style>${css}</style><body>${body}<script type='text/javascript' >try{ ${js} }catch(e){ console.log(e) }</script></body></html>`
+            ifrm.src = 'data:text/html;charset=utf-8,' + encodeURIComponent(html);
+        return ifrm
+    }
 }
 
 // loadScript('https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.1/sql-wasm.js', async () => {
@@ -188,6 +210,8 @@ class DomSQL {
     let sec = document.createElement('section')
         sec.id = idx
 
+    let stored = JSON.parse(storage.getItem('domsql_0'))
+
         cnt.appendChild(sec)
         nav.appendChild(btn)
 
@@ -226,7 +250,7 @@ class DomSQL {
             }
         `)
 
-    let alert = showAlertTabs(sec,['SQL','Callback','CSS','Weblet', 'Result'],false)
+    let alert = showAlertTabs(sec,['Sql','Js','Css','Results','Table'],false)
         alert.classList.add('domsql')
     let alertTitle = alert.querySelector('.alertHead')
     let alertBody = alert.querySelector('.alertBody')
@@ -235,19 +259,15 @@ class DomSQL {
         alertEditorSql.style.height = '30vh'
         alertEditorSql.id = 'editorSql'
 
-    let alertEditorCb = document.querySelector('.tabContent_1')
-        alertEditorCb.style.height = '30vh'
-        alertEditorCb.id = 'editorCb'
+    let alertEditorJs = document.querySelector('.tabContent_1')
+        alertEditorJs.style.height = '30vh'
+        alertEditorJs.id = 'editorJs'
 
     let alertEditorCss = document.querySelector('.tabContent_2')
         alertEditorCss.style.height = '30vh'
         alertEditorCss.id = 'editorCss'
 
-    let alertEditorWeb = document.querySelector('.tabContent_3')
-        alertEditorWeb.style.height = '30vh'
-        alertEditorWeb.id = 'editorWeb'
-
-    let alertEditorRes = document.querySelector('.tabContent_4')
+    let alertEditorRes = document.querySelector('.tabContent_3')
         alertEditorRes.style.height = '30vh'
         alertEditorRes.id = 'editorRes'
 
@@ -257,32 +277,34 @@ class DomSQL {
         alert.appendChild(btnRun)
 
     loadScript('https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js', () => {
-        editorSql = ace.edit('editorSql',{ mode:'ace/mode/sql', /* theme:'ace/theme/dracula'*/ })
-        editorCb  = ace.edit('editorCb', { mode:'ace/mode/javascript' })
-        editorCss = ace.edit('editorCss',{ mode:'ace/mode/css' })
-        editorWeb = ace.edit('editorWeb',{ mode:'ace/mode/javascript' })
-        editorRes = ace.edit('editorRes',{ mode:'ace/mode/json' })
-        editorSql.setValue(`
-SELECT
-  s2.{//title=>text} as title,
-  s2.{//*[@class='wfWrapper']=>text} as Weather
-  FROM
-   {https://www.sinoptik.bg/sofia-bulgaria-100727011/hourly} as s2;
 
-SELECT strftime('%s','now') as now
-        `, -1)
+        editorSql = ace.edit('editorSql',{ mode:'ace/mode/text',  fontSize: "1.5vh" /* theme:'ace/theme/dracula'*/ })
+        editorJs  = ace.edit('editorJs', { mode:'ace/mode/javascript',  fontSize: "1.5vh" })
+        editorCss = ace.edit('editorCss',{ mode:'ace/mode/css',  fontSize: "1.5vh"})
+        editorRes = ace.edit('editorRes',{ mode:'ace/mode/json',  fontSize: "1.5vh"})
+
+        if(typeof stored.sql !== 'undefined') editorSql.setValue(stored.sql, -1)
+        if(typeof stored.js  !== 'undefined') editorJs .setValue(stored.js , -1)
+        if(typeof stored.css !== 'undefined') editorCss.setValue(stored.css, -1)
     })
 
     let btnClick = async e => {
-        SQL = await initSqlJs({ locateFile: file => `https://sql.js.org/dist/${file}` })
-        DB = new SQL.Database()
-        //SELECT s1.{//title=>text}, s2.{//title=>outer} FROM {https://seqr.link} as s1 JOIN {https://vetshares.com} as s2
-        let qry = editorSql.getValue()
-        let domsql = new DomSQL(qry, DB)
+
+        storage.setItem('domsql_0',JSON.stringify({
+            sql:editorSql.getValue(),
+            js:editorJs.getValue(),
+            css:editorCss.getValue(),
+        }))
+        let domsql = new DomSQL(
+            editorSql.getValue(),
+            new (await initSqlJs({ locateFile: file => `https://sql.js.org/dist/${file}` })).Database())
         let res = await domsql.run()
+
         let tabs = Array(res.length)
             tabs.fill('*')
         let results = showAlertTabs(sec, tabs, false)
+            // if(results.previousElementSibling) results.parentNode.insertBefore(results, results.previousElementSibling) // Move up
+            if(results.nextElementSibling) results.parentNode.insertBefore(results.nextElementSibling, results) // Move down
         let resClose = document.createElement('input')
             resClose.type = 'button'
             resClose.value = 'Close'
@@ -293,12 +315,14 @@ SELECT strftime('%s','now') as now
                 let title = results.querySelector('.tabList_' + i)
                     title.innerText = (i + 1)
                 let contents = results.querySelector('.tabContent_' + i)
-                    contents.classList.add('preformatted')
-
-                    contents.innerText = JSON.stringify(result, null, 4)
+                    contents.innerHTML = ''
+                let weblet = domsql.weblet(result, editorCss.getValue(), editorJs .getValue())
+                    weblet.style.border = '0px solid red'
+                    weblet.style.width = '100%'
+                    weblet.style.height = '40vh'
+                contents.appendChild(weblet)
         })
         editorRes.setValue(JSON.stringify(res, null, 4), -1)
-
     }
 
     btnRun.addEventListener('pointerdown', btnClick, false)
