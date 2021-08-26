@@ -5,6 +5,7 @@
 	let cnt = document.querySelector('.container')
 	let storage = window.localStorage
     let initTime = Date.now()
+    let API = 'https://worldtimeapi.org/api/ip'
     let btnSync = document.createElement('i')
         btnSync.className = "fas fa-sync-alt"
         nav.appendChild(btnSync)
@@ -63,7 +64,7 @@
     let clocksInterval = setInterval( e => e ,1000)
     let sync = e => {
         btnSync.classList.add('rotating')
-        fetch('https://worldtimeapi.org/api/ip')
+        fetch(API)
         .then(response => response.json())
         .then(data => {
             btnSync.classList.remove('rotating')
