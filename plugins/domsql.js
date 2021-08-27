@@ -1,18 +1,3 @@
-
-
-// loadScript('https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.1/sql-wasm.js', async () => {
-//     const SQL = await initSqlJs({ locateFile: file => `https://sql.js.org/dist/${file}` })
-//     const DB = new SQL.Database() // REQUIRED implementation of .exec method
-//     let domsql = new DomSQL(DB)
-//     console.log(await domsql.run(`SELECT s1.{//title=>text}, s2.{//title=>outer} FROM {https://seqr.link} as s1 JOIN {https://vetshares.com} as s2`))
-//})
-
-
-
-
-
-
-
 ;(async () => {
 
    	let idx = PROJECT + ''
@@ -49,7 +34,6 @@
     let doc = document.createElement('section')
         doc.id = idx + '-doc'
 
-
         cnt.appendChild(sec)
         cnt.appendChild(doc)
 
@@ -69,10 +53,26 @@
         domsql.run(qry).then( r => r.map( res => document.body.appendChild(domsql.weblet(res, css, js)) ) )
 })()`
 
-    loadScripts([
-        'lib/domsql.js',
-        'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.1/sql-wasm.js'
-    ])
+    loadScript('lib/domsql.js', () => {
+        loadScript('https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.1/sql-wasm.js', () => {
+
+             jsdoc(DomSQL).reverse().map( dc => {
+                 if(dc.indexOf('@public') > 0){ // Document only public functions
+                    let d = showAlert(doc, {title:'', message: dc }, false)
+                        d.classList.add('preformatted')
+                    let body = d.querySelector('.alertBody')
+                        body.innerHTML = body.innerHTML
+                                            .replace('* @public', '')
+                                            .replace('@name','<span class="docRed">@name</span>')
+                                            .replaceAll('@example','<span class="docGreen">@example</span>')
+                                            .split('\n')
+                                            .map( line => line.trim() )
+                                            .filter( a => a )
+                                            .join('\n')
+                }
+             })
+        })
+    })
 
 	loadCss(`
         @media (orientation: landscape) {
@@ -96,6 +96,10 @@
 	`)
 
     loadCss(`
+        .docRed     { color: #f00 }
+        .docGreen   { color: #0f0 }
+        .docBlue    { color: #00f }
+        .alertBody  { overflow-x: auto;}
         .btnRun, .btnClose{
             border-top-left-radius:0 !important;
             border-top-right-radius:0 !important;
@@ -113,8 +117,6 @@
             background-color: #45a049;
         }
         `)
-
-    let alertDoc = showAlertTabs(doc,['Docs.', 'Examples'],false)
 
     let alert = showAlertTabs(sec,['Sql','Js','Css','Results','Weblet', 'Drafts'],false)
         alert.classList.add('domsql')
