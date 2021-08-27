@@ -55,11 +55,11 @@
 
     loadScript('lib/domsql.js', () => {
         loadScript('https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.1/sql-wasm.js', () => {
-
              jsdoc(DomSQL).reverse().map( dc => {
                  if(dc.indexOf('@public') > 0){ // Document only public functions
                     let d = showAlert(doc, {title:'', message: dc }, false)
                         d.classList.add('preformatted')
+                        d.querySelector('.alertHead').style.display = 'none'
                     let body = d.querySelector('.alertBody')
                         body.innerHTML = body.innerHTML
                                             .replace('* @public', '')
@@ -68,9 +68,12 @@
                                             .split('\n')
                                             .map( line => line.trim() )
                                             .filter( a => a )
+                                            .slice(1,-1)
                                             .join('\n')
                 }
              })
+             showAlert(doc, {title:'Documentation:', message: 'As extracted from jsdoc.'}, false)
+
         })
     })
 
