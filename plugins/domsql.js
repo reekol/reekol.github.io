@@ -5,6 +5,7 @@
 	let cnt = document.querySelector('.container')
 	let storage = window.localStorage
     let stored = JSON.parse(storage.getItem('domsql_0'))
+
     let btn = document.createElement('a')
         btn.href = '#' + idx
         btn.classList.add('fas')
@@ -53,7 +54,8 @@
         domsql.run(qry).then( r => r.map( res => document.body.appendChild(domsql.weblet(res, css, js)) ) )
 })()`
 
-    loadScript('lib/domsql.js', () => {
+    showAlert(doc, {title:'Provided by:', message: 'ReeKol - Nikolay Terziev (reekol.github.com).'}, false)
+    loadScript('lib/domsql.js?t=' + Date.now(), () => {
         loadScript('https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.1/sql-wasm.js', () => {
              jsdoc(DomSQL).reverse().map( dc => {
                  if(dc.indexOf('@public') > 0){ // Document only public functions
