@@ -266,8 +266,9 @@ FROM    {https://worldtimeapi.org/}
     }
 
     btnRun.addEventListener('pointerdown', btnClick, false)
+    btn.click()
+
     if(btnAto.selected){
-        btn.click()
         setTimeout( e => btnRun.dispatchEvent(new Event('pointerdown')),1000 )
     }
 
