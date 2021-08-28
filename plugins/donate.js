@@ -897,7 +897,7 @@ const DONATE_LINK = '<a href="https://www.paypal.com/donate?business=cupuyc%40gm
         btn.href = '#' + idx
         btn.classList.add('fas')
         btn.classList.add('fa-hand-holding-usd')
-
+        btn.style.color = '#0f0'
     let sec = document.createElement('section')
         sec.id = idx
 
@@ -918,8 +918,6 @@ const DONATE_LINK = '<a href="https://www.paypal.com/donate?business=cupuyc%40gm
                 padding-top: 8vw
             }
         }
-
-
 	`)
 
     let alert = showAlert(sec,{title:'',message:''},false)
@@ -927,10 +925,9 @@ const DONATE_LINK = '<a href="https://www.paypal.com/donate?business=cupuyc%40gm
         alert.querySelector('.alertHead').innerHTML = DONATE_FORM
         alert.querySelector('.alertBody').innerHTML = DONATE_SVG
 
-        alert.classList.add('someclass')
     let alertTitle = alert.querySelector('.alertHead')
     let alertBody = alert.querySelector('.alertBody')
 
-    btn.addEventListener('pointerdown', btnClick, false)
+    btn.addEventListener('pointerdown', e => e, false)
 })()
 
