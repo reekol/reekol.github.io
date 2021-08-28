@@ -103,8 +103,14 @@
 	let getAllNotes = async () => {
         let stg = localStorage;
 		let archive = {},
-			keys = Object.keys(stg).sort().reverse(),
-			i = keys.length
+			keys = Object.keys(stg).sort().reverse()
+            if(
+                window.location.hash.split('-').length === 2 &&
+                window.location.hash.indexOf('#note-add') !== 0
+            ) keys = [window.location.hash.substr(1)] // filter il note selected
+
+ 			let i = keys.length
+
 		while ( i-- ){
 			let name = keys[i]
 			if(name.indexOf('note-') === 0){
@@ -317,7 +323,6 @@
     }
     btnPlus.    addEventListener('pointerdown',  createNote, false)
     btnList.    addEventListener('pointerdown',  listNotes, false)
-    btnList.    dispatchEvent(new Event('pointerdown'))
 
     let hash = window.location.hash.split('?')
     if(hash[0] === '#' + PROJECT + '-add' && hash[1])
@@ -332,6 +337,8 @@
         note.getElementsByClassName('alertBody')[0] .dispatchEvent(new Event('input'))
         window.location.hash = PROJECT
     }
+
+    btnList.    dispatchEvent(new Event('pointerdown'))
 
 })()
 

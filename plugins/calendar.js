@@ -9,6 +9,16 @@ loadCss(`
             padding-top: 8vw
         }
     }
+
+    .eventList{
+        display:block;
+        float:left;
+        clear:both
+    }
+    .tabContent_1 {
+        overflow:auto
+    }
+
     ul {list-style-type: none;}
     ul, li {box-sizing: border-box;}
     .days {
@@ -22,7 +32,7 @@ loadCss(`
         width: 13.6%;
         text-align: center;
         font-size: 1.5vh;
-        color: #fff;
+        color: #000;
         cursor:pointer;
         padding:0.5vh;
     }
@@ -89,6 +99,7 @@ loadCss(`
 //         cnt.appendChild(section)
         section = cnt
     let archive = {}
+    let notes = {}
 
 
     let getCommands = text => {
@@ -112,8 +123,9 @@ loadCss(`
                 try{
                     let btoaclass = btoa(name)
                     let item = JSON.parse(localStorage.getItem(name))
+                        notes[name] = item
                     let commands = getCommands(item.title)
-                    let color = (typeof commands.color === 'undefined' ? '#FFFFFF' : commands.color)
+                    let color = (typeof commands.color === 'undefined' ? '#000' : commands.color)
                     let dates = item.body.matchAll(re)
                     let matched = false
                     for (const match of dates) {
@@ -191,12 +203,10 @@ loadCss(`
     let createMonthCal = (year, month) => {
         let today = getDay()
         let toMonth = getMonth(year, month)
-        let alert = showAlert(section,{
-                title:year + '. ' + month + '.',
-                message:''
-            },false)
+        let alert = showAlertTabs(section,[ year + '. ' + month + '.', 'Events' ],false)
         alert.classList.add('month-' + month)
-        let alertBody = alert.querySelector('.alertBody')
+        let alertBody = alert.querySelector('.tabContent_0')
+        let alertEvents = alert.querySelector('.tabContent_1')
         let ul = document.createElement('ul')
             ul.className = 'days'
             for(let pre = 1; pre < toMonth[0].dayOfWeek; pre++) ul.appendChild(document.createElement('li')) // add empty lists at the begining of the month
@@ -213,6 +223,16 @@ loadCss(`
                 ){ li.classList.add('active') }
 
                 if( day.events.length > 0){
+                    day.events.map( evt => {
+                        let eventObject = document.createElement('a')
+                            eventObject.href = "#" + evt.name
+                            eventObject.classList.add('eventList')
+                            eventObject.style.color = evt.color
+                            eventObject.innerText = evt.match + ' - '
+                                + notes[evt.name].title.split('\n')[0]
+//                                + ' pos: ' + evt.start + ', '+ evt.end
+                            alertEvents.appendChild(eventObject)
+                    })
                     li.classList.add('events')
                     li.events = day.events
                     for(let evt of day.events){
@@ -221,6 +241,7 @@ loadCss(`
                     li.addEventListener('pointerdown',showDayliEvents,false)
                 }
             }
+
             alertBody.appendChild(ul)
     }
 
