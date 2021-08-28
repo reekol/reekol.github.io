@@ -5,6 +5,48 @@
 	let cnt = document.querySelector('.container')
 	let storage = window.localStorage
     let stored = JSON.parse(storage.getItem('domsql_0'))
+    let now = Date.now()
+    if(!stored) stored = { // Example config if nothing stored in localStorage
+        sql:`/* ${now} */
+/* This is going to be in the [1] weblet */
+
+    SELECT
+        '<base href="https://www.accuweather.com/">' as base, /* set base path for resulted html */
+        {//*[@rel="stylesheet"]=>outer} as styles, /* use page styles */
+        {//*[@class="hourly-wrapper content-module"]=>outer} as html /* get the html */
+    FROM {https://www.accuweather.com/bg/bg/rosoman/51035/hourly-weather-forecast/51035};
+
+/* This is going to be in the [2] weblet */
+
+    SELECT
+        '<base href="https://www.accuweather.com/">' as base, /* set base path for resulted html */
+        {//*[@rel="stylesheet"]=>outer} as styles, /* use page styles */
+        {//*[@class="daily-wrapper"]=>outer} as html /* get the html */
+    FROM    {https://www.accuweather.com/bg/bg/rosoman/15035/daily-weather-forecast/15035};
+
+            `,
+        js:`
+// Add absolute path.
+    document.querySelectorAll('img')
+            .forEach(el => {
+                el.src = el.dataset.src ? 'https://www.accuweather.com/' + el.dataset.src : el.src
+            })`,
+        css:`
+br{
+    display:none;
+}
+.language-json{
+    font-family: monospace;
+    white-space: pre;
+}`,
+        drf:`/* worldtimeapi */
+SELECT
+    {//*[@rel="stylesheet"]=>outer},
+    {//*[@class="language-json"]=>outer}
+FROM    {https://worldtimeapi.org/}
+`,
+        ato:false
+    }
 
     let btn = document.createElement('a')
         btn.href = '#' + idx
