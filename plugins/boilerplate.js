@@ -1,7 +1,7 @@
 
 ;(async () => {
 
-   	let idx = PROJECT + ''
+   	let idx = PROJECT + 'boilerplate'
 	let nav = document.querySelector('nav')
 	let cnt = document.querySelector('.container')
 	let storage = window.localStorage
