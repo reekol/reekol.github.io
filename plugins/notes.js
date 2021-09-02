@@ -5,7 +5,6 @@
 	let idx = PROJECT + ''
 	let nav = document.querySelector('nav')
 	let cnt = document.querySelector('.container')
-	let storage = window.localStorage
 	let playlist = []
 
     let qrious = document.createElement('script')
@@ -101,9 +100,8 @@
     `)
 
 	let getAllNotes = async () => {
-        let stg = localStorage;
 		let archive = {},
-			keys = Object.keys(stg).sort().reverse()
+			keys = (await localStorage.apiGetKeys()).sort().reverse()
             if(
                 window.location.hash.split('-').length === 2 &&
                 window.location.hash.indexOf('#note-add') !== 0
@@ -115,7 +113,7 @@
 			let name = keys[i]
 			if(name.indexOf('note-') === 0){
                 try{
-                    archive[name] = JSON.parse(stg.getItem(name))
+                    archive[name] = JSON.parse(await localStorage.apiGetItem(name))
                 }catch(e){
                     d(['ERR',e])
                 }
@@ -255,15 +253,15 @@
 
         let edit = e => {
             document.querySelectorAll('.sharingQr').forEach( el => el.remove() )
-            localStorage. setItem(
+            localStorage. apiSetItem(
                 newAlert.id,
                 JSON.stringify({title: alertHead.innerText, body: alertBody.innerText })
             )
         }
-        let save = e => {
+        let save = async e => {
             e.exportName = alertHead.innerText
             e.exportData = { }
-            e.exportData[newAlert.id] =  storage.getItem(newAlert.id)
+            e.exportData[newAlert.id] =  await localStorage.apiGetItem(newAlert.id)
             exportStorage(e)
         }
 
@@ -285,22 +283,9 @@
                 },7000)
                 return
             }
-            localStorage.removeItem(newAlert.id)
+            localStorage.apiRemoveItem(newAlert.id)
             newAlert.remove()
         }
-
-//         let remotePut = e => {
-//             let commands = getCommands(alertHead.innerText)
-//             if(typeof commands.sync !== 'undefined'){
-//               fetch('https://' + commands.sync, {
-//                   method: 'PUT',
-//                   body: JSON.stringify({title: alertHead.innerText, body: alertBody.innerText}, null, 4)
-//                 })
-//               .catch( d )
-//             }
-//         }
-//         alertHead.  addEventListener('input',       remotePut,  false)
-//         alertBody.  addEventListener('input',       remotePut,  false)
 
         alertHead.  addEventListener('pointerdown', edit,    false)
         alertBody.  addEventListener('pointerdown', edit,    false)

@@ -387,7 +387,7 @@
 
 	}
 
-	let equalizerUIItem = () => {
+	let equalizerUIItem = async () => {
 		let filters = []
 		let inputs = []
 		for(let i in frequencys){
@@ -401,7 +401,7 @@
 					filter.gain.value = input.value
 					let savedEq = []
 					for(let f of filters) savedEq.push(f.gain.value)
-					localStorage.setItem('filters',savedEq.join(','))
+					localStorage.apiSetItem('filters',savedEq.join(','))
 				})
 				inputs.push(input)
 
@@ -413,7 +413,7 @@
 			boxEq.appendChild(input)
 		}
 
-		let storedEq = localStorage.getItem('filters')
+		let storedEq = await localStorage.apiGetItem('filters')
 		if(storedEq){
 			storedEq = storedEq.split(',')
 			for(let i in storedEq){

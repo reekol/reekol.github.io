@@ -4,7 +4,7 @@
 	let nav = document.querySelector('nav')
 	let cnt = document.querySelector('.container')
 	let storage = window.localStorage
-    let stored = JSON.parse(storage.getItem('domsql_0'))
+    let stored = JSON.parse(await storage.apiGetItem('domsql_0'))
     let now = Date.now()
     if(!stored) stored = { // Example config if nothing stored in localStorage
         sql:`/* ${now} */
@@ -218,8 +218,8 @@ FROM    {https://worldtimeapi.org/}
         if(typeof stored.drf !== 'undefined') editorDrf.setValue(stored.drf, -1)
     })
 
-    let save = () => {
-        storage.setItem('domsql_0',JSON.stringify({
+    let save = async () => {
+        return storage.apiSetItem('domsql_0',JSON.stringify({
             sql:editorSql.getValue(),
             js:editorJs.getValue(),
             css:editorCss.getValue(),

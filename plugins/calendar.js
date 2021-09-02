@@ -73,7 +73,7 @@ loadCss(`
     }
 `)
 
-;(() => {
+;( async () => {
 
    	let idx = PROJECT + ''
 	let nav = document.querySelector('nav')
@@ -113,16 +113,16 @@ loadCss(`
         return commands
     }
 
-	let getAllNotes = () => {
+	let getAllNotes = async () => {
         let re = /\d{2}.\d{2}.\d{4}/mgi;
-			keys = Object.keys(localStorage).sort().reverse(),
+			keys = (await localStorage.apiGetKeys()).sort().reverse(),
 			i = keys.length
 		while ( i-- ){
 			let name = keys[i]
 			if(name.indexOf('note-') === 0){
                 try{
                     let btoaclass = btoa(name)
-                    let item = JSON.parse(localStorage.getItem(name))
+                    let item = JSON.parse(await localStorage.apiGetItem(name))
                         notes[name] = item
                     let commands = getCommands(item.title)
                     let color = (typeof commands.color === 'undefined' ? '#000' : commands.color)
@@ -191,11 +191,11 @@ loadCss(`
         return months
     }
 
-    let showDayliEvents = e => {
+    let showDayliEvents = async e => {
         let events = e.target.events
         let toDisplay = []
         for (let evt of events){
-            let note = JSON.parse(localStorage.getItem(evt.name))
+            let note = JSON.parse(await localStorage.apiGetItem(evt.name))
             toDisplay.push(note.title + '\n' + note.body)
         }
         d(toDisplay.join('\n>\n'))
@@ -203,6 +203,7 @@ loadCss(`
     let createMonthCal = (year, month) => {
         let today = getDay()
         let toMonth = getMonth(year, month)
+
         let alert = showAlertTabs(section,[ year + '. ' + month + '.', 'Events' ],false)
         alert.classList.add('month-' + month)
         let alertBody = alert.querySelector('.tabContent_0')
@@ -247,7 +248,7 @@ loadCss(`
 
     let today = getDay()
     let year = today.year
-    getAllNotes()
+    await getAllNotes()
 
 
     btnNext. addEventListener('pointerdown', e => {
