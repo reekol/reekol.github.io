@@ -2,9 +2,14 @@
 (() => {
 
     let ANDROID = (navigator.userAgent.toLowerCase().indexOf("android") > -1)// is android
-	let idx = PROJECT + ''
+	let idx = PROJECT + '-note'
 	let nav = document.querySelector('nav')
-	let cnt = document.querySelector('.container')
+	let box = document.querySelector('.container')
+
+	let cnt = document.createElement('section')
+		cnt.id = idx + '-sec1'
+		box.appendChild(cnt)
+
 	let playlist = []
 
     let qrious = document.createElement('script')
@@ -14,12 +19,12 @@
 
 	let btnList = document.createElement('a')
 		btnList.className = 'fas fa-list'
-		btnList.href = '#' + idx
+		btnList.href = '#' + idx + '-sec1'
 		nav.appendChild(btnList)
 
-	let btnPlus = document.createElement('a')
+	let btnPlus = document.createElement('i')
 		btnPlus.className = 'fas fa-plus-square'
-		btnPlus.href = '#' + idx
+		btnPlus.href = '#' + idx + '-plus'
 		nav.appendChild(btnPlus)
 
 	let btnPrint = document.createElement('a')

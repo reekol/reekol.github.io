@@ -77,7 +77,7 @@ loadCss(`
 
    	let idx = PROJECT + ''
 	let nav = document.querySelector('nav')
-	let cnt = document.querySelector('.container')
+	let box = document.querySelector('.container')
 	let storage = window.localStorage
 
 	let	btnPrev = document.createElement('a')
@@ -93,11 +93,10 @@ loadCss(`
 		btnNext.className = 'fas fa-caret-right'
         nav.appendChild(btnNext)
 
-// 	let section = document.createElement('section')
-// 		section.id = idx
-// 		section.style.background = '#0c0'
-//         cnt.appendChild(section)
-        section = cnt
+	let cnt = document.createElement('section')
+		cnt.id = idx
+		box.appendChild(cnt)
+    let section = cnt
     let archive = {}
     let notes = {}
 
