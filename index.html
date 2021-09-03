@@ -502,8 +502,10 @@ Object.keys(data).forEach(function (k) {
 		}
 	}
 	PROJECT = project
-	d('Loading project: ' + PROJECT)
-	loadScripts(APPS[project])
+	if(project){
+		d('Loading project: ' + PROJECT)
+        loadScripts(APPS[project])
+    }
 }
 
 	Object.getPrototypeOf(localStorage).remoteUri = localStorage.getItem('remote')
