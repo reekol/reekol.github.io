@@ -879,7 +879,6 @@ const DONATE_FORM = `
 <input type="hidden" name="no_recurring" value="0" />
 <input type="hidden" name="currency_code" value="EUR" />
 <input type="image" src="https://img.shields.io/badge/Donate-PayPal-green.svg" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
-<img alt="" border="0" src="https://www.paypal.com/en_BG/i/scr/pixel.gif" width="1" height="1" />
 </form>
 `
 
