@@ -330,7 +330,7 @@
     }
 
     btnList.    dispatchEvent(new Event('pointerdown'))
-
+    btnList.click()
 })()
 
 
