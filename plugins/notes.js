@@ -112,10 +112,11 @@
 		while ( i-- ){
 			let name = keys[i]
 			if(name.indexOf('note-') === 0){
+                let stored = await localStorage.apiGetItem(name)
                 try{
-                    archive[name] = JSON.parse(await localStorage.apiGetItem(name))
+                    archive[name] = JSON.parse(stored)
                 }catch(e){
-                    d(['ERR',e])
+                    d(['ERR',e, name, stored])
                 }
 			}
 		}
