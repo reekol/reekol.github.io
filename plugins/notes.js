@@ -22,9 +22,9 @@
 		btnList.href = '#' + idx + '-sec1'
 		nav.appendChild(btnList)
 
-	let btnPlus = document.createElement('i')
+	let btnPlus = document.createElement('a')
 		btnPlus.className = 'fas fa-plus-square'
-		btnPlus.href = '#' + idx + '-plus'
+		btnPlus.href = '#' + idx + '-sec1'
 		nav.appendChild(btnPlus)
 
 	let btnPrint = document.createElement('a')
