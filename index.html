@@ -379,7 +379,7 @@ const loadScripts	 = (srcArr, pointer = 0) => {
 		pointer++
 
 	let tag = document.createElement('script')
-		tag.src = src //+ '?ts=' + new Date().getTime() // No Cache
+		tag.src = src + '?ts=' + new Date().getTime() // No Cache
 		tag.async = true
 		tag.defer = true
 		tag.onload = () => {
@@ -513,10 +513,14 @@ Object.keys(data).forEach(function (k) {
 	
 	Object.getPrototypeOf(localStorage).apiSetItem = async (k, v) => {
 		if(!localStorage.remoteUri) return localStorage.setItem(k, v)
-		
-		return fetch(localStorage.remoteUri + '?key=' + encodeURIComponent(k) + '&value=' + encodeURIComponent(v) + '&t=' + Date.now() ,{
-						method:'GET',
+
+		let fd = new FormData(document.createElement('form'))
+            fd.append('value',v)
+
+		return fetch(localStorage.remoteUri + '?key=' + encodeURIComponent(k) + '&t=' + Date.now() ,{
+						method:'POST',
 						mode: 'cors',
+						body: fd
 				}).then(r => r.text())
 				  .then(window.atob)
 				  .catch(e => alert)
