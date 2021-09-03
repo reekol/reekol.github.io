@@ -4,7 +4,7 @@
 	let nav = document.querySelector('nav')
 	let cnt = document.querySelector('.container')
 	let storage = window.localStorage
-    let stored = JSON.parse(await storage.apiGetItem('domsql_0'))
+    let stored = null; try{ stored = JSON.parse(await storage.apiGetItem('domsql_0')) }catch(e){}
     let now = Date.now()
     if(!stored) stored = { // Example config if nothing stored in localStorage
         sql:`/* ${now} */
@@ -232,7 +232,9 @@ FROM    {https://worldtimeapi.org/}
         save()
         alertBody.style.display = 'none'
         let domsql = new DomSQL(
-            new (await initSqlJs({ locateFile: file => `https://sql.js.org/dist/${file}` })).Database())
+//            new (await initSqlJs({ locateFile: file => `https://sql.js.org/dist/${file}` })).Database()
+            new (await initSqlJs({ locateFile: file => `https://seqr.link/sql-wasm.wasm` })).Database()
+        )
         let res = await domsql.run(editorSql.getValue())
 
         let tabs = Array(res.length)
