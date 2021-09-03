@@ -1,4 +1,4 @@
-(() => {
+;( async () => {
 
 	let idx = PROJECT + ''
 	let nav = document.querySelector('nav')
@@ -94,8 +94,11 @@
         document.body.removeChild(element)
     }
 
-    let exportStorage = e => {
-        download('reekol-xport-' + Date.now(), JSON.stringify(storage, null, 4))
+    let exportStorage = async e => {
+        let storageNow = {}
+        let keys = (await localStorage.apiGetKeys()).sort().reverse()
+        for(let key of keys) storageNow[key] = await localStorage.apiGetItem(key)
+        download('reekol-xport-' + Date.now(), JSON.stringify(storageNow, null, 4))
     }
 
 	let btnclick = e => {
