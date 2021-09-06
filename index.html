@@ -11,8 +11,14 @@
 <style>
 
 :root {
+    --color-body: #fff;
+    --color-alert-head: rgba(0, 0, 0, 0.3);
+    --color-alert-head-text: #fff;
+    --color-alert-body-text: #000;
+    --color-alert-background-last: rgba(100, 100, 100, 0.4);
+    --color-alert-background: rgba(0, 0, 0, 0.1);
+    --color-tabcontent-background: #fff;
 	--link-color: #fff;
-	--h1-color: #cdcdcd;
 }
 
 * {
@@ -27,11 +33,12 @@ html, body {
 }
 
 body {
-	background: #3b4775
+	background: var(--color-body)
 }
 .clear {
     clear:both;
 }
+
 a {
 	text-decoration:none;
 	color:var(--link-color)
@@ -91,12 +98,12 @@ nav {
 
 .tabList{
     font-size: 2vh;
-    border-top:1px solid #fff;
-    border-right:1px solid #fff;
-    border-left:1px solid #fff;
+    border-top:1px solid var(--color-tabcontent-background);
+    border-right:1px solid var(--color-tabcontent-background);
+    border-left:1px solid var(--color-tabcontent-background);
     border-top-left-radius:0.5vh;
     border-top-right-radius:0.5vh;
-    border-bottom:1px solid #fff;
+    border-bottom:1px solid var(--color-tabcontent-background);
     float:left;
     padding:0.5vh;
     cursor:pointer;
@@ -108,14 +115,14 @@ nav {
 }
 
 .tabListActive{
-    background: #fff;
+    background: var(--color-tabcontent-background);
     color: #222222
 }
 
 .tabContent{
     margin:-8px;
     padding:8px;
-    background:#fff
+    background:var(--color-tabcontent-background)
 }
 @media (orientation: landscape) {
 	nav {
@@ -186,24 +193,24 @@ section:target h1 {
 	margin-left:5vw;
 	margin-right:5vw;
 	padding: 0px;
-	background-color: rgba(255, 0, 0, 0.1);
-	color: white;
+	background-color: var(--color-alert-background);
 	float:right;
 	overflow:hidden
 }
 .alert:nth-child(1){
-	background:rgba(255, 0, 0, 0.4);
+	background:var(--color-alert-background-last);
 }
 .alertHead{
 	border-radius:5px 5px 0 0;
-	background:rgba(255, 0, 0, 0.3);
-	color:white;
+	background: var(--color-alert-head);;
+	color:var(--color-alert-head-text);
 	padding:8px
 }
 
 .alertBody{
 	padding:8px;
 	font-family: monospace;
+	color: var(--color-alert-body-text);
 }
 
 .alertBody::-webkit-scrollbar {
@@ -218,6 +225,56 @@ section:target h1 {
 .alertBody::-webkit-scrollbar-thumb {
     border-radius: 10px;
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 100; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  -webkit-animation-name: fadeIn; /* Fade in the background */
+  -webkit-animation-duration: 0.4s;
+  animation-name: fadeIn;
+  animation-duration: 0.4s
+}
+
+/* Modal Content */
+.modal-content {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  -webkit-animation-name: slideIn;
+  -webkit-animation-duration: 0.4s;
+  animation-name: slideIn;
+  animation-duration: 0.4s;
+  background: rgba(0,0,0, .5)
+}
+
+/* Add Animation */
+@-webkit-keyframes slideIn {
+  from {bottom: -300px; opacity: 0}
+  to {bottom: 0; opacity: 1}
+}
+
+@keyframes slideIn {
+  from {bottom: -300px; opacity: 0}
+  to {bottom: 0; opacity: 1}
+}
+
+@-webkit-keyframes fadeIn {
+  from {opacity: 0}
+  to {opacity: 1}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0}
+  to {opacity: 1}
 }
 
 [placeholder]:empty::before {
@@ -249,6 +306,7 @@ section:target h1 {
 	<div class='container'>
 <!-- <section id="section1"></section> -->
 	</div>
+
 <script type="text/javascript">
 
 const d = console.log
@@ -275,6 +333,31 @@ const blink = obj => {
  	setTimeout(() => { obj.style.visibility = 'visible' }, 600)
 // 	beep(100, 520, 200)
 }
+
+const showModal = (title,body) => {
+
+	let alert = showAlert(document.body, {title:title, message:body}, false)
+        alert.classList.add('modal')
+        alert.classList.remove('alert')
+
+    let close = document.createElement('button')
+        close.className = 'far fa-window-close'
+        close.style.background = 'transparent'
+        close.style.float = 'right'
+        close.style.padding = '30px'
+        close.style.border = 0
+
+        alert.appendChild(close)
+
+    let content = alert.querySelector('div')
+        content.classList.add('modal-content')
+
+        close.addEventListener('pointerdown', e => alert.remove(), false)
+
+        alert.style.display = 'block'
+    return alert
+}
+
 
 const showAlertCleared = (parent, msg, notify) => {
 	parent.innerHTML = ''

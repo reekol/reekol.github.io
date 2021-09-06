@@ -15,8 +15,13 @@ loadCss(`
         float:left;
         clear:both
     }
+
     .tabContent_1 {
         overflow:auto
+    }
+
+    .tabContent{
+        min-height:20vh
     }
 
     ul {list-style-type: none;}
@@ -38,7 +43,7 @@ loadCss(`
     }
 
     .days .active {
-        background: rgba(255, 0, 0, 0.3);
+        background: rgba(0, 0, 0, 0.4);
         color: white !important
     }
 
@@ -191,14 +196,19 @@ loadCss(`
     }
 
     let showDayliEvents = async e => {
-        let events = e.target.events
+        let day = e.target.day
+        let events = day.events
         let toDisplay = []
         for (let evt of events){
             let note = JSON.parse(await localStorage.apiGetItem(evt.name))
-            toDisplay.push(note.title + '\n' + note.body)
+            toDisplay.push(note.title + '\n-------------\n' + note.body)
         }
-        d(toDisplay.join('\n>\n'))
+        let modal = showModal('Notes for ' + [day.dayOfMonth, day.month, day.year].join('.'), toDisplay.join('\n___________\n'))
+        let modalBody = modal.querySelector('.alertBody')
+            modalBody.classList.add('preformatted')
+            modalBody.style.color = "#fff"
     }
+
     let createMonthCal = (year, month) => {
         let today = getDay()
         let toMonth = getMonth(year, month)
@@ -206,7 +216,9 @@ loadCss(`
         let alert = showAlertTabs(section,[ year + '. ' + month + '.', 'Events' ],false)
         alert.classList.add('month-' + month)
         let alertBody = alert.querySelector('.tabContent_0')
+            alertBody.innerHTML = ''
         let alertEvents = alert.querySelector('.tabContent_1')
+            alertEvents.innerHTML = ''
         let ul = document.createElement('ul')
             ul.className = 'days'
             for(let pre = 1; pre < toMonth[0].dayOfWeek; pre++) ul.appendChild(document.createElement('li')) // add empty lists at the begining of the month
@@ -234,7 +246,7 @@ loadCss(`
                             alertEvents.appendChild(eventObject)
                     })
                     li.classList.add('events')
-                    li.events = day.events
+                    li.day = day
                     for(let evt of day.events){
                         li.classList.add(evt.class)
                     }

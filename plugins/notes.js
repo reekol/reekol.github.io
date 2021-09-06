@@ -185,21 +185,22 @@
             alertBody.setAttribute('contenteditable','true')
             alertBody.textContent = e.note && e.note.body ? e.note.body : ''
 
+        let controllsBox = newAlert
         let alertTrash = document.createElement('i')
             alertTrash.className = 'fas fa-trash-alt'
-            newAlert.appendChild(alertTrash)
+            controllsBox.appendChild(alertTrash)
 
         let alertPrint = document.createElement('i')
             alertPrint.className = 'fas fa-print'
-            newAlert.appendChild(alertPrint)
+            controllsBox.appendChild(alertPrint)
 
         let alertQr = document.createElement('i')
             alertQr.className = 'fas fa-qrcode'
-            newAlert.appendChild(alertQr)
+            controllsBox.appendChild(alertQr)
 
         let alertSave = document.createElement('i')
             alertSave.className = 'fas fa-save'
-            newAlert.appendChild(alertSave)
+            controllsBox.appendChild(alertSave)
 
         let shareQr = e => {
                 document.querySelectorAll('.sharingQr').forEach( el => el.remove() )
@@ -329,8 +330,8 @@
         window.location.hash = PROJECT
     }
 
-    btnList.    dispatchEvent(new Event('pointerdown'))
-    btnList.click()
+//    btnList.    dispatchEvent(new Event('pointerdown'))
+//    btnList.click()
 })()
 
 
