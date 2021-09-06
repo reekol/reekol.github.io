@@ -206,6 +206,20 @@ section:target h1 {
 	font-family: monospace;
 }
 
+.alertBody::-webkit-scrollbar {
+    width: 12px;
+}
+
+.alertBody::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+}
+
+.alertBody::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+
 [placeholder]:empty::before {
     content: attr(placeholder);
 }
@@ -510,11 +524,12 @@ Object.keys(data).forEach(function (k) {
 
 	Object.getPrototypeOf(localStorage).remoteUri = localStorage.getItem('remote')
 
-	
+
 	Object.getPrototypeOf(localStorage).apiSetItem = async (k, v) => {
 		if(!localStorage.remoteUri) return localStorage.setItem(k, v)
 
 		let fd = new FormData(document.createElement('form'))
+            fd.append('key',k)
             fd.append('value',v)
 
 		return fetch(localStorage.remoteUri + '?key=' + encodeURIComponent(k) + '&t=' + Date.now() ,{
@@ -556,44 +571,6 @@ Object.keys(data).forEach(function (k) {
 				  .catch(e => alert)
 			}
 
-/* Example phpcode for cache server
-
-$db = new SQLite3(dirname(__FILE__) . '/cache.db');
-
-$db->query('CREATE TABLE IF NOT EXISTS cache (id INTEGER PRIMARY KEY, key TEXT NOT NULL UNIQUE, value TEXT, created_at DEFAULT CURRENT_TIMESTAMP);');
-
-$key   = isset($_GET['key'])   ? $_GET['key']   : false;
-$value = isset($_GET['value']) ? $_GET['value'] : false;
-
-
-if($key)
-{
-    if($value){
-        if($value === 'null'){
-            $smt = $db->prepare('DELETE FROM cache WHERE key = :key LIMIT 1;');
-        }else{
-            $smt = $db->prepare('INSERT INTO cache (key, value) VALUES (:key, :value) ON CONFLICT(key) DO UPDATE SET value = :value ;');
-            $smt->bindValue(':value', $value, SQLITE3_TEXT);
-        }
-        $smt->bindValue(':key', $key, SQLITE3_TEXT);
-        $smt->execute();
-    }
-
-    $smt = $db->prepare('SELECT * FROM cache where key = :key LIMIT 1');
-    $smt->bindValue(':key',   $key,   SQLITE3_TEXT);
-    $res = $smt->execute();
-    $row = $res->fetchArray(SQLITE3_ASSOC);
-    echo $row['value'];
-}else{
-    $out = [];
-    $smt = $db->prepare('SELECT key FROM cache');
-    $res = $smt->execute();
-    while($row = $res->fetchArray(SQLITE3_ASSOC)) $out[] = $row['key'];
-    echo json_encode($out);
-}
-
-
-*/
 </script>
 </body>
 </html>
