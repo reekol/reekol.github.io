@@ -18,7 +18,7 @@
     --color-alert-background-last: rgba(100, 100, 100, 0.4);
     --color-alert-background: rgba(0, 0, 0, 0.1);
     --color-tabcontent-background: #fff;
-	--link-color: #fff;
+	--color-link: #fff;
 }
 
 * {
@@ -41,7 +41,7 @@ body {
 
 a {
 	text-decoration:none;
-	color:var(--link-color)
+	color:var(--color-link)
 }
 
 .preformatted {
@@ -160,7 +160,7 @@ nav {
 .fa, .fas, .fab, .far  {
 	caret-color: transparent;
 	cursor:pointer;
-	color: var(--link-color);
+	color: var(--color-link);
 	text-decoration: none;
 	text-align: center;
 	text-shadow: 4px 4px 2px #000, 0 0 1em #cdcdcd, 0 0 0.2em #cdcdcd;
@@ -485,6 +485,7 @@ const loadScripts	 = (srcArr, pointer = 0) => {
 		}
 	document.head.append(tag)
 }
+
 
 const jsdoc = contents => {
     return  contents.toString().match(/[ \t]*\/\*\*\s*\n([^*]*(\*[^/])?)*\*\//g)
