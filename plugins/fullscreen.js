@@ -6,7 +6,7 @@
 		  nav.appendChild(btn)
 
 	btn.addEventListener('click', e => {
-		let elem = document.querySelector("body")
+		let elem = document.querySelector("html")
 		if (!document.fullscreenElement) {
 			elem.requestFullscreen().catch(err => {
 			alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`)
