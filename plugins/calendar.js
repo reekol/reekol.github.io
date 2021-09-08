@@ -21,7 +21,7 @@ loadCss(`
     }
 
     .tabContent{
-        min-height:20vh
+        min-height:25vh
     }
 
     ul {list-style-type: none;}
@@ -36,10 +36,11 @@ loadCss(`
         display: inline-block;
         width: 13.6%;
         text-align: center;
-        font-size: 1.5vh;
+        font-size: 2.0vh;
         color: #000;
         cursor:pointer;
-        padding:0.5vh;
+        padding:0;
+        margin-top:2vh
     }
 
     .days .active {
@@ -206,7 +207,7 @@ loadCss(`
         let modal = showModal('Notes for ' + [day.dayOfMonth, day.month, day.year].join('.'), toDisplay.join('\n___________\n'))
         let modalBody = modal.querySelector('.alertBody')
             modalBody.classList.add('preformatted')
-            modalBody.style.color = "#fff"
+            modalBody.style.color = "rgba(255, 255, 255, 0.7)"
     }
 
     let createMonthCal = (year, month) => {
@@ -232,7 +233,13 @@ loadCss(`
                     today.year === day.year &&
                     today.month === day.month &&
                     today.dayOfMonth === day.dayOfMonth
-                ){ li.classList.add('active') }
+                ){
+                    li.classList.add('active')
+                    setTimeout( () => {
+                        alert.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"})
+                        setTimeout(() => blink(alert),1500)
+                    } , 500)
+                }
 
                 if( day.events.length > 0){
                     day.events.map( evt => {
@@ -281,4 +288,5 @@ loadCss(`
         for(let i = 12; i > 0; i-- ) createMonthCal(year, i)
     })
     btnMonth. dispatchEvent(new Event('pointerdown'))
+    btnMonth.click()
 })()
