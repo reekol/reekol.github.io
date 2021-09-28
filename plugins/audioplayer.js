@@ -56,13 +56,15 @@
 		player.paused = true
 
 	let files = document.createElement('input')
-		files.type = 'file'
-		files.multiple = "multiple"
-		files.accept ="audio/*"
-		files.directory = 'directory'
-		files.webkitdirectory = 'webkitdirectory'
+        files.setAttribute('type','file')
+        files.setAttribute('multiple',true)
+        files.setAttribute('directory',true)
+        files.setAttribute('accept','audio/*')
+        files.setAttribute('allowdirs',true)
+        files.setAttribute('webkitdirectory',true)
+        files.setAttribute('mozdirectory',true)
 
-	let audioContext,
+    let audioContext,
 		audioContextAnalyser,
 		audioContextSrc
 
@@ -487,6 +489,7 @@
 
 	let playLoad = e => {
 		playlist = []
+
 		for(let file of e.target.files) if(file.type.split('/')[0] === 'audio') playlist.push(file)
 
 		files.type = '' // Reset/empty files list
@@ -508,6 +511,35 @@
 	let resizeEq = () => {
 		boxEq.style.height = nowPlayingVisualiser.offsetWidth
 	}
+
+    let dragAndDropFiles = (dropzone,cb) => {
+
+        let filelist = []
+
+        let traverseFileTree = function self(item) {
+            if (item.isFile) {
+            item.file( file => { filelist.push(file) })
+            } else if (item.isDirectory) {
+            item.createReader().readEntries(entries => entries.map( item => self(item) ) )
+            }
+        }
+
+        let dropEvent = function(e) {
+            let length = e.dataTransfer.items.length;
+            for (let i = 0; i < length; i++) traverseFileTree(e.dataTransfer.items[i].webkitGetAsEntry())
+            e.stopPropagation()
+            e.preventDefault()
+            cb({target: { files: filelist }})
+        }
+
+
+        let disable = e => { e.stopPropagation(); e.preventDefault() }
+
+        dropzone.addEventListener('dragenter', disable, false)
+        dropzone.addEventListener('dragover', disable, false)
+        dropzone.addEventListener('dragleave', disable, false)
+        dropzone.addEventListener('drop', dropEvent, false)
+    }
 
 	let keypress = e => {
 //			d(e)
@@ -548,7 +580,7 @@
 		jFilter.	addEventListener('input',  filterPl, false)
 		document.	addEventListener('keypress',keypress,	false)
 		window.		addEventListener('resize', resizeEq, false)
-
+        dragAndDropFiles(document, playLoad)
 		resizeEq()
 })()
 
