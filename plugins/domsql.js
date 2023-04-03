@@ -233,7 +233,7 @@ FROM    {https://worldtimeapi.org/}
         alertBody.style.display = 'none'
         let domsql = new DomSQL(
 //            new (await initSqlJs({ locateFile: file => `https://sql.js.org/dist/${file}` })).Database()
-            new (await initSqlJs({ locateFile: file => `https://seqr.link/sql-wasm.wasm` })).Database()
+            new (await initSqlJs({ locateFile: file => `https://sql.js.org/dist/sql-wasm.wasm` })).Database()
         )
         let res = await domsql.run(editorSql.getValue())
 
