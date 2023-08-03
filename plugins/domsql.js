@@ -86,7 +86,7 @@ FROM    {https://worldtimeapi.org/}
 
     let SQL, DB, editorSql, editorCb, editorCss, editorWeb, editorRes
     let EXAMPLE = `
-// Required dependency: <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.1/sql-wasm.js' ></script>
+// Required dependency: <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js' ></script>
 
 ;(async () => { // You can use this code to generate DomSQL weblets and append them to the body of your webpage.
     let qry = \`\${qry}\`
