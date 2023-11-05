@@ -190,6 +190,10 @@
             alertTrash.className = 'fas fa-trash-alt'
             controllsBox.appendChild(alertTrash)
 
+        let alertLoc = document.createElement('i')
+            alertLoc.className = 'fas fa-location-dot fa-beat'
+            controllsBox.appendChild(alertLoc)
+
         let alertPrint = document.createElement('i')
             alertPrint.className = 'fas fa-print'
             controllsBox.appendChild(alertPrint)
@@ -265,6 +269,7 @@
                 JSON.stringify({title: alertHead.innerText, body: alertBody.innerText })
             )
         }
+
         let save = async e => {
             e.exportName = alertHead.innerText
             e.exportData = { }
@@ -294,6 +299,50 @@
             newAlert.remove()
         }
 
+        let addLoc = e => {
+// Check if geolocation is supported by the browser
+            if ("geolocation" in navigator) {
+            // Prompt user for permission to access their location
+            navigator.geolocation.getCurrentPosition(
+                // Success callback function
+                (position) => {
+                    // Get the user's latitude and longitude coordinates
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+
+                    // Do something with the location data, e.g. display on a map
+                    let date = new Date();
+                    console.log(
+                        date.getUTCFullYear() + '-' +
+                        ('00' + (date.getUTCMonth()+1)).slice(-2) + '-' +
+                        ('00' + date.getUTCDate()).slice(-2) + ' ' +
+                        ('00' + date.getUTCHours()).slice(-2) + ':' +
+                        ('00' + date.getUTCMinutes()).slice(-2) + ':' +
+                        ('00' + date.getUTCSeconds()).slice(-2)
+                    )
+                    console.log(`Latitude: ${lat}, longitude: ${lng}`);
+                    alertBody.innerText += "\n"
+                                        +  ('00' + date.getUTCDate()).slice(-2) + "."
+                                        +  ('00' + (date.getUTCMonth()+1)).slice(-2) + "."
+                                        +  date.getUTCFullYear() + " "
+                                        +  ('00' + date.getUTCHours()).slice(-2) + ':'
+                                        +  ('00' + date.getUTCMinutes()).slice(-2) + ':'
+                                        +  ('00' + date.getUTCSeconds()).slice(-2) + " "
+                                        +  `Lat:${lat} Lon:${lng}`
+                    edit(e)
+                },
+                // Error callback function
+                (error) => {
+                // Handle errors, e.g. user denied location sharing permissions
+                console.error("Error getting user location:", error);
+                }
+            );
+            } else {
+            // Geolocation is not supported by the browser
+            console.error("Geolocation is not supported by this browser.");
+            }
+        }
+
         alertHead.  addEventListener('pointerdown', edit,    false)
         alertBody.  addEventListener('pointerdown', edit,    false)
         alertHead.  addEventListener('input',       edit,    false)
@@ -302,6 +351,7 @@
         alertSave.  addEventListener('pointerdown', save,    false)
         alertPrint. addEventListener('pointerdown', print,   false)
         alertQr.    addEventListener('pointerdown', shareQr, false)
+        alertLoc.   addEventListener('pointerdown', addLoc,  false)
         alertHead.  addEventListener('input', () => {
             let commands = getCommands(alertHead.innerText)
             if(typeof commands.color !== 'undefined'){

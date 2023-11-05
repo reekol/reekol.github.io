@@ -81,7 +81,7 @@ loadCss(`
 
 ;( async () => {
 
-   	let idx = PROJECT + ''
+  let idx = PROJECT + ''
 	let nav = document.querySelector('nav')
 	let box = document.querySelector('.container')
 	let storage = window.localStorage
