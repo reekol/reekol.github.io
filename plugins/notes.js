@@ -308,7 +308,7 @@
                 (position) => {
                     // Get the user's latitude and longitude coordinates
                     const lat = position.coords.latitude;
-                    const lng = position.coords.longitude;
+                    const lon = position.coords.longitude;
 
                     // Do something with the location data, e.g. display on a map
                     let date = new Date();
@@ -320,7 +320,7 @@
                         ('00' + date.getUTCMinutes()).slice(-2) + ':' +
                         ('00' + date.getUTCSeconds()).slice(-2)
                     )
-                    console.log(`Latitude: ${lat}, longitude: ${lng}`);
+                    console.log(`Latitude: ${lat}, longitude: ${lon}`);
                     alertBody.innerText += "\n"
                                         +  ('00' + date.getUTCDate()).slice(-2) + "."
                                         +  ('00' + (date.getUTCMonth()+1)).slice(-2) + "."
@@ -328,7 +328,7 @@
                                         +  ('00' + date.getUTCHours()).slice(-2) + ':'
                                         +  ('00' + date.getUTCMinutes()).slice(-2) + ':'
                                         +  ('00' + date.getUTCSeconds()).slice(-2) + " "
-                                        +  `Lat:${lat} Lon:${lng}`
+                                        +  `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}`
                     edit(e)
                 },
                 // Error callback function
