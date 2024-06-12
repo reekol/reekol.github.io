@@ -71,7 +71,7 @@
             let now = new Date()
             let dateTz = new Date(data.datetime.split('.')[0].replace('T',' '))
             let dateUtc = new Date(data.utc_datetime.split('.')[0].replace('T',' '))
-            let dateUtcDiff = (now - dateUtc)
+            let dateUtcDiff = (dateUtc - dateTz)
             let dateTzDiff = (now - dateTz)
                 alertTitleUTC.innerText = 'Utc'
                 textNode.remove()
