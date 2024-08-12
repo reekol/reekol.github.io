@@ -86,7 +86,7 @@ FROM    {https://worldtimeapi.org/}
 
     let SQL, DB, editorSql, editorCb, editorCss, editorWeb, editorRes
     let EXAMPLE = `
-// Required dependency: <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js' ></script>
+// Required dependency: <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.11.0/sql-wasm.js' ></script>
 
 ;(async () => { // You can use this code to generate DomSQL weblets and append them to the body of your webpage.
     let qry = \`\${qry}\`
@@ -98,7 +98,7 @@ FROM    {https://worldtimeapi.org/}
 
     showAlert(doc, {title:'Provided by:', message: 'ReeKol - Nikolay Terziev (reekol.github.com).'}, false)
     loadScript('lib/domsql.js?t=' + Date.now(), () => {
-        loadScript('https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js', () => {
+        loadScript('https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.11.0/sql-wasm.js', () => {
              jsdoc(DomSQL).reverse().map( dc => {
                  if(dc.indexOf('@public') > 0){ // Document only public functions
                     let d = showAlert(doc, {title:'', message: dc }, false)
