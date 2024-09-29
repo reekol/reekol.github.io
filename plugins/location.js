@@ -49,13 +49,14 @@
         mapBody.classList.add('map')
 
     navigator.geolocation.getCurrentPosition(GeoPposition => {
-      position = `Timestamp: ${GeoPposition.timestamp}\n`
-               + `${new Date(GeoPposition.timestamp)}\n`
+      position = ''
                + `Accuracy: ${GeoPposition.coords.accuracy}\n`
+               + `Lat: ${GeoPposition.coords.latitude} / Lon: ${GeoPposition.coords.longitude}\n`
                + `Altitude: ${GeoPposition.coords.altitude} (acc: ${GeoPposition.coords.altitudeAccuracy})\n`
                + `Heading: ${GeoPposition.coords.heading} /`
                + `Speed: ${GeoPposition.coords.speend} \n`
-               + `Lat: ${GeoPposition.coords.latitude} / Lon: ${GeoPposition.coords.longitude}`
+               + `Timestamp: ${GeoPposition.timestamp}\n`
+               + `${new Date(GeoPposition.timestamp)}\n`
 
       mapTitle.innerText = position
       console.log(position)
