@@ -6,6 +6,9 @@
 	let storage = window.localStorage
 
 	loadCss(`
+        .map section{
+          all:initial
+        }
         @media (orientation: landscape) {
             .container {
                 padding-top: 2vh
@@ -22,7 +25,7 @@
         }
 
         .map {
-            color: #074450;
+
         }
 	`)
 
@@ -43,15 +46,22 @@
       console.log(position)
 
       const map = L.map('map').setView([GeoPposition.coords.latitude, GeoPposition.coords.longitude], 13);
-      const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
+      let bm1 = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       }).addTo(map);
+
+      let bm2 = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',{
+        maxZoom: 20,
+        subdomains:['mt0','mt1','mt2','mt3']
+      }).addTo(map)
+
+      L.control.layers({"OsmStreep": bm1, "GoogleSat": bm2 }, []).addTo(map);
 
       const marker = L.marker([GeoPposition.coords.latitude, GeoPposition.coords.longitude]).addTo(map)
 //        .bindPopup(`<b>Position:</b><br />${position}`).openPopup();
     }, alert, {
-      enableHighAccuracy: false,
+      enableHighAccuracy: true,
       timeout: 10000,
       maximumAge: 0,
     });
