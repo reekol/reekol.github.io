@@ -42,7 +42,7 @@
         mapBody.classList.add('map')
 
     navigator.geolocation.getCurrentPosition(GeoPposition => {
-      position = `Acc: ${GeoPposition.coords.accuracy} / Lat: ${GeoPposition.coords.latitude} / Lon: ${GeoPposition.coords.longitude}`
+      position = `Accuracy: ${GeoPposition.coords.accuracy} \n Lat: ${GeoPposition.coords.latitude} / Lon: ${GeoPposition.coords.longitude}`
       mapTitle.innerText = position
       console.log(position)
 
