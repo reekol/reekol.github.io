@@ -56,11 +56,11 @@
       const map = L.map('map').setView([GeoPposition.coords.latitude, GeoPposition.coords.longitude], 13);
 
       let bm1 = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
+        maxZoom: 25,
       }).addTo(map);
 
       let bm2 = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',{
-        maxZoom: 20,
+        maxZoom: 25,
         subdomains:['mt0','mt1','mt2','mt3']
       }).addTo(map)
 
