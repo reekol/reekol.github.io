@@ -4,7 +4,10 @@
 	let nav = document.querySelector('nav')
 	let cnt = document.querySelector('.container')
 	let storage = window.localStorage
-
+  let btnSync = document.createElement('i')
+      btnSync.className = "fas fa-sync-alt"
+      nav.appendChild(btnSync)
+      btnSync.addEventListener('pointerdown', () => window.location.reload(), false)
 	loadCss(`
         .map section{
           all:initial
