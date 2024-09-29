@@ -9,12 +9,13 @@
         .map section{
           all:initial
         }
+
         @media (orientation: landscape) {
             .container {
                 padding-top: 2vh
             }
             .map{
-              all: initial
+
             }
 
         }
@@ -56,7 +57,7 @@
         subdomains:['mt0','mt1','mt2','mt3']
       }).addTo(map)
 
-      L.control.layers({"OsmStreep": bm1, "GoogleSat": bm2 }, []).addTo(map);
+      L.control.layers({"OsmStreet": bm1, "GoogleSat": bm2 }, []).addTo(map);
 
       const marker = L.marker([GeoPposition.coords.latitude, GeoPposition.coords.longitude]).addTo(map)
 //        .bindPopup(`<b>Position:</b><br />${position}`).openPopup();
