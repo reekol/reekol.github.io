@@ -50,7 +50,7 @@
 
       const marker = L.marker([GeoPposition.coords.latitude, GeoPposition.coords.longitude]).addTo(map)
 //        .bindPopup(`<b>Position:</b><br />${position}`).openPopup();
-    }, console.log, {
+    }, alert, {
       enableHighAccuracy: false,
       timeout: 10000,
       maximumAge: 0,
