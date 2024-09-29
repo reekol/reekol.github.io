@@ -44,7 +44,7 @@
     let map = showAlert(cnt,{title:'Map.',message:'Loading...'},false)
     let mapTitle = map.querySelector('.alertHead')
     let mapBody = map.querySelector('.alertBody')
-        mapBody.style.height = "70vh"
+        mapBody.style.height = "65vh"
         mapBody.id = 'map'
         mapBody.classList.add('map')
 
@@ -54,7 +54,7 @@
                + `Accuracy: ${GeoPposition.coords.accuracy}\n`
                + `Altitude: ${GeoPposition.coords.altitude} (acc: ${GeoPposition.coords.altitudeAccuracy})\n`
                + `Heading: ${GeoPposition.coords.heading} /`
-               + `Speed: ${GeoPposition.coords.speend} /`
+               + `Speed: ${GeoPposition.coords.speend} \n`
                + `Lat: ${GeoPposition.coords.latitude} / Lon: ${GeoPposition.coords.longitude}`
 
       mapTitle.innerText = position
