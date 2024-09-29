@@ -11,7 +11,7 @@
                 padding-top: 2vh
             }
             .map{
-
+              all: initial
             }
 
         }
@@ -38,9 +38,10 @@
         mapBody.classList.add('map')
 
     navigator.geolocation.getCurrentPosition(GeoPposition => {
-      position = `Lat: ${GeoPposition.coords.latitude} / Lon: ${GeoPposition.coords.longitude}`
+      position = `Acc: ${GeoPposition.coords.accuracy} / Lat: ${GeoPposition.coords.latitude} / Lon: ${GeoPposition.coords.longitude}`
       mapTitle.innerText = position
       console.log(position)
+
       const map = L.map('map').setView([GeoPposition.coords.latitude, GeoPposition.coords.longitude], 13);
       const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
@@ -49,6 +50,10 @@
 
       const marker = L.marker([GeoPposition.coords.latitude, GeoPposition.coords.longitude]).addTo(map)
 //        .bindPopup(`<b>Position:</b><br />${position}`).openPopup();
+    }, console.log, {
+      enableHighAccuracy: true,
+      timeout: 100,
+      maximumAge: 0,
     });
 
   })
