@@ -11,6 +11,7 @@
                 padding-top: 2vh
             }
             .map{
+
             }
 
         }
@@ -32,7 +33,7 @@
     let map = showAlert(cnt,{title:'Map.',message:'Loading...'},false)
     let mapTitle = map.querySelector('.alertHead')
     let mapBody = map.querySelector('.alertBody')
-        mapBody.style.height = "300px"
+        mapBody.style.height = "80vh"
         mapBody.id = 'map'
         mapBody.classList.add('map')
 
