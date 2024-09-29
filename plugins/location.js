@@ -54,7 +54,7 @@
                + `Lat: ${GeoPposition.coords.latitude} / Lon: ${GeoPposition.coords.longitude}\n`
                + `Altitude: ${GeoPposition.coords.altitude} (acc: ${GeoPposition.coords.altitudeAccuracy})\n`
                + `Heading: ${GeoPposition.coords.heading} /`
-               + `Speed: ${GeoPposition.coords.speend} \n`
+               + `Speed: ${GeoPposition.coords.speed} \n`
                + `Timestamp: ${GeoPposition.timestamp}\n`
                + `${new Date(GeoPposition.timestamp)}\n`
 
