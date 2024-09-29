@@ -52,7 +52,7 @@
 //        .bindPopup(`<b>Position:</b><br />${position}`).openPopup();
     }, console.log, {
       enableHighAccuracy: true,
-      timeout: 100,
+      timeout: 10000,
       maximumAge: 0,
     });
 
