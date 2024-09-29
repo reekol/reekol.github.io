@@ -44,12 +44,12 @@
     let map = showAlert(cnt,{title:'Map.',message:'Loading...'},false)
     let mapTitle = map.querySelector('.alertHead')
     let mapBody = map.querySelector('.alertBody')
-        mapBody.style.height = "80vh"
+        mapBody.style.height = "75vh"
         mapBody.id = 'map'
         mapBody.classList.add('map')
 
     navigator.geolocation.getCurrentPosition(GeoPposition => {
-      position = `Accuracy: ${GeoPposition.coords.accuracy} \n Lat: ${GeoPposition.coords.latitude} / Lon: ${GeoPposition.coords.longitude}`
+      position = `Timestamp: ${GeoPposition.timestamp}\n ${new Date(GeoPposition.timestamp)} \n Accuracy: ${GeoPposition.coords.accuracy} \n Lat: ${GeoPposition.coords.latitude} / Lon: ${GeoPposition.coords.longitude}`
       mapTitle.innerText = position
       console.log(position)
 
