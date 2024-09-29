@@ -15,7 +15,7 @@
 
         @media (orientation: landscape) {
             .container {
-                padding-top: 2vh
+                padding-top: 2vh;
             }
             .map{
 
@@ -24,7 +24,11 @@
         }
         @media (orientation: portrait) {
             .container {
-                padding-top: 8vw
+                padding-top: 8vw;
+            }
+            .alert{
+              width: 100vw !important;
+              margin-right: 0
             }
         }
 
