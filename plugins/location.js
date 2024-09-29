@@ -53,6 +53,8 @@
                + `${new Date(GeoPposition.timestamp)}\n`
                + `Accuracy: ${GeoPposition.coords.accuracy}\n`
                + `Altitude: ${GeoPposition.coords.altitude} (acc: ${GeoPposition.coords.altitudeAccuracy})\n`
+               + `Heading: ${GeoPposition.coords.heading} /`
+               + `Speed: ${GeoPposition.coords.speend} /`
                + `Lat: ${GeoPposition.coords.latitude} / Lon: ${GeoPposition.coords.longitude}`
 
       mapTitle.innerText = position
