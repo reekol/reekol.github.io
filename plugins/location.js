@@ -27,8 +27,8 @@
                 padding-top: 8vw;
             }
             .alert{
-              width: 100vw !important;
-              margin-right: 0
+              width: 95vw !important;
+              margin-right: 2.5vw
             }
         }
 
