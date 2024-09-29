@@ -52,7 +52,7 @@
       position = `Timestamp: ${GeoPposition.timestamp}\n`
                + `${new Date(GeoPposition.timestamp)}\n`
                + `Accuracy: ${GeoPposition.coords.accuracy}\n`
-               + `Altitude: ${GeoPposition.altitude} (acc: ${GeoPposition.altitudeAccuracy})\n`
+               + `Altitude: ${GeoPposition.coords.altitude} (acc: ${GeoPposition.coords.altitudeAccuracy})\n`
                + `Lat: ${GeoPposition.coords.latitude} / Lon: ${GeoPposition.coords.longitude}`
 
       mapTitle.innerText = position
