@@ -25,12 +25,15 @@
         }
         @media (orientation: portrait) {
             .container {
-                padding-top: 8vw;
+                padding-top: 0vw;
             }
             .alert{
-              width: 95vw !important;
-              margin-right: 2.5vw
+              height:100%;
+              width:100%;
+              margin:0;
             }
+            nav{ display:none }
+
         }
 
         .map {
@@ -56,7 +59,7 @@
     let map = showAlert(cnt,{title:'Map.',message:'Loading...'},false)
     let mapTitle = map.querySelector('.alertHead')
     let mapBody = map.querySelector('.alertBody')
-        mapBody.style.height = "65vh"
+        mapBody.style.height = "100%"
         mapBody.id = 'map'
         mapBody.classList.add('map')
 
