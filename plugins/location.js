@@ -81,7 +81,7 @@
       const marker = L.marker([GeoPposition.coords.latitude, GeoPposition.coords.longitude]).addTo(map)
             marker.dragging.enable()
         let p0 = marker.getLatLng()
-        let popup = marker.bindPopup("<i onpointerdown='navigator.share(this.data)' class='fa fa-share' data-title='' data-text='' data-url='' ></i><br />Latitude: " + p0.lat + "<br />Longitude: " + p0.lng + "").openPopup();
+        let popup = marker.bindPopup("<i onpointerdown='navigator.share({title:\"asd\"})' class='fa fa-share' data-title='' data-text='' data-url='' ></i><br />Latitude: " + p0.lat + "<br />Longitude: " + p0.lng + "").openPopup();
 
             marker.on('dragend', event => {
                 let p1 = marker.getLatLng()
