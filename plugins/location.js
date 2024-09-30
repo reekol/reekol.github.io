@@ -8,7 +8,7 @@
       btnSync.className = "fas fa-sync-alt"
       nav.appendChild(btnSync)
       btnSync.addEventListener('pointerdown', () => window.location.reload(), false)
-	loadCss(`
+      loadCss(`
         .map section{
           all:initial
         }
@@ -35,10 +35,21 @@
         .map {
 
         }
-	`)
+      `)
 
-  loadCssSrc("https://unpkg.com/leaflet@1.9.4/dist/leaflet.css")
-  loadScript("https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",() => {
+    loadCssSrc("https://unpkg.com/leaflet@1.9.4/dist/leaflet.css")
+    loadScript("https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",() => {
+
+    let description = GeoPposition => {
+        return ''
+               + `Accuracy: ${GeoPposition.coords.accuracy}\n`
+               + `Lat: ${GeoPposition.coords.latitude} / Lon: ${GeoPposition.coords.longitude}\n`
+               + `Altitude: ${GeoPposition.coords.altitude} (acc: ${GeoPposition.coords.altitudeAccuracy})\n`
+               + `Heading: ${GeoPposition.coords.heading} /`
+               + `Speed: ${GeoPposition.coords.speed} \n`
+               + `Timestamp: ${GeoPposition.timestamp}\n`
+               + `${new Date(GeoPposition.timestamp)}\n`
+    }
 
 
     let map = showAlert(cnt,{title:'Map.',message:'Loading...'},false)
@@ -49,17 +60,9 @@
         mapBody.classList.add('map')
 
     navigator.geolocation.getCurrentPosition(GeoPposition => {
-      position = ''
-               + `Accuracy: ${GeoPposition.coords.accuracy}\n`
-               + `Lat: ${GeoPposition.coords.latitude} / Lon: ${GeoPposition.coords.longitude}\n`
-               + `Altitude: ${GeoPposition.coords.altitude} (acc: ${GeoPposition.coords.altitudeAccuracy})\n`
-               + `Heading: ${GeoPposition.coords.heading} /`
-               + `Speed: ${GeoPposition.coords.speed} \n`
-               + `Timestamp: ${GeoPposition.timestamp}\n`
-               + `${new Date(GeoPposition.timestamp)}\n`
 
-      mapTitle.innerText = position
-      console.log(position)
+
+      mapTitle.innerText = description(GeoPposition)
 
       const map = L.map('map').setView([GeoPposition.coords.latitude, GeoPposition.coords.longitude], 13);
 
@@ -75,7 +78,17 @@
       L.control.layers({"OsmStreet": bm1, "GoogleSat": bm2 }, []).addTo(map);
 
       const marker = L.marker([GeoPposition.coords.latitude, GeoPposition.coords.longitude]).addTo(map)
-//        .bindPopup(`<b>Position:</b><br />${position}`).openPopup();
+            marker.dragging.enable()
+//            let popup = marker.bindPopup(`<b>Position:</b><br />${mapTitle.innerText}`).openPopup();
+//            console.log(popup)
+            marker.on('dragend', event => {
+                let p = marker.getLatLng();
+                mapTitle.innerText = "Accuracy: absolute.\n"
+                                  + "Latitude: "  + p.lat + "\n"
+                                  + "Longitude: " + p.lng + "\n"
+                console.log(p)
+//                map.panTo(new L.LatLng(position.lat, position.lng))
+            });
     }, alert, {
       enableHighAccuracy: true,
       timeout: 10000,
