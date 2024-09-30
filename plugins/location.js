@@ -79,14 +79,11 @@
 
       const marker = L.marker([GeoPposition.coords.latitude, GeoPposition.coords.longitude]).addTo(map)
             marker.dragging.enable()
-//            let popup = marker.bindPopup(`<b>Position:</b><br />${mapTitle.innerText}`).openPopup();
-//            console.log(popup)
+        let popup = marker.bindPopup(marker.getLatLng().toString()).openPopup();
+
             marker.on('dragend', event => {
-                let p = marker.getLatLng();
-                mapTitle.innerText = "Accuracy: absolute.\n"
-                                  + "Latitude: "  + p.lat + "\n"
-                                  + "Longitude: " + p.lng + "\n"
-                console.log(p)
+                marker._popup.setContent(marker.getLatLng().toString())
+                marker.openPopup()
 //                map.panTo(new L.LatLng(position.lat, position.lng))
             });
     }, alert, {
