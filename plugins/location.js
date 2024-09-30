@@ -81,11 +81,11 @@
       const marker = L.marker([GeoPposition.coords.latitude, GeoPposition.coords.longitude]).addTo(map)
             marker.dragging.enable()
         let p0 = marker.getLatLng()
-        let popup = marker.bindPopup("<i class='fa fa-share' style='float:left' data-title='' data-text='' data-url='' ></i>Latitude: " + p0.lat + "<br />Longitude: " + p0.lng).openPopup();
+        let popup = marker.bindPopup("<i onpointerdown='navigator.share(this.data)' class='fa fa-share' data-title='' data-text='' data-url='' ></i><br />Latitude: " + p0.lat + "<br />Longitude: " + p0.lng + "").openPopup();
 
             marker.on('dragend', event => {
                 let p1 = marker.getLatLng()
-                marker._popup.setContent("<i onpointerdown='navigator.share(this.data)' class='fa fa-share' style='float:left' data-title='' data-text='' data-url='' ></i>Latitude: " + p1.lat + "<br />Longitude: " + p1.lng)
+                marker._popup.setContent("<i onpointerdown='navigator.share(this.data)' class='fa fa-share' data-title='' data-text='' data-url='' ></i><br />Latitude: " + p1.lat + "<br />Longitude: " + p1.lng + "")
                 marker.openPopup()
 //                map.panTo(new L.LatLng(position.lat, position.lng))
             });
