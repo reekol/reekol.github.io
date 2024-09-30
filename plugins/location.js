@@ -79,10 +79,12 @@
 
       const marker = L.marker([GeoPposition.coords.latitude, GeoPposition.coords.longitude]).addTo(map)
             marker.dragging.enable()
-        let popup = marker.bindPopup(marker.getLatLng().toString()).openPopup();
+        let p0 = marker.getLatLng()
+        let popup = marker.bindPopup("Latitude: " + p0.lat + "<br />Longitude: " + p0.lng).openPopup();
 
             marker.on('dragend', event => {
-                marker._popup.setContent(marker.getLatLng().toString())
+                let p1 = marker.getLatLng()
+                marker._popup.setContent("Latitude: " + p1.lat + "<br />Longitude: " + p1.lng)
                 marker.openPopup()
 //                map.panTo(new L.LatLng(position.lat, position.lng))
             });
