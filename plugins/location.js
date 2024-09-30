@@ -9,6 +9,7 @@
       nav.appendChild(btnSync)
       btnSync.addEventListener('pointerdown', () => window.location.reload(), false)
       loadCss(`
+        .leaflet-bottom { display: none !important }
         .map section{
           all:initial
         }
