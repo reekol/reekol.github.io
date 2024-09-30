@@ -92,7 +92,7 @@
 
             marker.on('dragend', event => {
                 let p1 = marker.getLatLng()
-                marker._popup.setContent(`<i onpointerdown='navigator.share(this.dataset)' class='fa fa-share' data-title='Share marker' data-text='' data-url='https://www.openstreetmap.org/?mlat=${p1.lat}&mlon=${p1.lng}' ></i><br />Latitude: ${p1.lat} <br />Longitude: ${p1.lng}`)
+                marker._popup.setContent(`<i onpointerdown='navigator.share(this.dataset)' class='fa fa-share' data-title='Share marker' data-text='Marker ( Latitude: ${p1.lat} / Longitude ${p1.lng} )' data-url='https://www.openstreetmap.org/?mlat=${p1.lat}&mlon=${p1.lng}' ></i><br />Latitude: ${p1.lat} <br />Longitude: ${p1.lng}`)
                 marker.openPopup()
 //                map.panTo(new L.LatLng(position.lat, position.lng))
             });
