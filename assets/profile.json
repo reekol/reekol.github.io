@@ -1,7 +1,7 @@
 {
-  "brand": "Personal profile",
-  "theme": "aurora",
-  "name": "Ree Kol",
+  "brand": "Business card",
+  "theme": "ice",
+  "name": "Nikolay Terziev (Ree Kol)",
   "initials": "RK",
   "avatarImageUrl": [
     "https://raw.githubusercontent.com/reekol/reekol.github.io/master/assets/avatar1.jpg",
@@ -13,5 +13,17 @@
   "phone": "+359 887 111 583",
   "website": "seqr.link",
   "location": "Remote · Worldwide",
-  "availability": "AVAILABLE"
+  "availability": "AVAILABLE",
+  "medical": {
+    "bloodType": "O+",
+    "allergies": "None",
+    "medications": "Acefein",
+    "emergencyContact": {
+      "name": "Sidunova Tatyana Nikolaevna",
+      "relationship": "Mother",
+      "phone": "+359 888 126 570"
+    },
+    "conditions": "Spinal injury: L5-S1, Kidney stones (left)",
+    "notes": "Multiple fractures in the past"
+  }
 }
