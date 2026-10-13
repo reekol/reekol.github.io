@@ -1,0 +1,18 @@
+{
+  "brand": "Personal profile",
+  "theme": "aurora",
+  "name": "Ree Kol",
+  "initials": "RK",
+  "avatarImageUrl": [
+    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&h=400&q=85",
+    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&h=400&q=85",
+    "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&h=400&q=85"
+  ],
+  "avatarImageIntervalMs": 3500,
+  "role": "Problem solver · System architect",
+  "email": "cupuyc@gmail.com",
+  "phone": "+359 887 111 583",
+  "website": "seqr.link",
+  "location": "Remote · Worldwide",
+  "availability": "AVAILABLE"
+}
