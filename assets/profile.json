@@ -4,8 +4,8 @@
   "name": "Ree Kol",
   "initials": "RK",
   "avatarImageUrl": [
-    "https://raw.githubusercontent.com/reekol/reekol.github.io/master/assets/avatar0.png",
-    "https://raw.githubusercontent.com/reekol/reekol.github.io/master/assets/avatar1.jpg"
+    "https://raw.githubusercontent.com/reekol/reekol.github.io/master/assets/avatar1.jpg",
+    "https://raw.githubusercontent.com/reekol/reekol.github.io/master/assets/avatar0.png"
   ],
   "avatarImageIntervalMs": 3500,
   "role": "Problem solver · System architect",
